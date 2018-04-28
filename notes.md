@@ -3,6 +3,26 @@
 - search for projects by language: https://www.codetriage.com/
 - search for projects and opportunities: https://openhatch.org/search/
 
+## Specific focuses (foci?)
+- much focus on GitHub projects
+	- thanks to my own history of very positive experiences using their tools
+	- and thanks to a close contact I have there ;)
+- also on communities that sound like they're welcoming and working on cool projects
+
+## atom
+- project: https://github.com/atom/Atom
+- contributing: https://github.com/atom/atom/blob/master/CONTRIBUTING.md
+- thoughts:
+	- my top choice right now
+	- lots of open issues
+	- seems like a very active community
+	- clear documentation for exactly how to learn, contribute, submit
+	- a big project with many pieces to juggle in the codebase
+	- how to change and test core: https://flight-manual.atom.io/hacking-atom/sections/hacking-on-atom-core/
+	- getting PR to pass CircleCI, AppVeyor, Travis CI seems about 50% at a glance
+	- JavaScript with a fair bit of CoffeeScript
+	- make sure to keep up with significant decisions: https://github.com/atom/design-decisions
+
 ## Hubot
 - project: https://github.com/hubotio/hubot
 - contributing: https://github.com/hubotio/hubot/blob/master/CONTRIBUTING.md
@@ -76,19 +96,6 @@
 	- lots of issues to contribute to
 	- clearly labeled [beginner issues](https://github.com/avajs/ava/labels/good%20for%20beginner)
 	- will require using to get a handle on how to contribute
-
-## atom
-- project: https://github.com/atom/Atom
-- contributing: https://github.com/atom/atom/blob/master/CONTRIBUTING.md
-- thoughts:
-	- lots of open issues
-	- seems like a very active community
-	- clear documentation for exactly how to learn, contribute, submit
-	- a big project with many pieces to juggle in the codebase
-	- how to change and test core: https://flight-manual.atom.io/hacking-atom/sections/hacking-on-atom-core/
-	- getting PR to pass CircleCI, AppVeyor, Travis CI seems about 50% at a glance
-	- JavaScript with a fair bit of CoffeeScript
-	- make sure to keep up with significant decisions: https://github.com/atom/design-decisions
 
 ## nvm
 - project: https://github.com/creationix/nvm
