@@ -3,7 +3,6 @@
 Getting into the Atom repo as a programmer who's just starting to use the editor. What would I be contributing to, and how can I contribute? Here's my understanding of the project.
 
 ## Landscape
-
 Main page: https://github.com/atom/
 Docs: https://atom.io/docs
 
@@ -41,9 +40,14 @@ Problems and solutions:
 - they've added Rust and other enhancements but what breaks when you upgrade?
 - might also help to work on the GitHub integration package (big help for support)
 
+## Key bindings
+Use the base keymap as a kind of (cheat sheet)[https://github.com/atom/atom/blob/master/keymaps/base.cson].
+
 ## Flight manual
 https://flight-manual.atom.io/
+
 ### 1. Getting Started
+
 #### Why Atom?
 - editor property matrix
 	- +convenient, -extensible: Sublime
@@ -68,6 +72,7 @@ https://flight-manual.atom.io/
 - Open Source
 	- fits with GitHub mission: "building better software by working together"
 	- lasting community that supports future growth needs to be open source
+
 #### Installing Atom
 - usually simple to download and install locally from the Atom website
 - first time it runs Atom will try to install `atom` and `apm` commands for terminal
@@ -78,6 +83,7 @@ https://flight-manual.atom.io/
 	- _or_ set `ATOM_HOME` environment variable to point to a directory
 - Hacking on Atom core (we'll get there) shares how to clone and build source code
 - SSL and proxy issues
+
 #### Atom Basics
 - startup welcomes you with the Welcome screen
 - look up terms in the [Glossary](https://flight-manual.atom.io/resources/sections/glossary/)
@@ -125,7 +131,30 @@ https://flight-manual.atom.io/
 - "Core" packages ship with Atom, "Community" packages do not
 	- you can edit the core packages the same way as any other feature
 	- `core.ignoredNames` is shorthand for "Ignored Names in Core Settings"
+
 ### 2. Using Atom
+#### Atom Packages
+- ships with 90+ basic core packages (Tree View, Settings View, Welcome screen, spell checker, Fuzzy Finder, ...)
+- open Settings View (Cmd+) and click "Install" tab to start searching for new packages
+- Package Settings
+	- once installed, packages show up under this tab within the Settings View
+	- search under the "Installed Packages" heading
+	- packages have their own Settings screens
+	- upgrade here too when Atom automatically detects new release
+- Atom Themes
+	- search for themes in the Settings View too
+	- remember these include UI or syntax themes
+	- often see a preview and decide whether to install
+- Command Line
+	- `apm` can install themes and packages: `apm help install`
+	- basic structure of the command: `apm install <package_name>` 
+	- installing a specific version: `apm install <package_name>@<package_version>`
+	- search package registry for a specific term: `apm search <search_term>`
+	- find more info about a specific package: `apm view <package_name>`
+
+### Moving in Atom
+- 
+
 ### 3. Hacking Atom
 ### 4. Behind Atom
 
