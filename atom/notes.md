@@ -21,7 +21,7 @@ Problems and solutions:
 	- there's an atom forum but it does say to join Slack: https://discuss.atom.io/
 	- forum actively receives posts but >0 messages refer to the help found on Slack
 - traversing and documenting
-	- Atom Flight Manual and associated issues in its repo
+	- Atom Manual and associated issues in its repo
 	- Atom Environment manual for packages API
 	- site and apm feedback through atom.io issues
 - GitHub issues
@@ -147,15 +147,145 @@ https://flight-manual.atom.io/
 	- often see a preview and decide whether to install
 - Command Line
 	- `apm` can install themes and packages: `apm help install`
-	- basic structure of the command: `apm install <package_name>` 
+	- basic structure of the command: `apm install <package_name>`
 	- installing a specific version: `apm install <package_name>@<package_version>`
 	- search package registry for a specific term: `apm search <search_term>`
 	- find more info about a specific package: `apm view <package_name>`
 
-### Moving in Atom
+#### Moving in Atom
+- arrow keys:
+	- up, down, left, right
+	- word start: Alt + left
+	- word end: Alt + right
+	- line start: Ctrl + left
+	- line end: Ctrl + right
+	- file start: Cmd + up
+	- file end: Cmd + down
+- avoiding moving hand to arrow keys:
+	- move right or left 1 character: Ctrl + F / B
+	- move up or down 1 character: Ctrl + P / N
+	- word start: Alt + B
+	- word end: Alt + F
+	- line start: Ctrl + A
+	- line end: Ctrl + E
+- specific line: Ctrl + G
+	- even takes input for specific row:column like `40:23`
+- movement commands without default keybindings
+	- add them to your `keymap.cson`
+	- or just access them in the Command Palette
+	- example: move to line at top of screen: `editor:move-to-beginning-of-screen-line`
+	- example: select to end of last word: `editor:select-to-previous-word-boundary`
+- the following movement and selection commands have default keybindings:
+```
+	editor:move-to-beginning-of-next-paragraph
+	editor:move-to-beginning-of-previous-paragraph
+	editor:move-to-beginning-of-screen-line
+	editor:move-to-beginning-of-line
+	editor:move-to-beginning-of-next-word
+	editor:move-to-previous-word-boundary
+	editor:move-to-next-word-boundary
+	editor:move-to-previous-subword-boundary
+	editor:select-to-beginning-of-previous-paragraph
+	editor:select-to-end-of-line
+	editor:select-to-beginning-of-line
+	editor:select-to-beginning-of-word
+	editor:select-to-beginning-of-next-word
+	editor:select-to-next-word-boundary
+	editor:select-to-previous-word-boundary
+```
+- (the juxtaposition above confused me - I'm writing up an issue)
+- Navigating by Symbols
+	- open the Symbols View: Cmd + R
+	- fuzzy filter (much like Cmd + T did for files and folders)
+	- searching for symbols across the whole project
+		- generate a `tags` file using [ctags](https://ctags.io/)
+		- install ctags and run a command to generate `tags`
+		- use generated `tags` to search project: Cmd + Shift + R
+		- go to declaration of symbol under cursor: Alt + Cmd + down
+		- return from declaration of symbol under cursor: Alt + Cmd + up
+		- create `.ctags` customize how `tags` are generated ([here's an example](https://github.com/atom/symbols-view/blob/master/lib/ctags-config))
+	- symbols navigation is implemented in [Symbols View](https://github.com/atom/symbols-view)
+- Bookmarks
+	- jump to specific lines across your project
+	- toggle a bookmark: Cmd + F2
+	- small bookmark symbol added to line gutter
+	- cycle to next bookmark in focused file: F2
+	- cycle to previous bookmark: Shift + F2
+	- see all current project bookmarks: Ctrl + F2
+
+#### Atom Selections
+- supports many actions: scoping delete/indent/search, marking text to  quote/bracket, ...
+- selection keybindings add Shift
+	- select up: Shift + up / Ctrl + Shift + P
+	- and so on for word start/end, line start/end, ...
+	- includes Cmd + Shift + up/down for selecting to top/bottom of file
+- specific selections for whole content areas
+	- select entire file contents: Cmd + A
+	- select entire line contents: Cmd + L
+	- select current word: Ctrl + Shift + W
+
+#### Editing and Deleting Text
+- Basic Manipulation (of buffer text)
+	- join next line to this: Cmd + J
+	- move this line up/down: Cmd + Ctrl + up/down
+	- duplicate this line: Cmd + Shift + D
+	- uppercase/lowercase this word: Cmd + K Cmd + U/L
+	- transpose two characters (metathesis): Ctrl + T
+	- hard-wrap paragraph at current `editor.preferredLineLength`: Alt + Cmd + Q
+- Deleting and Cutting (text out of the buffer)
+	- delete this line: Ctrl + Shift + K
+	- delete to word start: Alt + Backspace/H
+	- delete to word end: Alt + Delete/D
+	- cut to line start: Cmd + Backspace
+	- cut to line end: Cmd + Delete
+	- delete to line start: Cmd + Backspace
+	- delete to line end: Cmd + Delete
+- Multiple Cursors and Selections (especially for long lists)
+	- add cursor: Cmd + click (continue holding Cmd to add more)
+	- add cursor above/below current cursor: Ctrl + Shift + up/down
+	- select next instance of this same word: Cmd + D
+	- select all instances of this same word: Cmd + Ctrl + G
+	- convert multiline selection to cursors: Cmd + Shift + L
+	- example uses: change variable case, or duplicate lines
+- Whitespace (whitespace package)
+	- search Command Palette for converting tabs <-> spaces
+	- the whitespace package settings are available in Settings View
+	- default settings include removing trailing whitespace when buffer saved
+	- default settings include adding trailing newline on buffer save
+- Brackets (bracket-matcher package)
+	- includes highlighting of complement to current bracket in pair
+		- does the same with HTML or XML tags
+	- autocomplete for enclosing syntax tokens (parens, backticks, quotes, ...)
+	- if selection, typing the opening character will enclose the selection
+	- jump to the next matching closing bracket: Ctrl + M
+	- select all text inside these brackets: Cmd + Ctrl + M
+	- close this HTML/XML tag: Alt + Cmd + .
+	- bracket-matcher settings available in Settings View
+- Encoding (encoding-selector package)
+	- open encoding support to change encoding: Ctrl + Shift + U
+		- changes to encoding are persisted on next buffer save
+	- Atom autodetects opened file encoding
+	- default for undetected or newly opened files is UTF-8
+
+#### Find and Replace
+- find-and-replace package, which uses Node `scandal` for searching
+- search buffer: Cmd + F
+- search project: Cmd + Shift + F
+- find next: Cmd + G (or just press Enter)
+- clear find panel: Esc
+- Find and Replace options in panel:
+	- toggle case sensitivity
+	- perform regex matching
+	- scope search to selections
+	- limit search to subset of files with glob patterns
+	- limit search to a folder by entering folder name
+
+#### Snippets
 - 
 
 ### 3. Hacking Atom
+-
+
 ### 4. Behind Atom
 
 ## Stepping into the code
