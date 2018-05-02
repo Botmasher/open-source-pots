@@ -281,10 +281,95 @@ https://flight-manual.atom.io/
 	- limit search to a folder by entering folder name
 
 #### Snippets
-- 
+- snippets package
+- type a short string, press tab, see snippet expand
+- example: `habtm` expanding to `has_and_belongs_to_many`
+- `language-html` package comes with many snippets
+	- type `html` then press tab for a basic page snippet
+	- notice the cursor position between title tags
+	- pressing tab again will move to body tags
+- `snippets:available` lists all snippets through Command Palette
+	- use fuzzy search to find one
+	- select one below the selection box to execute
+- creating snippets
+	- your `~/.atom` directory contains `snippets.cson`
+	- menu Atom > Snippets opens that file
+	- format
+		- left (top) key selects scope
+		 	- starts with dot like CSS class selector
+			- find scopes in a language package listed as its Scope (Settings View)
+		- example: look up `language-java` package to find Scope `source.java`
+		- the next level key is a readable snippet display name
+		- the next inside that is a `prefix` used to trigger the snippet
+		- beside the `prefix` is a `body` to insert once triggered
+		- inputting `$` plus number indicates a tab stop
+			- on tab the cursor will stop at this location in the buffer
+			- multiple same number stops create multiple cursors
+			- stops can select, like ${1:"string"} will leave the string selected
+```
+'.source.js':
+	'My Snippet':
+		'prefix': 'hi'
+		'body': 'Hello World!'
+```
+	- multiline snippet bodies: surround with `"""` above and below body
+	- snippet to create snippets: `snip` then hit tab
+	- multiple snippets
+		- just include snippet name, prefix, body under the scope
+		- CSON keys are not repeatable (last overwrites just like JSON)
+```
+'.source.js':
+	'My Snippet':
+		'prefix': 'hi'
+		'body': 'Hello World!'
+
+	'My Other Snippet':
+			'prefix': 'bye'
+			'body': 'Goodbye World!'
+```
+
+#### Autocomplete
+- autocomplete-plus package
+- use tab or enter
+- defaults to matching strings in current open file
+- Settings for the package can toggle looking through all open buffers
+
+#### Folding
+- hover mouse over gutter to hide code blocks
+- hide keybinding: Alt + Cmd + [
+- unhide keybinding: Alt + Cmd + ]
+- fold everything: Alt + Cmd + Shift + [
+- unfold everything: Alt + Cmd + Shift + ]
+- fold at an indentation depth: Cmd + K Cmd + 0-9
+- fold arbitrary selection: Alt + Cmd + C
+	- "Fold Selection" also available through Command Palette
+
+#### Panes
+- split any pane horizontally: Cmd + K left/right
+- split any pane vertically: Cmd + K up/down
+- switch between panes: Cmd + K Cmd + up/down/left/right
+- _pane items_ are represented by tabs
+	- drag files between panes
+	- you can disable the tabs package
+	- close all pane items: Cmd + W
+	- core settings "Remove Empty Panes" to auto-close when all items closed
+
+#### Pending Pane Items
+- (formerly Preview Tabs)
+- single clicking a new file from Tree View shows title in italics
+	- this file is pending
+	- next pending file will replace it
+- confirm the pending file:
+	- double click the tab
+	- double click the file in Tree View
+	- edit the file contents
+	- save the file
+- disable pending pane items through Core Settings "Allow Pending Pane Items"
+	- single clicks will select but no longer open files
 
 ### 3. Hacking Atom
 -
+
 
 ### 4. Behind Atom
 
