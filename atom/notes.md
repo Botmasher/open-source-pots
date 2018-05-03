@@ -317,7 +317,7 @@ https://flight-manual.atom.io/
 	- snippet to create snippets: `snip` then press tab
 	- multiple snippets
 		- just include snippet name, prefix, body under the scope
-		- CSON keys are not repeatable (last overwrites just like JSON)
+		- CSON keys are not repeatable (last overrides just like JSON)
 ```
 '.source.js':
 	'My Snippet':
@@ -478,8 +478,57 @@ https://flight-manual.atom.io/
 	- find all by choosing "Snippets: Available" in Command Palette
 
 #### Basic Customization
-- 
-
+- all but the stylesheet and Init Script are in CSON
+	- objects marked with indentation
+	- key values can be strings, numbers, objects, booleans, `null`, or array
+	- duplicate keys will be overwritten by last occurrence
+		- repeating scopes in attempt to add more keys will actually override
+		- this was seen with snippets above
+- styles in `styles.less` accessible through Atom > Stylesheet
+	- use Chromium Developer Tools to inspect the DOM: Alt + Cmd + I
+	- learn more about Less as a preprocessor at [http://lesscss.org/]
+- keybindings
+	- define meaning of a keypress in different contexts
+	- map key to which command it will trigger
+	- custom `keymap.cson` loads with Atom (see Atom > Keymap)
+	- see all configured keybindings in Keybindings tab in Settings View
+	- open the Keybinding Resolver: Cmd + .
+		- watch Atom catch input and see which command it executes
+- global config in `config.cson`
+	- open in Atom > Config
+	- key for all settings `*` vs language specific keys like `.python.source`
+	- core settings grouped under core namespaces `core` or `editor`
+	- other settings grouped by package name beneath those
+	- description for each of the keys in the config:  https://flight-manual.atom.io/using-atom/sections/basic-customization/#configuration-key-reference
+- language-specific config
+	- scoped to editor's language
+	- example: different tab widths for different languages
+	- select packages for a specific language in Settings View
+	- _or_ open `config.cson` with "open config" in the Command Palette
+		- override `*` settings in a scope like `.source.ruby`
+		- then within that object set some key:value under the `editor:` key
+	- language's scope name
+		- listed to the right of "Scope:" ina  grammar package in Settings View
+		- _or_ show all scopes at current cursor position: Alt + Cmd + P
+		- these also act as class names for your stylesheet!
+ 	- language recognition
+		- add an extension to `core` in `config.cson`
+```CSON
+'*':
+	core:
+		customFileTypes:
+			'source.ruby': [
+				'rooobie'
+			]
+```
+- change customization storage
+	- defaults to home directory of user running Atom: `~/.atom`
+	- if `ATOM_HOME` environment variable exists it will be used
+	- Portable Mode when `.atom` directory is a sibling to the application
+		- allows for running from USB or cloud storage
+		- Atom uses that storage directory for machines where it's synced
+		- optional command line parameter: `atom --portable`
+			- this simply moves your current settings to a sibling directory
 
 ### 3. Hacking Atom
 -
