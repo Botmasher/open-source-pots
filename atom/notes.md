@@ -133,6 +133,7 @@ https://flight-manual.atom.io/
 	- `core.ignoredNames` is shorthand for "Ignored Names in Core Settings"
 
 ### 2. Using Atom
+
 #### Atom Packages
 - ships with 90+ basic core packages (Tree View, Settings View, Welcome screen, spell checker, Fuzzy Finder, ...)
 - open Settings View (Cmd+) and click "Install" tab to start searching for new packages
@@ -313,7 +314,7 @@ https://flight-manual.atom.io/
 		'body': 'Hello World!'
 ```
 	- multiline snippet bodies: surround with `"""` above and below body
-	- snippet to create snippets: `snip` then hit tab
+	- snippet to create snippets: `snip` then press tab
 	- multiple snippets
 		- just include snippet name, prefix, body under the scope
 		- CSON keys are not repeatable (last overwrites just like JSON)
@@ -366,6 +367,119 @@ https://flight-manual.atom.io/
 	- save the file
 - disable pending pane items through Core Settings "Allow Pending Pane Items"
 	- single clicks will select but no longer open files
+
+#### Grammar
+- grammar-selector package
+- grammar as the language Atom associates with file
+	- example: "Java"
+	- this is what was used above to create scopes for snippets
+- Atom automatically guesses grammar
+	- mostly from file extension
+	- sometimes from checking a little of the content
+- defaults to "Plain Text"
+- change selected grammar: Ctrl + Shift + L
+
+#### Version Control in Atom
+- basic Git and GitHub integration when project contains Git repo
+- checkout the `HEAD` of the current file: Alt + Cmd + Z
+	- equivalent to running the following on the file path:
+		- `git checkout HEAD -- <path>` to update the working tree
+		- and `git reset HEAD -- <path>` to update the head index back
+	- the action is on the undo stack: Cmd + Z
+- Git status list
+	- fuzzy-finder-package provides some tools
+	- open files in the project: Cmd + T
+	- jump to open editor: Cmd + B
+	- display all untracked and modified project files: Cmd + Shift + B
+		- (same as files seen by running `git status`)
+		- right-side icon indicates if it's untracked or modified
+- Commit editor
+	- language-git package
+		- syntax highlighting for edited commit, merge, rebase messages
+		- colorizes first lines of commit messages longer than 50 or 65 chars
+	- set Atom as commit editor: `git config --global core.editor "atom --wait"`
+- Status bar icons
+	- status-bar package
+	- Git decorations on right side of status bar
+	- shows current branch name
+	- shows number of commits branch is ahead of upstream
+	- displays info when file falls outside of commit data
+		- icon if file is untracked, modified or ignored
+		- number of lines added or removed since last commit
+- Line diffs
+	- git-diff package
+	- colorized gutter lines
+	-	added lines are green
+	- modified lines are yellow
+	- deleted lines are red
+	- move cursor to previous/next diff: Alt+G up/down
+- Open on GitHub
+	- open file: Alt + G O
+	- open file Blame view: Alt + G B
+	- open file History view: Alt + G H
+	- copy file uri to clipboard: Alt + G C
+	- branch compare: Alt + G R
+		- shows commits to current branch that are not also on mainline branch
+
+#### GitHub Package
+- github package
+- Git and GitHub integration in Atom
+- open Git panel: Ctrl + 9
+- open GitHub panel: Ctrl + 8
+- toggle Git panel from Status Bar: click changed files icon
+- initialize repo from the panel
+- clone repo by running the `GitHub: Clone` command
+- branch tooltip: click branch icon in Status Bar
+	- create or switch branches
+- stage changes (select file and viewing in Unstaged Changes view)
+	- "Stage All" button in "Unstaged Changes" bar
+	- double click or select one file and press Enter
+	- "Stage Hunk" button or select hunk and press Enter
+	- "Stage Selection" button after select one or multiple lines
+	- use slash to toggle hunk vs line mode, then Enter to stage one line
+	- switch between list view and diff view: left/right
+		- left/right also handles unstaging
+- discard changes (select file and view in Staged Changes view)
+	- it's like staging but it's behind a context menu
+	- all: right click "Unstaged Changes" then click "Discard All Changes"
+	- files: right click one or more files then "Discard Changes"
+	- hunk: click trash icon in top bar of hunk
+- commit message: enter, expand, finalize at bottom right
+- amend: toggle to change previous commit
+- push: up arrow at bottom Status Bar
+	- Atom offers to create branch if local doesn't exist in remote repo
+- pull: fetch button (down) in bottom Status Bar
+- resolve conflicts
+	- Merge Conflicts list shows up between staged and unstaged changes
+	- pick a version to resolve or make more edits
+	- stage and commit
+- view PRs
+	- status of PRs show up in the GitHub panel
+	- to show timeline click "Conversation"
+
+#### Writing in Atom
+- Asciidoc or Markdown to write prose
+- automatic spellcheck for markup text grammars
+	- spell-check package
+	- dashed red line underlines misspells
+	- bring up suggested corrections: Cmd + Shift + ;
+		- also available as "Correct Spelling" from Command Palette
+		- also available from right-click context menu
+- add more grammars to the spell checker
+	- Settings view, Spell Check package settings
+	- defaults: `text.plain`, `source.gfm`, `text.git-commit`
+	- example to add: `source.asciidoc`
+- markdown previews
+	- toggle preview mode: Ctrl + Shift + M
+	- copy rendered HTML: "Markdown Preview Copy HTML" from Command Palette
+- snippets
+	- try executing markdown snippets like `img` or `table`
+	- "only a handful" for md, like `b`, `i`, `code`
+	- find all by choosing "Snippets: Available" in Command Palette
+
+#### Basic Customization
+- 
+
 
 ### 3. Hacking Atom
 -
