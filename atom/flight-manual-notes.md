@@ -1,54 +1,9 @@
-# OpenSourcePot for Atom
-
-Getting into the Atom repo as a programmer who's just starting to use the editor. What would I be contributing to, and how can I contribute? Here's my understanding of the project.
-
-## Landscape
-Main page: https://github.com/atom/
-Docs: https://atom.io/docs
-
-Repos:
-- atom text editor: the main project
-- **xray**:	the bleeding edge project in Rust
-- **github**: integrating the editor into GitHub
-- **teletype**: remote sharing built into Atom (use case: share workspace through e.g. chat link)
-- **atom.io**: for website and apm package API feedback
-- **flight-manual.atom.io**: autogen documentation
-- ...plus a multitude of repos' worth of hackery support for various languages and uses
-
-Problems and solutions:
-- discussing
-	- https://discuss.atom.io/t/join-us-on-slack/16638?source_topic_id=25406
-	- there's an atom forum but it does say to join Slack: https://discuss.atom.io/
-	- forum actively receives posts but >0 messages refer to the help found on Slack
-- traversing and documenting
-	- Atom Manual and associated issues in its repo
-	- Atom Environment manual for packages API
-	- site and apm feedback through atom.io issues
-- GitHub issues
-	- many open issues across projects, including tagging for "beginner" or "good first issue"
-	- the core atom repo has a lot of stuff tagged "more information needed"
-	- definitely doing active triaging
-- PRs
-	- quite a few over the last months
-	- even split between passing/failing
-	- can't spot a pattern in proposed merges
-	- tests: circleci, appveyor, travis
-
-### Whispers
-- Atom is developed on an old version of Electron
-- the team wants to update Atom to work on the latest Electron (a complex task)
-- they've added Rust and other enhancements but what breaks when you upgrade?
-- might also help to work on the GitHub integration package (big help for support)
-
-## Key bindings
-Use the base keymap as a kind of (cheat sheet)[https://github.com/atom/atom/blob/master/keymaps/base.cson].
-
-## Flight manual
+# Flight manual
 https://flight-manual.atom.io/
 
-### 1. Getting Started
+## 1. Getting Started
 
-#### Why Atom?
+### Why Atom?
 - editor property matrix
 	- +convenient, -extensible: Sublime
 	- -convenient, +extensible: Vim, Emacs
@@ -73,7 +28,7 @@ https://flight-manual.atom.io/
 	- fits with GitHub mission: "building better software by working together"
 	- lasting community that supports future growth needs to be open source
 
-#### Installing Atom
+### Installing Atom
 - usually simple to download and install locally from the Atom website
 - first time it runs Atom will try to install `atom` and `apm` commands for terminal
 - for portable/removable storage install and create `.atom` directory alongside the app
@@ -84,7 +39,7 @@ https://flight-manual.atom.io/
 - Hacking on Atom core (we'll get there) shares how to clone and build source code
 - SSL and proxy issues
 
-#### Atom Basics
+### Atom Basics
 - startup welcomes you with the Welcome screen
 - look up terms in the [Glossary](https://flight-manual.atom.io/resources/sections/glossary/)
 - Command Palette (Cmd+Shift+P)
@@ -132,9 +87,9 @@ https://flight-manual.atom.io/
 	- you can edit the core packages the same way as any other feature
 	- `core.ignoredNames` is shorthand for "Ignored Names in Core Settings"
 
-### 2. Using Atom
+## 2. Using Atom
 
-#### Atom Packages
+### Atom Packages
 - ships with 90+ basic core packages (Tree View, Settings View, Welcome screen, spell checker, Fuzzy Finder, ...)
 - open Settings View (Cmd+) and click "Install" tab to start searching for new packages
 - Package Settings
@@ -153,7 +108,7 @@ https://flight-manual.atom.io/
 	- search package registry for a specific term: `apm search <search_term>`
 	- find more info about a specific package: `apm view <package_name>`
 
-#### Moving in Atom
+### Moving in Atom
 - arrow keys:
 	- up, down, left, right
 	- word start: Alt + left
@@ -214,7 +169,7 @@ https://flight-manual.atom.io/
 	- cycle to previous bookmark: Shift + F2
 	- see all current project bookmarks: Ctrl + F2
 
-#### Atom Selections
+### Atom Selections
 - supports many actions: scoping delete/indent/search, marking text to  quote/bracket, ...
 - selection keybindings add Shift
 	- select up: Shift + up / Ctrl + Shift + P
@@ -225,7 +180,7 @@ https://flight-manual.atom.io/
 	- select entire line contents: Cmd + L
 	- select current word: Ctrl + Shift + W
 
-#### Editing and Deleting Text
+### Editing and Deleting Text
 - Basic Manipulation (of buffer text)
 	- join next line to this: Cmd + J
 	- move this line up/down: Cmd + Ctrl + up/down
@@ -268,7 +223,7 @@ https://flight-manual.atom.io/
 	- Atom autodetects opened file encoding
 	- default for undetected or newly opened files is UTF-8
 
-#### Find and Replace
+### Find and Replace
 - find-and-replace package, which uses Node `scandal` for searching
 - search buffer: Cmd + F
 - search project: Cmd + Shift + F
@@ -281,7 +236,7 @@ https://flight-manual.atom.io/
 	- limit search to subset of files with glob patterns
 	- limit search to a folder by entering folder name
 
-#### Snippets
+### Snippets
 - snippets package
 - type a short string, press tab, see snippet expand
 - example: `habtm` expanding to `has_and_belongs_to_many`
@@ -329,13 +284,13 @@ https://flight-manual.atom.io/
 			'body': 'Goodbye World!'
 ```
 
-#### Autocomplete
+### Autocomplete
 - autocomplete-plus package
 - use tab or enter
 - defaults to matching strings in current open file
 - Settings for the package can toggle looking through all open buffers
 
-#### Folding
+### Folding
 - hover mouse over gutter to hide code blocks
 - hide keybinding: Alt + Cmd + [
 - unhide keybinding: Alt + Cmd + ]
@@ -345,7 +300,7 @@ https://flight-manual.atom.io/
 - fold arbitrary selection: Alt + Cmd + C
 	- "Fold Selection" also available through Command Palette
 
-#### Panes
+### Panes
 - split any pane horizontally: Cmd + K left/right
 - split any pane vertically: Cmd + K up/down
 - switch between panes: Cmd + K Cmd + up/down/left/right
@@ -355,7 +310,7 @@ https://flight-manual.atom.io/
 	- close all pane items: Cmd + W
 	- core settings "Remove Empty Panes" to auto-close when all items closed
 
-#### Pending Pane Items
+### Pending Pane Items
 - (formerly Preview Tabs)
 - single clicking a new file from Tree View shows title in italics
 	- this file is pending
@@ -368,7 +323,7 @@ https://flight-manual.atom.io/
 - disable pending pane items through Core Settings "Allow Pending Pane Items"
 	- single clicks will select but no longer open files
 
-#### Grammar
+### Grammar
 - grammar-selector package
 - grammar as the language Atom associates with file
 	- example: "Java"
@@ -379,7 +334,7 @@ https://flight-manual.atom.io/
 - defaults to "Plain Text"
 - change selected grammar: Ctrl + Shift + L
 
-#### Version Control in Atom
+### Version Control in Atom
 - basic Git and GitHub integration when project contains Git repo
 - checkout the `HEAD` of the current file: Alt + Cmd + Z
 	- equivalent to running the following on the file path:
@@ -421,7 +376,7 @@ https://flight-manual.atom.io/
 	- branch compare: Alt + G R
 		- shows commits to current branch that are not also on mainline branch
 
-#### GitHub Package
+### GitHub Package
 - github package
 - Git and GitHub integration in Atom
 - open Git panel: Ctrl + 9
@@ -457,7 +412,7 @@ https://flight-manual.atom.io/
 	- status of PRs show up in the GitHub panel
 	- to show timeline click "Conversation"
 
-#### Writing in Atom
+### Writing in Atom
 - Asciidoc or Markdown to write prose
 - automatic spellcheck for markup text grammars
 	- spell-check package
@@ -477,7 +432,7 @@ https://flight-manual.atom.io/
 	- "only a handful" for md, like `b`, `i`, `code`
 	- find all by choosing "Snippets: Available" in Command Palette
 
-#### Basic Customization
+### Basic Customization
 - all but the stylesheet and Init Script are in CSON
 	- objects marked with indentation
 	- key values can be strings, numbers, objects, booleans, `null`, or array
@@ -530,21 +485,134 @@ https://flight-manual.atom.io/
 		- optional command line parameter: `atom --portable`
 			- this simply moves your current settings to a sibling directory
 
-### 3. Hacking Atom
+## 3. Hacking Atom
+
+### Tools of the Trade
+- Atom is implemented using web tech like JavaScript and CSS
+	- specifically CoffeeScript for JS
+	- specifically Less for CSS
+
+### The Init File
+- `init.coffee` runs from your `~./atom` directory
+	- access it through Atom > Init Script
+	- call Atom API
+	- allows for startup customizations
+	- if customizations grow consider making a package
+- the file can also be named `init.js` and run JS code instead
+- syntax is like below (for adding to text editor)
+	- or see [one example]( https://flight-manual.atom.io/hacking-atom/sections/the-init-file/#the-init-file)
+```
+atom.commands.add 'atom-text-editor', 'command:name', ->
+	return unless editor = atom.workspace.getActiveTextEditor()
+
+	// actions
+```
+- newly defined commands are in the Command Palette and can be keybound
+
+### Package: Word Count
+- example of creating "a very simple package"
+	- display small modal window with number of words in current buffer
+- Package Generator
+	- package-generator package
+	- run "Generate Package" from Command Palette
+	- on create Atom will make a named directory under `.atom/packages`
+		- if a package on atom.io has the same name your package may not load
+	- atom creates a bunch of files
+```
+my-package/
+├─ grammars/
+├─ keymaps/
+├─ lib/
+├─ menus/
+├─ spec/
+├─ snippets/
+├─ styles/
+├─ index.js
+└─ package.json
+```
+- `package.json` contains metadata
+	- Node info like dependencies
+	- extra info like path to `main` JS file, styles, keymaps, snippets
+	- `activationCommands` are the commands triggering the package
+		- loading is delayed until one of those is triggered
+		- if left out `activate()` will be called once package loads
+	- `activationHooks` delay loading until one of array of hooks triggers
+	- make sure to update the repo URL
+	- fill out name, description and license
+- source code
+	- write one top-level module (singleton managing extension lifestyle)
+	- export that module from the `main` file
+		- if `main` is missing from `package.json` it will try `index.js`/`index.coffee`
+	- all other code lives in `lib`
+	- all `lib` code should be required from the top-level module
+	- required method:
+		- `initialize(state)`: called before workspace finished setting up
+		- initialize sets up before deserializers and view providers
+	- optional methods:
+		- `activate(state)`: gets state from last time window was serialized
+			- assuming module implements serialize()
+			- do work here after package starts
+			- use it to e.g. set up DOM events
+		- `serialize()`: returns state when window shuts down
+			- this data gets passed to `activate()`
+		- `deactivate()`: use it to release external resources when window shuts down
+			- if subscribing to window don't worry since it's "getting torn down anyway"
+- style sheets
+	- Less sheets live in `styles` directory
+	- these load and apply to DOM
+	- loading order
+		- optionally add a `styleSheets` array to your `package.json`
+	- keep it to structural elements and avoid colors and sizing
+		- if you do need them take them from active theme's `ui-variables.less`
+- keymaps
+	- set up a keymap in `keymaps/`
+	- key-command pairs apply to the selected element
+		- `atom-workspace` is parent of everything in Atom UI
+- menus
+	- for context menu on right click or application menu
+	- load alphabetically by default but `package.json` can have a `menus` array
+	- application menu
+		- create an application menu "for common actions ... that aren't tied to a specific element"
+		- will show up for your package under the Packages menu
+	- context menu
+		- for commands tied to specific UI
+		- determines selected element then adds items matching selector
+		- add submenus with `"submenu"` key instead of command
+		- add separators with a simple item `{"type": "separator"}`
+- developing
+	- breakdown of the generated code: https://flight-manual.atom.io/hacking-atom/sections/package-word-count/#understanding-the-generated-code
+		- split between View class and the main entry point file
+		- review lifecycle methods (only `activate` is required)
+	- flow from perspective of Atom:
+		1. start up
+		2. start loading packages
+		3. read `package.json`
+		4. load keymaps, styles, menus and main
+		5. finish loading packages
+		6. detect user executing package command
+		7. execute `activate` in main
+		8. execute package command as registered
+		9. detect user executing package command again
+		10. execute package command as registered
+		...
+		11. shut down, triggering serializations
+	- that flow differs if you do not use `activationCommands`
+	- example of making changes to the code and calling active text editor methods: https://flight-manual.atom.io/hacking-atom/sections/package-word-count/#counting-the-words
+- debugging
+	- familiar looking Chromium console
+	- open developer console: Alt + Cmd + I
+	- _or_ select View > Developer > Toggle Developer Tools
+- tests
+	- please do test
+	- place tests under `spec/`
+	- tests are run by Jasmine
+	- running tests
+		- press Alt + Cmd + Ctrl + P
+		- _or_ select View > Developer > Run Package Specs
+		- _or_ from command line: `atom --test spec`
+	- created packages have an example suite
+
+### Package: Modifying Text
 -
 
-
-### 4. Behind Atom
-
-## Stepping into the code
-- [ ] Read the flight manual
-- [ ] Reread the flight manual
-- [ ] Document the layout of the code
-- [ ] Read the tests
-- [ ] Write a test
-- [ ] Make a small change
-- [ ] See if it works
-- [ ] Pick up an issue/bug
-- [ ] Test a potential fix
-- [ ] See if it works
-- [ ] Propose merge/PR
+## 4. Behind Atom
