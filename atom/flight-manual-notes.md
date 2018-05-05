@@ -613,6 +613,43 @@ my-package/
 	- created packages have an example suite
 
 ### Package: Modifying Text
--
+- command tool to replace text with ascii art
+1. generate package from Command Palette and enter package name
+2. remove view-related code as this package has no UI
+  - one view file in `lib/`
+  - one view test file in `spec/`
+  - the `styles/` directory
+  - all view and modal code lines from the main logic file
+3. add a command
+	- store a reference to the active text editor
+	- test inserting a string
+```
+convert() {
+  const editor = atom.workspace.getActiveTextEditor()
+  if (editor) {
+    editor.insertText('Hello World!')
+  }
+}
+```
+4. reload the latest version of your package
+	- "Window: Reload" from Command Palette or Alt + Cmd + Ctrl + L
+5. trigger the command
+	- add your command to the `activationCommands` in `package.json`
+6. add a keybinding
+	- open bindings in `keymaps/` and change the keys and the function run
+	- note that Atom keymaps are case sensitive
+	- strong recommendation: use lowercase and explicitly mark Shift
+7. add the dependency for Node `figlet` module
+	- this will do the ASCII art conversion
+	- add the dependency line to `package.json`: `"figlet": "1.0.8"`
+	- run "Update Package Dependencies: Update" from the Command Palette
+8. require and use `figlet`
+	- note that editor has `.getSelectedText()` and `.insertText()` for you to use
+	- pass selected text from editor to figlet
+	- declare a font for figlet
+	- the figlet function: `figlet(text, { font }, (error, art) => {})`
+- why might you want UI-free packages?
+	- creating linters
+	- creating code checkers
 
 ## 4. Behind Atom
