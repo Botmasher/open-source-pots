@@ -652,4 +652,143 @@ convert() {
 	- creating linters
 	- creating code checkers
 
+### Package: Active Editor Info
+- extend UI by adding items to workspace
+	- different from Word Count above which showed info in modal
+	- drag these to docks on window edges and restore on next project open
+- example of creating workspace item displaying info about active editor
+1. generate package called `active-editor-info` from Command Palette
+2. edit files to show view in workspace
+	- register an Atom "opener" with `addOpener` inside `activate()`
+		- openers take a URI and return a view
+	- add the command to run the view toggle
+	- add disposable to destroy views on deactivate package
+```
+	...
+	activate(state) {
+		this.subscriptions = new CompositeDisposable(
+			atom.workspace.addOpener(uri => {
+				if (uri === 'atom://active-editor-info') {
+					return new ActiveEditorInfoView();
+				}
+			}),
+			atom.commands.add('atom-workspace', {
+				'active-editor-info:toggle': () => this.toggle()
+			}),
+			new Disposable(() => {
+				atom.workspace.getPaneItems().forEach(item => {
+					if (item instanceof ActiveEditorInfoView) {
+						item.destroy();
+					}
+				});
+			})
+		);
+	},
+	...
+```
+3. remove the `activeEditorInfoView` and `serialize()`
+	- since you can have more than one view instance
+	- each can manage its own state and serialization
+	- so don't do package-level serialization
+4. change `toggle()` to toggle view: `atom.workspace.toggle('atom://active-editor-info')`
+5. update view file
+	- it's mostly ready to go
+	- but add a method to show tab text
+```
+	getTitle() {
+		// Used by Atom for tab text
+		return 'Active Editor Info';
+	}
+```
+	- add another to set up that URI
+```
+	getURI() {
+		// Used by Atom to identify the view when toggling.
+		return 'atom://active-editor-info';
+	}
+```
+	- consider storing the URI to avoid repeating the string three times
+6. reload and run the package command from the Command Palette
+	- notice it shows up right in the middle of the workspace
+7. constrain item location
+	- add view class methods to shape where it opens
+	- the default defaults to `'center'`
+	- change it to appear on the right by default
+	- allow user to override that with one of three other dock positions
+```
+	getDefaultLocation() {
+		return 'right';
+	}
+	getAllowedLocations() {
+		return ['left', 'right', 'bottom'];
+	}
+```
+8. actually displaying the info
+	- modify the constructor
+	- notice we're just naïvely inserting `innerHTML` using a template string
+	- _caution_: sanitize input and go through DOM API in a real production package
+```
+	this.subscriptions = atom.workspace.getCenter().observeActivePaneItem(item => {
+	  if (!atom.workspace.isTextEditor(item)) {
+	    message.innerText = 'Open a file to see important information about it.';
+	    return;
+	  }
+	  message.innerHTML = `
+	    <h2>${item.getFileName() || 'untitled'}</h2>
+	    <ul>
+	      <li><b>Soft Wrap:</b> ${item.softWrapped}</li>
+	      <li><b>Tab Length:</b> ${item.getTabLength()}</li>
+	      <li><b>Encoding:</b> ${item.getEncoding()}</li>
+	      <li><b>Line Count:</b> ${item.getLineCount()}</li>
+	    </ul>
+	  `;
+	});
+```
+9. clean up the subscription in `destroy()`
+```
+	destroy() {
+	  this.element.remove();
+	  this.subscriptions.dispose();
+	}
+```
+10. serialize it
+	- notice if we reload Atom the item is gone
+	- add `serialize()` to the view class
+	- since preserved state lives in editor, only need `deserializer` field
+		- if item relied on other state would add it to the returned object
+```
+	serialize() {
+		return {
+			// This is used to look up the deserializer function. It can be any string, but it needs to be
+			// unique across all packages!
+			deserializer: 'active-editor-info/ActiveEditorInfoView'
+		};
+	}
+```
+11. add a `deserializers` object to `package.json`
+	- add a key that matches the string used in `serialize()`
+	- add its value as `"deserializeActiveEditorInfoView"`, a method we'll write
+```
+	{
+	  "name": "active-editor-info",
+	  ...
+	  "deserializers": {
+	    "active-editor-info/ActiveEditorInfoView": "deserializeActiveEditorInfoView"
+	  }
+	}
+```
+12. write a function to deserialize the view
+	- go back to the main logic file
+	- add a deserialize function
+	- the value returned from `serialize()` will get passed to this function
+	- only return a new view instance since serialized object is state free
+```
+	deserializeActiveEditorInfoView(serialized) {
+		return new ActiveEditorInfoView();
+	}
+```
+13. reload and try toggling the view from the Command Palette
+- consider what else you could make
+	- useful "visual tools for working with code"
+
 ## 4. Behind Atom
