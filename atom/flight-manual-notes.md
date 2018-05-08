@@ -791,4 +791,53 @@ convert() {
 - consider what else you could make
 	- useful "visual tools for working with code"
 
+### Creating a Theme
+- rendered in HTML, styled with Less
+- UI themes: tree view, tabs, drop-down lists, status bar
+- syntax themes: code, gutter, other editor elements
+- change themes in Settings View or Atom > Preferences
+- understand [Less](https://speakerdeck.com/danmatthews/less-css), `package.json` and atom.io themes registry
+- create a syntax theme
+	1. Generate Syntax Theme from the Command Palette
+		- give it a name like `motif-syntax`
+		- end syntax theme names with `-syntax` and UI ones with `-ui`
+	2. check that theme shows in Syntax Theme dropdown under Settings View > Themes
+	3. open `styles/colors.less` and change defined color variables
+	4. open `styles/base.less` and change selectors
+		- for example, make `.gutter` have a red `background-color`
+		- caution: declaring a `font-family` in the theme will override Atom settings
+	5. reload atom to see changes: Alt + Cmd + Ctrl + L
+		- in the future run `atom --dev .` or View > Developer > Open in Dev Mode
+- create a UI theme
+	1. fork the [template](https://github.com/atom-community/ui-theme-template)
+	2. clone the forked repo to local
+	3. run Atom in dev mode from the local theme directory
+	4. change theme name in `package.json`
+		- again, be sure the name ends in `-ui`
+	5. run `apm link --dev`
+		- this symlinks repo to `~/.atom/dev/packages`
+		- now you can always load atom normally to force Atom back to default theme
+	6. reload atom
+	7. enable the theme in Settings View
+	8. work on the UI theme
+- theme variables
+	- required: provide a `ui-variables.less` or `syntax-variables.less`
+		- there is a default fallback for [UI variables](https://github.com/atom/atom/blob/master/static/variables/ui-variables.less)
+		- and a default fallback for [syntax variables](https://github.com/atom/atom/blob/master/static/variables/syntax-variables.less)
+	- adhere to the [style guide](https://github.com/atom/styleguide)
+	- stick to "structural styling"
+	- avoid defining colors, padding, absolute pixels (use the theme variables)
+- workflow
+	- use dev mode (discussed above) for live reload
+	- reload all styles at once: Alt + Cmd + Ctrl + L
+	- developer tools: Alt + Cmd + I or Toggle Developer Tools
+	- open the styleguide: Cmd + Ctrl + Shift + G (or Command Palette "styleguide")
+		- styleguide renders every component supported by Atom
+		- don't be afraid to open it - very visual and easy to look through
+	- side-by-side view
+		- open two windows instead of needing to fix everything through reloading
+		- example problem: accidentally changing text to same color as background
+	- publish your package
+		- follow [the steps](https://flight-manual.atom.io/hacking-atom/sections/publishing/) to deploy
+
 ## 4. Behind Atom
