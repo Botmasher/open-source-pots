@@ -812,6 +812,8 @@ convert() {
 	1. fork the [template](https://github.com/atom-community/ui-theme-template)
 	2. clone the forked repo to local
 	3. run Atom in dev mode from the local theme directory
+		- command: `atom --dev .`
+		- dev mode windows have a little icon in the bottom left
 	4. change theme name in `package.json`
 		- again, be sure the name ends in `-ui`
 	5. run `apm link --dev`
@@ -840,4 +842,72 @@ convert() {
 	- publish your package
 		- follow [the steps](https://flight-manual.atom.io/hacking-atom/sections/publishing/) to deploy
 
+### Creating a Grammar
+- grammars written in CSON or JSON
+- scopes assigned to regex patterns
+- scopes turned into targetable CSS classes
+- using Oniguruma engine
+1. open Command Palette and "Generate Package"
+2. name it something, like `language-flight-manual`
+	- grammar packages begin with `language-`
+3. delete unnecessary folders: `keymaps`, `lib`, `menus`, `styles`
+4. remove `activationCommands` from `package.json`
+5. create folder `grammars`
+6. inside `grammars/` create file like `flight-manual.cson`
+7. populate the main grammar with [boilerplate](https://gist.github.com/DamnedScholar/622926bcd222eb1ddc483d12103fd315)
+	- `scopeName`: language highlighted by this grammar
+	- `name`: display name shown in status bar and grammar selector
+	- `fileTypes`: array of file types highlighted by this grammar
+	- `patterns`: regex patterns used for tokenizing these files
+8. add a basic pattern to tokenize words
+	- pattern to tokenize words like "Flight Manual": `'\\bFlight Manual\\b'`
+	- give a scope name to this like: `'entity.other.flight-manual'`
+	- double escape `\\` since CSON processes the string before Oniguruma!
+9. add different scopes with capture groups
+	- change the match to include capture groups: `'\\b(Flight) (Manual)\\b'`
+	- add a `captures` key after `name` to assign scopes to referenced capture groups
+	- now main name is overarching scope but capture names will reference each group
+```
+'captures':
+  '1':
+		'name': 'keyword.other.flight.flight-manual'
+	'2':
+		'name': 'keyword.other.manual.flight-manual'
+```
+10. add begin/end patterns
+	- multiline patterns
+	- begin tokenizing from `begin` key and don't stop until `end` key
+	- provide punctuation scopes from the start (harder to support later)
+	- so try adding (support for note blocks)[https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/#beginend-patterns]
+	- begin/end patterns only match their own subpatterns (as if its own subgrammar)
+11. include inherited markdown patterns: `'include': 'source.gfm'`
+	- note that the begin/end blocks still don't highlight
+	- instead of duplicating, use the `'include': '$self'` scope in begin/end patterns
+
+### Publishing
+- use `apm` to publish and update public registry packages
+- prepare a package:
+	1. correctly fill out `package.json` fields: `name`, `description`, `repository`
+	2. set the `package.json` version to `0.0.0`
+	3. check that `package.json` has `engines` entry for Atom
+	4. make sure there's a `README.md` in root
+	5. package should be a git repo pushed to GitHub
+- publish a package:
+	1. double check there isn't a name conflict with an existing atom.io package
+	2. run `apm publish minor` (version can be `major`, `minor`, `patch`)
+		- registers package name on atom.io (first time only)
+		- updates `version` in `package.json` and commits
+		- creates new [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) for your version
+		- pushes tag and current branch to GitHub
+		- updates atom.io with your published version
+	3. enter GitHub credentials
+	4. head over to atom.io packages to see yours among all in registry
+- update a package: `apm publish version-type` (to update major.minor.patch number)
+	- `version-type` is `major` when you break backwards compatability
+	- `version-type` is `minor` when adding new functionality
+	- `version-type` is `patch` when changing implementation but not behavior/options
+
+### Iconography
+
 ## 4. Behind Atom
+-
