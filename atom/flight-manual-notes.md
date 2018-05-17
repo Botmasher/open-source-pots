@@ -908,6 +908,110 @@ convert() {
 	- `version-type` is `patch` when changing implementation but not behavior/options
 
 ### Iconography
+- bundled with Octicons
+- see Icons in Styleguide
+- add them to styles with a span class `icon icon-whatever-name`
+- recommended font size: `16px`
+	- use multiples of 16 for clear results
+- add text for clarity
+	- a text label
+	- a [tooltip](https://atom.io/docs/api/v1.27.0/TooltipManager)
+	- an attribute `title="label"`
+
+### Debugging
+- how to debug Atom and what info to provide in issues
+- update version
+	- check version: `atom --version`
+	- look for [latest stable release](https://github.com/atom/atom/releases/tag/v1.27.0)
+	- update in Atom > About and click "Restart and Install Update" if applicable
+	- you can also rebuild Atom from source
+- safe mode
+	- run `atom --safe`
+	- does not load packages
+	- does not load your init script
+	- if this fixes an issue, it's probably in packages or init
+	- if this does not help:
+		- start Atom in normal mode
+		- open Settings View
+		- disable packages one by one
+		- restart Atom after disabling each package
+	- disable or uninstall the problem package
+	- contact the package maintainer
+- clear saved state across all projects (including unsaved buffers)
+	- run `atom --clear-window-state`
+	- may also clear all config: `mv ~/.atom ~/.atom-backup` then restart Atom
+- linked packages
+	- find packages linked to Atom packages or Atom dev packages: `apm links`
+	- remove links: `apm unlink` (including `apm unlink all`)
+- package settings
+	- open Settings View
+	- check through settings in Basic Customization
+	- check through per-language settings in languages under Packages tab
+	- check through the settings for each package
+- configuration
+	- are these causing unexpected behavior for you?
+	- custom styles
+	- custom keymaps
+	- custom snippets
+- keybindings
+	- use Keybinding Resolver if the expected commands aren't executing
+	- the resolver shows:
+		- command
+		- CSS selector defining valid context
+		- file where keybinding is defined
+	- gray keybindings are matched but not executed
+	- green keybindings are matched and executed
+	- multiple for the same are chosen by selector specificity and load order
+		- core loaded first
+		- then package keybindings
+		- then user-defined ones
+	- what causes commands to be listed but not triggered?
+		- key combination not used in context defined by keybinding selector
+		- _or_ another keybinding had precedence (often conflicting packages)
+	- open a package issue if any package's keybindings take precedence over core
+- font rendering
+	- use Developer Tools > Elements tab to see which fonts render which text
+- errors
+	- errors log to red notification (for me appearing on right side)
+	- check other errors in Console tab of Developer Tools
+	- developer tools automatically show in Dev mode
+- crash logs
+	- check automatic logs in `Console.app`
+		- select User Reports
+		- find entries starting with `Atom` and ending in `.crash`
+		- save dump
+- startup performance
+	- Timecop gives insights on loading times and behaviors
+	- look for any packages that have high loading or activation times
+- runtime performance
+	- issues are more useful when including Chrome CPU profiler saved profile
+		- open Developer Tools
+		- collect the JS CPU profile
+		- select Start
+		- capture a recording of the action
+		- select Stop
+	- now you can check out the chart view
+	- you can save and post the profile data
+- profile startup performance
+	- create a CPU profile for checking the window load time
+	- start atom with `atom --profile-startup .`
+	- select Profiles in Developer Tools
+	- select "startup" profile
+	- then save the startup profile
+	- include it in your issue
+- build tools
+	- is `apm install` causing issues?
+	- maybe package depends on native code
+	- check that apm can build native code on your machine: `apm install --check`
+	- you will need C++ compiler and Python
+- GPU issues
+	- rendering issues like flickering?
+	- run without GPU: `atom --disable-gpu`
+	- this may increase draw times and use more CPU energy
+	- allow commands to determine how layer tiles (graphics) are drawn: `--enable-gpu-rasterization`
+	- make Skia GPU backend draw layer tiles only: `--force-gpu-rasterization`
+	- use these Chromium flags after other flags
+		- other flags like `--safe` will not be executed after Chromium ones above
 
 ## 4. Behind Atom
 -
