@@ -1013,5 +1013,41 @@ convert() {
 	- use these Chromium flags after other flags
 		- other flags like `--safe` will not be executed after Chromium ones above
 
+### Writing Specs
+- Atom tests with Jasmine
+- core and packages store tests in `spec/` directory
+- files have to end in `-spec`
+1. add `describe` method or methods
+2. add `it` method or methods
+3. add `expect` method or methods (Jasmine [expectations](https://jasmine.github.io/1.3/introduction.html#section-Expectations))
+4. consider other matchers besides Jasmine built-ins
+	- [jasmine-jquery](https://github.com/velesin/jasmine-jquery)
+	- `toBeInstanceOf`: for `instanceof`
+	- `toHaveLength`: for `.length`
+	- `toExistOnDisk`: file exists on filesystem
+	- `toHaveFocus`: if element has focus
+	- `toShow`: if element is visible in DOM
+- async specs with promises
+	- promises and the `waitsForPromise` function
+	- use promises in the `describe`, `it`, `beforeEach`, `afterEach`
+	- multiple promises: use one new `waitsForPromise` per promise (not nested)
+	- optional promise arguments: `shouldReject` (default: `false`), `timeout`, `label` (if times out)
+- async specs with wait
+	- use `waitsFor` and `runs`
+	- more info [from Jasmine](https://jasmine.github.io/1.3/introduction.html#section-Asynchronous_Support)
+- run specs
+	- use the command `window:run-package-specs` (also for Atom core)
+	- that will run all tests in `spec/`
+	- CI environments are easily supported
+	- command line: `atom --test`
+		- optionally add a timeout like `--timeout 60`
+		- followed by directories to test
+- customizing test runner
+	- Atom runs outdated Jasmine 1.3 for compatability
+	- add an `atomTestRunner` field to `package.json`
+	- this test module must export one function for Atom to run
+	- Atom will call the function with [a bunch of parameters](https://flight-manual.atom.io/hacking-atom/sections/writing-specs/#customizing-your-test-runner)
+	- the function should return a promise with a resolve code
+
 ## 4. Behind Atom
 -
