@@ -1049,5 +1049,20 @@ convert() {
 	- Atom will call the function with [a bunch of parameters](https://flight-manual.atom.io/hacking-atom/sections/writing-specs/#customizing-your-test-runner)
 	- the function should return a promise with a resolve code
 
+### Handling URIs
+- a package can register itself "to handle special URIs triggered from the system"
+- example: `my-package` can handle any URI beginning in `atom://my-package/`
+- add a `uriHandler` to `package.json`
+	- give it a `method` key to call
+	- optionally give it a `deferActivation` key (set to `false` to avoid Atom deferring package activation)
+- write the handler method
+	- Atom passes parsed URI with query string (arg 1) and a raw URI (arg 2)
+	- query strings are still strings and must be converted to native types
+- activation deferral
+	- by default adding a `uriHandler` means Atom will not activate package until it has a handleable URI
+	- once it has the URI Atom activates package and calls the handler
+	- disabling avoids this but increases Atom startup time
+- no Linux support for URI handlers
+
 ## 4. Behind Atom
 -
