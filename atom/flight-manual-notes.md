@@ -1064,5 +1064,30 @@ convert() {
 	- disabling avoids this but increases Atom startup time
 - no Linux support for URI handlers
 
+### Cross-Platform Compatability
+- Electron and Node handle most details across platforms
+- symlinks: on Windows specify type `'junction'`
+- filenames
+	- Windows has [reserved filenames and characters](https://flight-manual.atom.io/hacking-atom/sections/cross-platform-compatibility/#filenames)
+	- Mac and Linux require `\` before spaces
+- filepaths
+	- Windows `\` and only up to 250 characters (avoid deep nesting)
+	- Mac and Linux `/`
+	- `join` and `normalize` Node functions handle this
+- do not parse paths as URLs
+	- characters like `?` and `#` are misread
+	- Windows drives parse as protocols
+	- when URLs are required use `file:` protocol
+- `fs.stat`: this returns allocation size of directory, not contents
+- `path.relative`: useful on Mac or Linux but Windows allows "multiple absolute roots" (`C:`, `D:`, ...)
+- [RimRAF](https://www.npmjs.com/package/rimraf) has retry logic for operating over many files
+- line endings
+	- `CRLF` on Windows
+	- `LF` on Mac, Linux
+	- `autocrlf` on Git on Windows (converts between `CRLF`/`LF`)\
+	- these "interfere with file lengths, hash codes and direct text comparisons"
+	- these also increase Atom selection length by 1 char/line
+	- force ending type by [specifying gitattributes](https://flight-manual.atom.io/hacking-atom/sections/cross-platform-compatibility/#line-endings)
+
 ## 4. Behind Atom
 -

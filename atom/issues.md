@@ -19,3 +19,8 @@ Flight Manual
   - where: 2 > Writing in Atom
   - uri: https://flight-manual.atom.io/using-atom/sections/writing-in-atom/
   - description: keypress instructions under Spell Checking state to "pull up a menu of possible corrections by _hitting_ <kbd>Cmd+Shift+;</kbd>" (italics mine). Later, the Snippets subsection gives two instructions to "hit `tab`". These conflict with the [language guidelines]( https://github.com/atom/flight-manual.atom.io/blob/master/CONTRIBUTING.md#language) in CONTRIBUTING.md.
+
+- heading text lacks prescribed title-case
+  - where: 3 > Cross-Platform Compatibility
+  - uri: https://flight-manual.atom.io/hacking-atom/sections/cross-platform-compatibility/
+  - description: most multiword headings in this section are not title-cased, which conflicts with the [language guidelines]( https://github.com/atom/flight-manual.atom.io/blob/master/CONTRIBUTING.md#language) in CONTRIBUTING.md.
