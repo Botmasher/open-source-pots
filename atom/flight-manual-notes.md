@@ -1089,5 +1089,22 @@ convert() {
 	- these also increase Atom selection length by 1 char/line
 	- force ending type by [specifying gitattributes](https://flight-manual.atom.io/hacking-atom/sections/cross-platform-compatibility/#line-endings)
 
+### Converting from TextMate
+- themes or grammars
+- converting a bundle
+	- editor preferences, snippets, colorization
+	- example converting R: `apm init --package language-r --convert https://github.com/textmate/r.tmbundle`
+	- in that example you can go into the `language-r` directory
+	- then link your package with `apm link`
+	- now try opening `.r` files in Atom
+- syntax themes
+	- `plist` files vs Atom's Less
+	- download the TextMate theme
+	- convert the theme: `apm init --theme my-theme --convert ~/Downloads/MyTheme.tmTheme`
+	- open Settings View and enable the theme
+
+### Hacking on Atom Core
+- 
+
 ## 4. Behind Atom
 -
