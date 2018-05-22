@@ -1104,7 +1104,43 @@ convert() {
 	- open Settings View and enable the theme
 
 ### Hacking on Atom Core
-- 
+- for Atom bugs or adding features to core
+- run in dev mode with local copy of source
+1. fork `atom/atom`
+2. clone it to local
+3. run the bootstrap script from local directory: `script/bootstrap`
+4. run in dev mode
+	- set `ATOM_DEV_RESOURCE_PATH` if _not_ cloned to `~/github/atom`
+	- use `--dev` parameter when running Atom
+	- may be `atom-dev` or `atom-beta` instead depending on source code
+	- benefits
+		- restart Atom after changes instead of needing to run `script/build`
+		- dev packages load instead of regular packages with same name
+5. run core tests
+ 	- make sure the `ATOM_DEV_RESOURCE_PATH` is right
+	- go to local and run `atom --test spec`
+6. build from source
+	- have macOS, Node, npm, Python, and Xcode command line tools
+	- see specific [requirements](https://flight-manual.atom.io/hacking-atom/sections/hacking-on-atom-core/#requirements)
+	- install using `script/build --install`
+	- browse build [options][https://flight-manual.atom.io/hacking-atom/sections/hacking-on-atom-core/#scriptbuild-options] and [errors](https://github.com/atom/atom/search?q=label%3Abuild-error+label%3Amac&type=Issues)
+
+### Contributing to Official Atom Packages
+- open an issue
+- create a clone
+	- for some packages it may be necessary to build Atom core
+	- fork then clone
+	- go into the directory then run `apm install`
+- link your fork instead of the built-in package: `apm link -d`
+- now you can run `atom --dev`
+- running in dev mode
+	- note that you're using Atom to modify Atom
+	- only load packages you're building in development mode
+	- only develop in stable mode and test packages in dev mode
+	- command for "Application: Open Dev" or `atom --dev`
+	- create a symlink to your package (automatically done with `apm develop`)
+	- `apm link --dev` and `apm unlink --dev` also create and remove dev mode symlinks
+- keep dependencies updated: `apm update` after pulling upstream changes
 
 ## 4. Behind Atom
 -
