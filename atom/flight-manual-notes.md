@@ -1143,4 +1143,30 @@ convert() {
 - keep dependencies updated: `apm update` after pulling upstream changes
 
 ## 4. Behind Atom
--
+
+### Configuration API
+- read global `atom.config` settings
+	- useful for packages that need to be configurable
+- `atom.config.get` reads value of namespaced key: `@showInvisibles() if atom.config.get "editor.showInvisibles"`
+- `atom.config.observe` subscribes to track any view object
+	- calls a callback now and then each value change
+```
+{View} = require 'space-pen'
+
+class MyView extends View
+  attached: ->
+    @fontSizeObserveSubscription =
+      atom.config.observe 'editor.fontSize', (newValue, {previous}) =>
+        @adjustFontSize(newValue)
+
+  detached: ->
+    @fontSizeObserveSubscription.dispose()
+```
+- `atom.config.onDidChange` calls callback on each value change (but not now)
+- subscriptions return `Disposable` objects for unsubscribing
+	- the example shows unsubscribing on view detach
+	- group multiple into `CompositeDisposable` and dispose that on view detach
+- writing config
+	- automatically on startup from the `config.cson`
+	- `atom.config.set` to update a config key: `atom.config.set("core.showInvisibles", true)`
+- set up a [schema](https://atom.io/docs/api/v1.27.1/Config) to "expos[e] package configuration via specific key paths"
