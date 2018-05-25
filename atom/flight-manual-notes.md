@@ -1170,3 +1170,39 @@ class MyView extends View
 	- automatically on startup from the `config.cson`
 	- `atom.config.set` to update a config key: `atom.config.set("core.showInvisibles", true)`
 - set up a [schema](https://atom.io/docs/api/v1.27.1/Config) to "expos[e] package configuration via specific key paths"
+
+### Keymaps In-Depth
+- keymap file
+	- CSON/JSON nested hashes
+	- apply keystrokes and commands to elements matching a selector
+	- can add attribute to selectors: `'atom-text-editor:not([mini])'`
+- key combinations
+	- modifier keys plus key
+	- separated by dash
+- commands
+	- custom DOM events triggered when presses match bindings
+	- UI code listens for named commands, not key presses
+	- `atom.commands` is global `CommandRegistry` (these are what show in Command Palette)
+	- Command Palette shows commands in its "focus context"
+- multiple commands for one keybinding: no support, so just create a new command that does both
+- order
+	- most specific selector is chosen first
+	- otherwise JSON is unordered so just split into multiple files if ordering matters
+- grammars
+	- limit binding to a grammar with an attribute: `"atom-text-editor[data-grammar='source example']"`
+	- only entire grammar, not scopes within it, not subelements of text editor
+- unsetting and aborting bindings
+	- use `unset!` instead of command to avoid triggering binding
+	- unset bindings don't cancel same keybindings on parent selector though
+	- use `abort!` instead of command to stop searching for binding
+- native Chromium keybindings
+	- use `native!` to force native browser keymapping
+	- apply selector `.native-key-bindings` to set all keystrokes on an element
+	- useful for backspace and arrow keys in components and input elements
+- aborting commands and overloading bindings
+	- when defining a command use `.abortKeyBinding()` to step out of overloaded keybinding
+	- examples include tabbing in snippets, since it should expand if snippet exists otherwise just tab
+- consider the [steps Atom takes](https://flight-manual.atom.io/behind-atom/sections/keymaps-in-depth/#step-by-step-how-keydown-events-are-mapped-to-commands) to map a keypress to a command
+- getting Atom to recognize keypresses
+	- Chromium [is limited](https://blog.atom.io/2016/10/17/the-wonderful-world-of-keyboards.html) in how it reports keypresses
+	- there are [ways to get around this](https://flight-manual.atom.io/behind-atom/sections/keymaps-in-depth/#overriding-atoms-keyboard-layout-recognition)
