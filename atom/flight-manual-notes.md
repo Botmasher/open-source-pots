@@ -1206,3 +1206,27 @@ class MyView extends View
 - getting Atom to recognize keypresses
 	- Chromium [is limited](https://blog.atom.io/2016/10/17/the-wonderful-world-of-keyboards.html) in how it reports keypresses
 	- there are [ways to get around this](https://flight-manual.atom.io/behind-atom/sections/keymaps-in-depth/#overriding-atoms-keyboard-layout-recognition)
+
+### Scoped Settings, Scopes and Scope Descriptors
+- settings specific to a grammar
+- a kind of "scoped settings" for "targeting ... a specific syntax token type"
+	- example scopes for a JavaScript function: `function` and `name`
+- treat scope names like CSS classes
+	- example scopes on a JS function's name: `<span class="entity name function js">foo</span>`
+- scope selectors
+	- target tokens
+	- example selecting all JS: `source.js`
+	- example selecting all JS function names: `source.js .function.name`
+	- example selecting all function names: `.function.name`
+- `atom.config.set()` scope selector setting
+	- accepts a `scopeSelector` param: `atom.config.set('my-package.my-setting', 'special value', scopeSelector: '.source.js .function.name')`
+- scope descriptors
+	- array of scopes for a path from root
+	- can obtain arrays from editor
+		- [root scope descriptor](https://atom.io/docs/api/v1.27.1/TextEditor#instance-getRootScopeDescriptor)
+		- [buffer position descriptor](https://atom.io/docs/api/v1.27.1/TextEditor#instance-scopeDescriptorForBufferPosition)
+		- [cursor position descriptor](https://atom.io/docs/api/v1.27.1/Cursor#instance-getScopeDescriptor)
+	- get the descriptor then `atom.config.get` the value for a setting at that scope
+
+### Serialization in Atom
+- 
