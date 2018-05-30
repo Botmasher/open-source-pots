@@ -1229,4 +1229,25 @@ class MyView extends View
 	- get the descriptor then `atom.config.get` the value for a setting at that scope
 
 ### Serialization in Atom
-- 
+- useful for reloading/restoring from a previous session
+	- window's JSON representation gets deserialized on shutdown
+- package serialization hook (`serialize`)
+	- optional `serialize` method in main package module
+	- return JSON-serializable object: `@myObject.serialize()`
+	- this gets passed to `activate` on reload
+- serialization methods
+	- implement `.serialize()` for the class of any object that should be able to serialize
+	- serialize must have a `deserializer` key that can convert the data back into an object
+		- it's usually just pointing back to this same class
+```
+class A
+  constructor: (@data) ->
+  serialize: -> { deserializer: 'A', data: @data }
+```
+- deserialization
+	- now the package needs to be able to take that serialized object and load it
+	- `package.json` should contain a `deserializers` key with a method for that object
+	- each of that object's keys should be an object named in `deserializer` and value its deserialize method
+	- that method (in main) gets passed the serialized data: `deserializeA: ({ data }) -> new A(data)`
+	- alternatively, use `atom.deserializers.add` from within the class (not preferred)
+- class-level version can be added to the object: `@version: 2`
