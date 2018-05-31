@@ -1251,3 +1251,24 @@ class A
 	- that method (in main) gets passed the serialized data: `deserializeA: ({ data }) -> new A(data)`
 	- alternatively, use `atom.deserializers.add` from within the class (not preferred)
 - class-level version can be added to the object: `@version: 2`
+
+### Developing Node Modules
+- multiple packages are Node modules rather than Atom packages
+	- example: `atom-keymap`
+- these require separate way of linking to dev environment
+1. clone the module to local
+2. navigate to the local directory
+3. install the module using `npm install`
+4. lin the module using `npm link`
+5. change to the directory where Atom is cloned
+6. link the specific module to Atom using `npm link module-name`
+7. rebuild with Atom Package Manager: `apm rebuild`
+8. set environment variable if Atom is not in `~/github/atom`: `export ATOM_DEV_RESOURCE_PATH=Atom Cloned Path`
+	- the path should match the directory in step 5
+9. run Atom in dev mode: `atom --dev .`
+- even after linking you still need to install and rebuild if changing the Node code
+1. change to the directory of the Node module
+2. `npm install`
+3. change to the directory where Atom is cloned
+4. `apm rebuild`
+5. run `atom --dev .`
