@@ -1272,3 +1272,56 @@ class A
 3. change to the directory where Atom is cloned
 4. `apm rebuild`
 5. run `atom --dev .`
+
+### Interacting with Other Packages via Services
+- one Atom package can provide services to other packages
+	- these are "versioned APIs"
+	- register services in `packages.json` under a `providedServices` key
+- provide a service by setting version keys and then methods to call
+```
+{
+  "providedServices": {
+    "my-service": {
+      "description": "What the service does",
+      "versions": {
+        "1.2.3": "provideMyServiceV1",
+        "2.3.4": "provideMyServiceV2"
+      }
+    }
+  }
+}
+```
+- those methods should exist in the main module
+- each method "should return a value that implements the service's API"
+```
+module.exports =
+  #...
+
+  provideMyServiceV1: ->
+    adaptToLegacyAPI(myService)
+
+  provideMyServiceV2: ->
+    myService
+```
+- consume services by setting up the same kind of syntax in `packages.json`
+	- but under a `consumedServices` key
+	- again list versions under a service name
+	- use [version ranges](https://docs.npmjs.com/misc/semver#ranges) like `^1.2.3` or `>=2.3.4 <2.5`
+- the consume methods
+	- called whenever active package provides that service
+	- are passed the service object returned from provider methods
+	- usually require cleanup for when providing package gets deactivated
+```
+{Disposable} = require 'atom'
+
+module.exports =
+  #...
+
+  consumeAnotherServiceV1: (service) ->
+    useService(adaptServiceFromLegacyAPI(service))
+    new Disposable -> stopUsingService(service)
+
+  consumeAnotherServiceV2: (service) ->
+    useService(service)
+    new Disposable -> stopUsingService(service)
+```
