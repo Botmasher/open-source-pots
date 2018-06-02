@@ -1325,3 +1325,32 @@ module.exports =
     useService(service)
     new Disposable -> stopUsingService(service)
 ```
+
+### Maintaining Your Packages
+- actions besides publishing
+- manually publishing
+	- _not_ recommended for anyone but advanced users
+	- performing wrong steps may require unpublishing
+	- this takes over what `apm` normally does automatically
+	- `apm` will still only publish to `atom.io`
+	- `apm` will still only list packages hosted on `GitHub`
+	1. update your `package.json` version number
+	2. commit the version change
+	3. make a git tag to ref that commit
+		- must match regex `^v\d+\.\d+\.\d+`
+		- the number must match the version number in `package.json`
+	4. run `git push --follow-tags`
+	5. run `apm publish --tag name` where name matches the git tag name
+- add collaborators
+	- invite them as a [personal collaborator](https://help.github.com/articles/inviting-collaborators-to-a-personal-repository/) on GitHub
+	- you can also do this with an [organization](https://help.github.com/articles/collaborating-with-groups-in-organizations/)
+		- collaborate with the team that published the package
+- transfer ownership
+	- [transfer the repo](https://help.github.com/articles/about-repository-transfers/)
+	- the new owner can now publish that package
+	- this is permanent!
+- unpublish a package from atom.io registry: `apm unpublish package-name`
+- unpublish a version: `apm unpublish package-name@1.1.1`
+- rename a package: `apm publish --rename changed-name`
+	- the original name cannot be reused
+	- changes name in `package.json`, pushes a new commit tag, publishes renamed package
