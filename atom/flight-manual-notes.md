@@ -1354,3 +1354,26 @@ module.exports =
 - rename a package: `apm publish --rename changed-name`
 	- the original name cannot be reused
 	- changes name in `package.json`, pushes a new commit tag, publishes renamed package
+
+### How Atom Uses Chromium Snapshots
+- Atom uses [V8 snapshots](https://v8project.blogspot.it/2015/09/custom-startup-snapshots.html) to preload
+	- core packages
+	- core services
+- runtime Atom fills in the info not gained from snapshot during compilation
+	- 3rd-party packages
+	- custom stylesheets
+	- settings
+	- more
+- [electron-link](https://github.com/atom/electron-link) traverses require graph
+	- replaces "forbidden `require` calls" (not accessible through snapshot) with functions to call at runtime
+	- outputs one script with code for all modules that can be reached from entry point
+	- code is supplied to `mksnapshot` to make snapshot blob
+	- blob gets copied to app bundle
+	- running Atom then automatically gets blob loaded by Electron
+- new Atom code should go inside snapshot
+	- defer use of DOM APIs
+	- defer native modules
+	- anything that can be deferred to time when available
+- when not possible, add unsupported paths to files excluded from snapshot
+	- only exclude unsupported files
+	- avoid skipping whole Node modules
