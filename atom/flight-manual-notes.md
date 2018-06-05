@@ -1377,3 +1377,43 @@ module.exports =
 - when not possible, add unsupported paths to files excluded from snapshot
 	- only exclude unsupported files
 	- avoid skipping whole Node modules
+
+### Glossary
+- buffer
+	- text content held in memory
+	- not written to file until saved
+- command
+	- Atom functionality
+	- triggered with keybindings
+	- triggered through menu items
+- dock
+	- pane containers attaching to side of Atom window
+	- can attach left, right, below
+	- "Tree View" is one
+- key combination
+	- any number of keys pressed to do task
+- key sequence
+	- subset of key combination
+	- when keys pressed and released sequentially (press... then...)
+	- not when all keys pressed and released together
+- keybinding
+	- map a key combination to an Atom command
+- keymap
+	- collection of keybindings
+	- _or_ file(s) of keybindings for Atom package/core
+- package
+	- a plugin for Atom
+- pane
+	- visual part of editor
+	- holds one or more pane items
+	- each Atom window contains one or more
+- pane container
+	- Atom UI section with one or more panes
+- pane item
+	- editor or other item shown in a pane
+	- represented as tabs by default
+	- not equivalent to "tabs" because tabs can be disabled
+	- can display non-files such as Settings View
+- panel
+	- Atom UI that's outside of the editor
+	- for example, there's a Find and Replace panel
