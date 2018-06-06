@@ -1,6 +1,8 @@
 # Flight manual
 https://flight-manual.atom.io/
 
+Skimming QBASIC documentation, revisiting my 8 year old self programming simple adventure games. I wish I could see it then through my eyes now. Oh, that's why I was typing that!
+
 ## 1. Getting Started
 
 ### Why Atom?
