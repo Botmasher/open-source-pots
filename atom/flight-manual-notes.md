@@ -1378,7 +1378,7 @@ module.exports =
 	- only exclude unsupported files
 	- avoid skipping whole Node modules
 
-### Glossary
+## Glossary
 - buffer
 	- text content held in memory
 	- not written to file until saved
@@ -1417,3 +1417,20 @@ module.exports =
 - panel
 	- Atom UI that's outside of the editor
 	- for example, there's a Find and Replace panel
+
+## Removing Shadow DOM Styles
+- removed from text editors in Atom 1.13
+- UI themes/packages
+	- remove pseudoselector `::shadow`
+	- remove combinator selector `/deep/`
+- syntax themes
+	- remove pseudoselector `:host`
+	- prefix grammar selectors to avoid "accidental style pollution": `syntax--`
+	- non-language selectors like `.gutter` or `.cursor` should remain unprefixed
+- context-targeted stylesheets
+	- previously Atom allowed targeting specific shadow DOM elements
+	- this involved adding `.atom-text-editor` to filename
+	- remove as no longer necessary
+	- if selectors do not work after this change, increase selector specificity
+		- try repeating selector class to up specificity: `.my-class.my-class`
+- decide [when to migrate](https://flight-manual.atom.io/shadow-dom/sections/removing-shadow-dom-styles/#when-should-i-migrate-my-themepackage) your package
