@@ -1436,3 +1436,18 @@ module.exports =
 	- if selectors do not work after this change, increase selector specificity
 		- try repeating selector class to up specificity: `.my-class.my-class`
 - decide [when to migrate](https://flight-manual.atom.io/shadow-dom/sections/removing-shadow-dom-styles/#when-should-i-migrate-my-themepackage) your package
+
+## Upgrading to 1.0 APIs
+
+### Upgrading Your Package
+- [what to update](https://flight-manual.atom.io/upgrading-to-1-0-apis/sections/upgrading-your-package/) when switching to 1.0
+- mostly achievable just by fixing errors/deprecations that come up
+- visit the site above for specific updates and deprecations
+
+### Upgrading Your UI Theme or Package Selectors
+- [updating to deal with DOM](https://flight-manual.atom.io/upgrading-to-1-0-apis/sections/upgrading-your-ui-theme-or-package-selectors/)
+- DOM style-breaking changes
+- as mentioned above shadow DOM removed
+
+### Upgrading Your Syntax Theme
+- this section deals with text editor Shadow DOM, no longer applicable
