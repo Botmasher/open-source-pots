@@ -30,3 +30,8 @@ Flight Manual
   - where: Appendix B
   - uri: https://flight-manual.atom.io/shadow-dom/sections/removing-shadow-dom-styles/
   - description: most multiword headings in this section are not title-cased, including some full sentences, which conflicts with the [language guidelines]( https://github.com/atom/flight-manual.atom.io/blob/master/CONTRIBUTING.md#language) in CONTRIBUTING.md.
+
+  - [ ] heading text lacks prescribed title-case
+    - where: Appendix D (including both sections)
+    - uri: https://flight-manual.atom.io/atom-server-side-apis/
+    - description: most multiword headings in this section are not title-cased, including some full sentences, which conflicts with the [language guidelines]( https://github.com/atom/flight-manual.atom.io/blob/master/CONTRIBUTING.md#language) in CONTRIBUTING.md.

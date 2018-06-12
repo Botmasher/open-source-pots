@@ -1451,3 +1451,24 @@ module.exports =
 
 ### Upgrading Your Syntax Theme
 - this section deals with text editor Shadow DOM, no longer applicable
+
+## Atom Server-Side APIs
+### Atom Package Server API
+- calls handled through `apm`
+	- this same tool also helps by implementing `package.json` version and ensuring git tags are pushed
+	- even Atom "shells out to `apm` rather than hitting the API directly"
+- after authorization info, resources listed
+	- list packages (`GET` call to `/packages`)
+	- search packages (passing a query)
+	- read details of one package (passing a package name)
+	- create a package (`POST` call to `/packages`)
+	- delete a package (`DELETE` call passing a package name)
+	- rename package: new version with changed name in `package.json`, then automatic forwarding
+	- read a package version
+	- create a package version
+	- delete a package version
+	- stars (list stars, star, unstar, list stargazers (users who have starred))
+
+### Atom Update Server API
+- Atom update feed through `GET` request to `/api/updates`
+- lists out Atom updates
