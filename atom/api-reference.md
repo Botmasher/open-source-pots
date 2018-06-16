@@ -65,3 +65,13 @@ Notes on what I'm discovering and reinforcing as I make my way through the [API 
   - find, dispatch, on will/did dispatch
 
 ## CompositeDisposable
+- collects multiple `Disposable` objects
+  - `Disposable` objects are returned when subscribing
+  - `Disposable` object has method for checking if disposable
+  - `Disposable` objects have constructor and destructor (`dispose()`) methods
+  - composites dispose these in a group
+- methods for constructor and disposal
+- collection methods for adding, removing one `Disposable`
+- `delete` is an alias for the remove method
+- method for clearing the collection
+
