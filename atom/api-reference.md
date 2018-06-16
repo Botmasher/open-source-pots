@@ -35,7 +35,33 @@ Notes on what I'm discovering and reinforcing as I make my way through the [API 
   - open, toggle, execute JS
 
 ## Color
+- returned from `Config::get`
+- method for parsing string or object to color
+- methods for converting to hex/rgba
 
 ## CommandRegistry
+- global `atom.commands`
+  - commands here findable in Command Palette
+- listeners <-> commands, with CSS selectors
+- event handling is jQuery-like "event delegation"
+  - custom DOM events
+  - on focused element
+  - through keybinding or Command Palette
+- this is instead of binding listeners to DOM nodes
+  - attach to `atom.commands`
+  - then constrain using CSS selectors
+- pattern: `namespace:action`
+  - `namespace` is usually the package name
+  - `action` is the command's behavior
+  - words separated by `-` and all lowercase
+- listener call order (parallels CSS cascade)
+  - event bubbles up through DOM
+  - listeners invoked by specificity (more to less)
+  - ties resolved by invoking most recent listener
+  - event context: `this` points to `event.currentTarget`
+  - `stopPropagation`/`stopImmediatePropagation` stop bubbling and avoid triggering more listeners
+- methods include:
+  - add command listener to element
+  - find, dispatch, on will/did dispatch
 
 ## CompositeDisposable
