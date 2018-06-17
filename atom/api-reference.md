@@ -75,3 +75,38 @@ Notes on what I'm discovering and reinforcing as I make my way through the [API 
 - `delete` is an alias for the remove method
 - method for clearing the collection
 
+## Config
+- `atom.config` has get and set methods
+  - pass `get` the `package.key` to return a value
+  - pass `get` the `package.key` and a new value to set
+- `atom.config` has an observe method to watch changes
+  - `onDidChange` to catch old-to-new value changes only
+- values are set as strings but type specified in **schema**
+  - this is done in package main
+  - use JSON to configure type, default, min/max
+  - types are coerced and validated - not set if cannot validate!
+  - so below setting `atom.config.set('someInt', 'dog')` will not update the value
+```
+module.exports =
+  config:
+    someInt:
+      type: 'integer'
+      default: 23
+      minimum: 1
+ 
+  activate: (state) -> # ...
+```
+- types: string, integer, number (real), boolean, array, color, object, enum
+  - object must have key with child keys defining `properties`
+- settings can have `title` and `description` keys with limited markdown
+- you can initialize and set settings outside of package main schema
+  - _not_ recommended!
+- do not "depend on (or write to) configuration keys outside of your keypath"
+  - basically, don't try to manipulate settings for other packages (and more)
+- methods include:
+  - `observe` and `onDidChange` mentioned above
+  - get, set, unset keypaths
+  - extended: get all, sources for strings added via set, get schema, suppress observers
+
+## Decoration
+- 
