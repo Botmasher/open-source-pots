@@ -93,7 +93,7 @@ module.exports =
       type: 'integer'
       default: 23
       minimum: 1
- 
+
   activate: (state) -> # ...
 ```
 - types: string, integer, number (real), boolean, array, color, object, enum
@@ -109,4 +109,18 @@ module.exports =
   - extended: get all, sources for strings added via set, get schema, suppress observers
 
 ## Decoration
+- visually represents a `DisplayMarker`
+- add CSS to gutter numbers, lines, "selection-line regions around marked ranges of text"
+- create with `marker = editor.decorateMarker(range)`
+- destroy with `marker.destroy()`
+  - only when not needed or not owned
+- methods include:
+  - destroy
+  - checks for property changed, destroyed
+  - get id, get marker, check type
+  - get/set properties
+    - example uses a method called `update` instead
+    - change decoration's class
+
+## DisplayMarker
 - 
