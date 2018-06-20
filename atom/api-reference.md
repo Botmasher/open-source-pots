@@ -123,4 +123,39 @@ module.exports =
     - change decoration's class
 
 ## DisplayMarker
-- 
+- "buffer annotation"
+  - stays put as buffer changes
+  - anytime buffer location tracked: cursors, folds, misspelled words, ...
+- create through `DisplayMarkerLayer` instead of directly
+  - mark buffer range
+  - _or_ mark screen range
+- head and tail
+  - always head, sometimes tail
+  - tail stays put
+  - head moves, like when mouse moves during selection
+  - normal orientation: head > tail
+  - reversed orientation: head < tail
+- validation
+  - markers start off valid
+  - some changes to buffer can turn marker invalid
+  - based on chosen marker invalidation strategy
+    - never: good for selections
+    - surround: when changes completely surround marker
+    - overlap: (default) when changes surround start or end
+    - inside: when changes end up inside the marker
+    - touch: any contact with marked region, including up to start or end
+- methods
+  - destroy, copy
+  - subscribe for notifications when changed or destroyed
+  - check if marker is valid, destroyed, reversed or exclusive
+  - get invalidation strategy
+  - get, set properties
+  - check if marker matches properties
+  - compare marker range to another marker
+  - compare marker range and options to another marker
+  - get or set buffer or screen range
+  - get the screen position of the marker's start or end
+- head and tail methods
+  - set or get buffer and screen positions
+  - start or end buffer positions
+  - plant, clear or check for tail
