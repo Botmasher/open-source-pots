@@ -159,3 +159,15 @@ module.exports =
   - set or get buffer and screen positions
   - start or end buffer positions
   - plant, clear or check for tail
+
+## DisplayMarkerLayer
+- collection of related DisplayLayers for markers
+- overlays a MarkerLayer
+- experimental!
+- methods:
+  - destroy (the layer), clear (all markers in layer), check destroyed
+  - subscribe for notifications on destroy, update, create marker
+  - create markers using screen/buffer position/range
+  - query for marker/markers, marker count
+  - find markers with specific properties
+- note that the underlying MarkerLayer is also experimental and can do similar
