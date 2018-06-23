@@ -171,3 +171,24 @@ module.exports =
   - query for marker/markers, marker count
   - find markers with specific properties
 - note that the underlying MarkerLayer is also experimental and can do similar
+
+## Disposable
+- handle to disposable resource
+- an Emitter's `on` event "returns disposables representing subscriptions"
+- methods:
+  - check if it's disposable
+  - constructor
+  - dispose
+    - runs disposal action
+    - indicates resource no longer needed
+    - callable multiple times but action only runs once
+
+## Emitter
+- register handles with `on` and evoke with `emit`
+- class instances intended to be used with internal classes exposing event API
+  - example: create emitter and add an `on` for name change, then `emit` when name changes
+- methods:
+  - constructor, clear, dispose (see Disposable above)
+  - on (whenever event emitted), once (next time event emitted)
+  - preempt (run before other handlers existing at subscription time)
+  - emit (the actual invocation)
