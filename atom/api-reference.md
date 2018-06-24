@@ -192,3 +192,32 @@ module.exports =
   - on (whenever event emitted), once (next time event emitted)
   - preempt (run before other handlers existing at subscription time)
   - emit (the actual invocation)
+
+## LayerDecoration
+- decoration for every marker on a MarkerLayer
+- create with text editor's `.decorateMarkerLayer`
+  - create many markers without having to set/adjust every single one
+- methods:
+  - destroy, check if destroyed
+  - get/set properties
+  - set properties on a specific marker
+
+## MarkerLayer
+- container for a marker set
+- experimental
+- lifecycle methods:
+  - copy, destroy, clear
+  - check if destroyed
+- query methods:
+  - get marker by id
+  - get all markers in layer
+  - get marker count
+  - find markers by property
+  - get marker layer role (such as `atom.selection`)
+- creation methods:
+  - create marker with a certain range
+  - create marker with no tail and head at a position
+- event subscription methods:
+  - update (when layer marker created, updated, destroyed)
+  - create (when layer marker created)
+  - destroy (when layer is destroyed)
