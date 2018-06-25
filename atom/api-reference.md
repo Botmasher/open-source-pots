@@ -221,3 +221,28 @@ module.exports =
   - update (when layer marker created, updated, destroyed)
   - create (when layer marker created)
   - destroy (when layer is destroyed)
+
+## Notification
+- user notification
+  - has a message
+  - has a type
+- event subscription methods:
+  - pass callback for when dismissed
+  - pass callback for when displayed
+- read methods:
+  - get type, get message
+- other method: `dismiss`
+
+## NotificationManager
+- create notifications to send to user
+- `atom.notifications` is a globally available instance when Atom is running
+- event subscription methods:
+  - notification added
+  - notifications cleared
+- add methods:
+  - add a success, info, warning, error or fatal error notification
+  - each add method takes a message and optional `options` object
+  - options include buttons, description, dismissable, ...
+- read methods:
+  - get notification
+- other method: `clear`
