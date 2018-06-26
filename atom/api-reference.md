@@ -246,3 +246,24 @@ module.exports =
 - read methods:
   - get notification
 - other method: `clear`
+
+## Point
+- single row, column point
+  - two-element array
+  - `new Point(1,2) === [1, 2]`
+- properties: row, column
+- construction methods:
+  - constructor, convert object to point, copy (same row/col), negate
+- comparison methods:
+  - `.min` finds the earliest of two points
+  - `compare` checks whether this point is earler/later/equal
+  - check if equal, less than, less or equal, greater than, greater or equal
+- methods returning a new Point:
+  - `freeze` makes point immutable
+  - `translate` adds to row and col of a point
+  - `traverse` gets a new point by traversing typewriter-style across lines
+    - me: what's the difference in result? any cases?
+- conversion methods:
+  - point to array
+  - serialize array of row/col
+  - string representation of point
