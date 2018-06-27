@@ -267,3 +267,32 @@ module.exports =
   - point to array
   - serialize array of row/col
   - string representation of point
+
+## Range
+- region between two points
+- "range-compatible" arrays like `[[0, 0], [1, 0]]`
+- has `start` and `end` properties
+- construction methods:
+  - constructor (taking two points)
+  - range from object
+  - copy, negate (both start and end)
+- serialize/deserialize methods
+- details methods:
+  - check if is empty, if is single line
+  - read row count
+  - read rows (array of all rows)
+- methods to operate on range:
+  - freeze (return immutable version)
+  - union with other range
+  - translate (takes point to use as delta)
+  - traverse (typewriter style again)
+- comparison methods
+  - compare (returns if starts before, same, after)
+  - check if equal
+  - check if covers same rows
+  - check if intersects with another range
+  - check if contains another range
+  - check if contains a point
+  - check if intersects a row
+  - check if intersects a row range
+- conversion method: convert to string representation of range
