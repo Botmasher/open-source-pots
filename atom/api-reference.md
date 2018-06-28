@@ -296,3 +296,36 @@ module.exports =
   - check if intersects a row
   - check if intersects a row range
 - conversion method: convert to string representation of range
+
+## TextEditor
+- "all essential editing state" for one buffer
+  - cursor position
+  - selection position
+  - folds
+  - soft wraps
+- used to manipulate editor state
+- one buffer can be associated with many editors
+  - example: one file in two panes
+  - above would be one buffer, two editors
+  - in above example, changes in one buffer update two editors
+  - _but_ editors have own cursor position, selection position, ...
+- access editor instance
+  - register callback on `atom.workspace` global using `observeTextEditors`
+    - called with current editors
+    - called with any future editors
+  - example method call with callback param
+```
+atom.workspace.observeTextEditors(editor => {
+  editor.insertText('Hello World')
+})
+```
+- soft-wrap coords: buffer vs screen
+  - soft wrapping and folds cause misalignment between screen and buffer
+  - wrapped lines display as multiple on screen but are only one in buffer
+  - folded lines do not display lines on screen that are counted in buffer
+  - consider difference in behavior when extending
+    - example: jumping cursor 10 lines for user probably calls for screen coords
+    - example: jumping between method definitions may call for buffer coords
+  - advice: _default to buffer coords_!
+- methods:
+  - TODO give overview of available methods documentation
