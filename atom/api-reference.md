@@ -328,4 +328,28 @@ atom.workspace.observeTextEditors(editor => {
     - example: jumping between method definitions may call for buffer coords
   - advice: _default to buffer coords_!
 - methods:
-  - TODO give overview of available methods documentation
+  - subscription methods
+    - pass callbacks for events
+    - including changes to buffer title, path, or changes stopped
+    - cursor and selection changes
+    - adding, removing gutters
+    - buffer saved, buffer destroyed
+    - extension methods include changes to wrapping, grammar, add/remove selection, ...
+  - info about file
+    - read title, path
+    - check if file is modified, empty
+    - get/set encoding
+  - save file and save file as
+  - read text
+    - read buffer text, read buffer text in range
+    - read specific lines
+    - read paragraph around cursor
+  - change text
+    - replace (set), insert, delete, backspace text
+    - extension methods include change case, insert lines, delete to various points, ...
+  - history methods
+    - undo and redo last change
+    - extension methods for batching undo/redos and handling checkpoints (pointer in history stack)
+  - editor coordinates
+    - convert between screen/buffer positions or ranges
+    - extended methods for clipping returned point to a valid position in screen/buffer
