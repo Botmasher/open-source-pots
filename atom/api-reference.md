@@ -353,3 +353,36 @@ atom.workspace.observeTextEditors(editor => {
   - editor coordinates
     - convert between screen/buffer positions or ranges
     - extended methods for clipping returned point to a valid position in screen/buffer
+  - decoration methods
+    - add decoration to track a DisplayMarker (including if marker moved, invalidated, destroyed)
+    - add decoration to every marker in a DisplayMarkerLayer
+    - extended methods to get decorations or get line/highlight/overlay decorations
+  - marker methods
+    - create marker with a specific buffer/screen range or position
+    - find markers
+    - create marker layer to group markers
+    - retrieve a specific marker layer
+    - retrieve default marker layer (all markers not given an explicit layer)
+    - read markers, marker by id or marker count
+  - cursor (movement) methods
+    - various ways to read cursor screen/buffer positions
+    - or fetch/add a cursor at a buffer/screen position
+    - check if there are multiple cursors
+    - many movement methods, everything from up/down to end of screen line
+    - extension methods allow even more movement behaviors
+    - plus extension methods for fetching last cursor, all cursors or word under cursor
+  - selection methods
+    - read text selection
+    - get/set selected buffer/screen ranges
+    - add screen/buffer range selection
+    - many selection methods for, like move above, everything from up/down to end of screen line
+    - even more extended methods for selection direction/location behaviors
+    - plus extended methods for fetching all selections, markers, larger/smaller syntax nodes
+    - and a handy extended method for checking if a buffer range intersects a selection
+  - find/replace ("Searching and Replacing") methods
+    - scan buffer for text matching regex and run iterator function on matches (like `match` or `replace`)
+    - scan buffer within a range (otherwise just as above)
+    - scan buffer backwards
+      - useful for making programmatic changes while iterating
+      - invoke instead of `scan` to avoid "tripping over your own changes"!
+      
