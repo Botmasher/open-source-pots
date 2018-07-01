@@ -385,4 +385,33 @@ atom.workspace.observeTextEditors(editor => {
     - scan buffer backwards
       - useful for making programmatic changes while iterating
       - invoke instead of `scan` to avoid "tripping over your own changes"!
-      
+  - tab methods
+    - get/set/toggle soft tabs for the editor
+    - get/set tab length
+    - extended methods for checking if buffer uses soft tabs and reading tab text (indent level)
+  - soft wrap methods
+    - check if text is soft wrapped
+    - set/toggle editor soft wrapping
+    - get column where text will soft wrap
+  - indentation methods
+    - get/set indentation level for buffer row (depending on soft tabs and tab length)
+    - extended methods to indent/outdent specific rows, get line indent level, autoindent rows based on a grammar
+  - grammar: read the current grammar for this editor
+  - syntax scope methods
+    - get the root scope for this editor's current language
+    - get the scope descriptor for this position in the buffer
+    - extended methods for getting range for scope at cursor position, checking if row is commented out
+  - clipboard methods
+    - copy/cut/paste text
+    - cut text up to end of screen line or buffer line
+  - fold methods
+    - fold/unfold the current screen/buffer row
+    - extended methods for folding lines, folding/unfolding all, toggling folding and checking for folded/foldable
+  - gutter methods
+    - get gutters, add a gutter
+    - get a gutter with a given name (but documentation shows no params for this method)
+  - scroll methods
+    - scroll to cursor position or a specific screen/buffer position
+  - rendering methods
+    - read or set a mini editor's "greyed out placeholder" text
+      - this text displays when editor does not yet have content
