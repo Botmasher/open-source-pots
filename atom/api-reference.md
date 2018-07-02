@@ -415,3 +415,29 @@ atom.workspace.observeTextEditors(editor => {
   - rendering methods
     - read or set a mini editor's "greyed out placeholder" text
       - this text displays when editor does not yet have content
+
+## TooltipManager
+- "associates tooltips with HTML elements"
+- globally available through `atom.tooltips`
+- adding a tooltip returns a disposable
+- since routinely grouped, add to a CompositeDisposable
+- optionally display keybinding by setting `keyBindingCommand` property
+```
+const { CompositeDisposable } = require('atom')
+const subscriptions = new CompositeDisposable()
+subscriptions.add(atom.tooltips.add(document.createElement('div'), {title: 'This is a tooltip'}))
+subscriptions.add(atom.tooltips.add(document.createElement('div'), {
+  title: 'Another tooltip',
+  keyBindingCommand: 'find-and-replace:toggle-case-option',
+  keyBindingTarget: this.findEditor.element
+}))
+subscriptions.dispose()
+```
+- methods:
+  - add an HTML element using various options (title, placement, hover/click/focus trigger)
+    - as shown above this returns a Disposable
+  - find tooltips applied to a specific element
+    - returns array of tooltips on the target element
+
+## ViewRegistry
+- 
