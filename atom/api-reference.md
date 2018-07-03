@@ -440,4 +440,28 @@ subscriptions.dispose()
     - returns array of tooltips on the target element
 
 ## ViewRegistry
-- 
+- associates a model with a view
+- class provides view for any model
+  - the model/view association has to be registered first
+  - models are registered using `addViewProvider`
+- building a pane item
+  - separate models from views
+  - do this for "all but the simplest items"
+  - model deals with logic and API calls
+  - view deals with presentation
+- any object can be a model
+  - implement `getTitle` in models if displayed in Pane
+- how a view works
+  - tells workspace how to present the given model
+  - view provider returns DOM node
+  - HTML5 elements can implement views
+- global access through `atom.views`
+- methods:
+  - add a view provider
+    - optionally pass model constructor to limit view creation to that model
+    - pass factory function that returns some HTML
+    - adding a view provider returns a disposable
+  - get the view for an object in the workspace
+    - direct access to the view layer
+    - use to manipulate DOM in ways not supported by API
+    - performs a [series of checks](https://atom.io/docs/api/v1.28.0/ViewRegistry#instance-getView) to resolve the view and return an associated view
