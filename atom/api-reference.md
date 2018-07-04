@@ -465,3 +465,25 @@ subscriptions.dispose()
     - direct access to the view layer
     - use to manipulate DOM in ways not supported by API
     - performs a [series of checks](https://atom.io/docs/api/v1.28.0/ViewRegistry#instance-getView) to resolve the view and return an associated view
+
+## Workspace
+- UI state for the whole window
+- globally accessible through `atom.workspace`
+- uses:
+  - open files
+  - get notifications of current/future editors
+  - manipulate panes
+    - add panel methods allow panel creation
+- "items" display in a workspace pane
+  - in WorkspaceCenter
+  - or in one of three Docks
+- workspace requires `getTitle` method
+- methods:
+  - subscription methods for observing editors/panels, or events on editor/panel changes (add, destroy, ...)
+  - opening methods to open/hide/create item for URI
+    - add an opener function that runs whenever a URI is opened
+    - create new editor
+  - panes extended methods for reading panes and pane containers and activating panes
+  - pane location methods for getting the center workspace or the left/right/bottom dock
+  - panel methods for reading anel items at various locations or adding a panel to them
+  - search and replace methods for scanning/replacing across all files in workspace with a regex
