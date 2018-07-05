@@ -487,3 +487,21 @@ subscriptions.dispose()
   - pane location methods for getting the center workspace or the left/right/bottom dock
   - panel methods for reading anel items at various locations or adding a panel to them
   - search and replace methods for scanning/replacing across all files in workspace with a regex
+
+## WorkspaceCenter
+- the main workspace at center of window
+- this is the "workspace center" within the Workspace
+  - the Workspace also includes the three Docks (more above)
+- methods:
+  - subscription methods
+    - observe editors and pane items
+    - events when pane items added/changed/destroyed
+    - event when text editor added
+  - pane item methods
+    - read array of pane items in the workspace center
+    - just the active pane item
+    - read all text editors in the workspace center
+    - just the current active text editor
+  - extended methods for panes
+    - read all panes or the active pane
+    - activate the previous or next pane
