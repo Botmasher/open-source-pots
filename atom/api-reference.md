@@ -505,3 +505,29 @@ subscriptions.dispose()
   - extended methods for panes
     - read all panes or the active pane
     - activate the previous or next pane
+
+
+## BufferedNodeProcess
+- same as BufferedProcess but takes and runs a Node script
+- Windows does not support `#!` shebangs so this method is necessary there
+- included with `const {BufferedNodeProcess} = require('atom')`
+- constructor method as below - compare BufferedProcess
+
+## BufferedProcess
+- Node child process wrapper with error/output line buffering
+- an example of creating a buffered process
+```
+{BufferedProcess} = require('atom')
+
+const command = 'ps'
+const args = ['-ef']
+const stdout = (output) => console.log(output)
+const exit = (code) => console.log("ps -ef exited with #{code}")
+const process = new BufferedProcess({command, args, stdout, exit})
+```
+- methods
+  - constructor: as above, takes command, arguments, output and an exit code
+  - will throw error callback - method to call when error raised
+    - usually called because command isn't available at this path
+    - call `handle()` on the object passed to callback to signal error handled
+  - kill method to terminate the process
