@@ -531,3 +531,37 @@ const process = new BufferedProcess({command, args, stdout, exit})
     - usually called because command isn't available at this path
     - call `handle()` on the object passed to callback to signal error handled
   - kill method to terminate the process
+
+## Clipboard
+- representation of the Atom clipboard
+  - for copy/paste
+  - available globally through `atom.clipboard`
+- example use:
+```
+atom.clipboard.write('Hello World!')
+console.log(atom.clipboard.read())
+```
+- methods:
+  - write text to the clipboard
+  - read string existing in clipboard
+  - read the text and associated metadata
+    - metadata is stored by earlier calls to `write`
+    - returns an object with both the string and any metadata
+
+## ContextMenuManager
+- registry for commands that should appear in a context menu
+  - available globally through `atom.contextMenu`
+  - reminder: context menus come up on right click in a given context
+- expects a specific [CSON format](https://atom.io/docs/api/v1.28.1/ContextMenuManager)
+  - select the context key, then associate labels with commands in that context
+  - package menu `.cson` then specifies the menu under key `context-menu`
+- method to add context menu items
+  - pass it CSS selector matching elements that should be the key
+  - then value objects have [these keys](https://atom.io/docs/api/v1.28.1/ContextMenuManager#instance-add)
+    - `label` string for menu item label
+    - `command` string for associated command
+    - `enabled` boolean for whether item is clickable
+    - `submenu` allows nesting on this item by adding array of label-command objects
+    - `created` function called on the item each time right click brings up menu
+    - and others
+  - returns a Disposable
