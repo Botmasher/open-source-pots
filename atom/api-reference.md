@@ -565,3 +565,31 @@ console.log(atom.clipboard.read())
     - `created` function called on the item each time right click brings up menu
     - and others
   - returns a Disposable
+
+## Cursor
+- Cursor representing place of textual insertion
+- visually a blinking vertical line
+- belongs to TextEditor
+- has DisplayMarker metadata attached to it
+- methods:
+  - subscribe with a callback for did change position and did destroy events
+  - manage cursor position
+    - set or get screen or buffer position
+    - break down reading into screen/buffer row or column
+    - check if cursor is at the beginning or end of a line
+  - read cursor position details
+    - get the underlying DisplayMarker
+    - check if surrounded by whitespace, between word and nonword, is inside word, has preceding characters
+    - get the indentation level
+    - get the scope descriptor
+    - check if it's the last cursor in the editor
+  - move the cursor
+    - move to or along the movement dimensions found in TextEditor, including up, right, end of word, ...
+  - read local positions/ranges
+    - get the word, word boundary, line, paragraph and more around a cursor
+  - compare buffer position to another cursor's buffer position (passing the other cursor as argument)
+  - utility methods
+    - clear (deselect) the current selection
+    - get the regex used by cursor to determine what a word is
+    - get the regex used by cursor to determine what a subword is
+      - camelCase and snake_case contain multiple subwords
