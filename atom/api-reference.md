@@ -593,3 +593,27 @@ console.log(atom.clipboard.read())
     - get the regex used by cursor to determine what a word is
     - get the regex used by cursor to determine what a subword is
       - camelCase and snake_case contain multiple subwords
+
+## DeserializerManager
+- manage Deserializers
+  - these are used for serialized state as explained in the Flight Manual
+  - available globally through `atom.deserializers`
+- example of using it to add a Deserializer
+```
+class MyPackageView extends View
+  atom.deserializers.add(this)
+
+  @deserialize: (state) ->
+    new MyPackageView(state)
+
+  constructor: (@state) ->
+
+  serialize: ->
+    @state
+```
+- review [serialization](https://flight-manual.atom.io/behind-atom/sections/serialization-in-atom/)
+  - the preferred way (instead of through the global `add` above) is to add through `package.json`
+- methods:
+  - add one or more deserializers
+    - added objects must have a `name` and a `deserialize` property
+  - deserialize a `state` object and its params
