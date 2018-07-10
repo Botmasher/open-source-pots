@@ -617,3 +617,28 @@ class MyPackageView extends View
   - add one or more deserializers
     - added objects must have a `name` and a `deserialize` property
   - deserialize a `state` object and its params
+
+## Directory
+- represents a disk directory
+- watch the directory for changes
+- methods:
+  - constructor
+    - configure new directory instance, taking string argument for path
+  - create a directory at `getPath` if it doesn't exist
+    - returns Promise
+    - Promise resolves when directory created
+  - subscribe to did change event, callback on directory content changes
+  - metadata methods:
+    - check if is a file/directory/symbolic link
+    - check if directory exists (one variation returns a promise, other sync)
+    - check if directory is root
+  - path management:
+    - read the path or the path with symlinks and relative pathing
+    - read the directory's basename
+    - `relativize` to read the path from current directory
+  - traversal:
+    - traverse to parent
+    - traverse to a specific file
+    - traverse to a specific subdirectory
+    - read entries from the directory, either passing a callback or sync
+    - check if a path is inside this directory
