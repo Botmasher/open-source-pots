@@ -642,3 +642,24 @@ class MyPackageView extends View
     - traverse to a specific subdirectory
     - read entries from the directory, either passing a callback or sync
     - check if a path is inside this directory
+
+## Dock
+- represents containers at editor edges
+- not intended for direct creation
+  - access workspace docks through Workspace
+  - use Workspace methods `getLeftDock`, `getRightDock`, `getBottomDock`
+  - _or_ add dock item through Workspace method `open`
+- methods:
+  - basic ones to add, show, hide
+  - toggle visibility, check if visible
+  - subscribe for events
+    - changed visibility
+    - observe visibility (for current and future changes)
+    - changed pane items
+    - observe pane items (current and future changes)
+    - pane add, will/did destroy, or changed active
+    - watch pane items, too
+  - pane item methods: read all pane items or just the active one
+  - pane methods
+    - read all panes or just the active one
+    - activate the next/previous pane
