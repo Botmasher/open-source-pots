@@ -663,3 +663,81 @@ class MyPackageView extends View
   - pane methods
     - read all panes or just the active one
     - activate the next/previous pane
+
+## File
+- representation of a single file
+  - this is a file to be watched, read, written
+- methods:
+  - constructor and create
+    - construction configures the file but does not access it
+    - `create` returns a Promise resolving once file created
+  - subscribe for events
+    - callbacks for changed, renamed, deleted
+    - callback for watch error invoked after file unsubscribed from watches
+  - metadata
+    - check if exists (sync or async), or if is file/directory/symbolic link
+    - read the SHA (sync or async)
+    - read or set the charset encoding
+  - path management
+    - read the path
+    - read the "completely resolved" path (sync or async)
+    - read the base filename only (no directory)
+  - traversal: read the parent directory
+  - read and write
+    - read the contents, passing boolean to require direct read or accept cached copy
+    - create a read stream or a write stream, returning a stream object
+    - write text (sync or async)
+
+## GitRepository
+- representation of Atom's git operations
+  - not meant to be instantiated
+  - access through global `atom.project` with a `getRepositories()` call
+  - works only with a repo-backed project
+- submodules handled through `path` argument to methods
+  - determines underlying repo to use
+  - example use below
+```
+git = atom.project.getRepositories()[0]
+git.getShortHead()   # 'master'
+git.getShortHead('vendor/path/to/a/submodule')
+```
+- require the Atom GitRepository class in your package
+```
+{GitRepository} = require 'atom'
+```
+- methods:
+  - construction/destruction
+    - open a path
+    - call destroy on the objects or check if it was destroyed
+  - subscribe for events
+    - callbacks when changed status of one file or statuses of multiple files
+      - status changes when file updates, reloads, ...
+      - mutliple, for example window focus checks all paths in repo
+    - callbacks when destroyed
+    - as normal, all return a Disposable for unsubscribing
+  - repo details
+    - read the type of version control
+    - read the path of the repo or just to the working directory
+    - check if project is at root
+    - `relativize` path to the working directory
+    - check if branch exists
+    - get short head reference (no `refs/heads`, tags, remotes; no SHA-1 for detached head)
+    - check if a path is a submodule in the repo
+    - check how many commits ahead/behind branch is from upstream remote
+      - also variant for cached commits
+    - retrieve configuration value for a configuration key
+    - retrieve origin URL
+    - retrieve upstream branch for current head
+    - read the local and remote references (heads, remotes, tags arrays)
+    - read SHA string for a specific reference
+  - reading status
+    - check if path is new/modified/ignored
+    - read the status of a path (variant for cached status) or a directory
+    - check if status shows modified
+    - check if status shows new path
+  - getting diffs
+    - diff stats for number of path lines added or removed
+    - compare line diffs for head version of path versus passed-in text
+  - checking out
+    - check out head at a path, just like running git reset and checkout `HEAD` at that path
+    - check out a branch in the repo, passing string reference and boolean to create if not exist
