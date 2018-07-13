@@ -741,3 +741,25 @@ git.getShortHead('vendor/path/to/a/submodule')
   - checking out
     - check out head at a path, just like running git reset and checkout `HEAD` at that path
     - check out a branch in the repo, passing string reference and boolean to create if not exist
+
+## Grammar
+- the Atom grammar
+  - tokenize text lines
+  - not meant to instantiate
+  - access from GrammarRegistry using `loadGrammar` (see immediately below)
+- methods:
+  - subscribe for callback when updated
+    - updated means grammar it depends on is added/removed from GrammarRegistry
+    - returns a Disposable as expected with event subscriptions
+  - tokenization
+    - tokenize all lines in passed-in text, returning array of token arrays
+    - tokenize a line from passed-in line string, `ruleStack` (from previous line or null if first line)
+
+## GrammarRegistry
+- contains at least one grammar
+- methods:
+  - subscribe with callback for when grammar added, updated, removed
+  - management
+    - read all grammars, or a specific grammar (sync or async)
+    - add grammar, or load grammar and add it (sync or async)
+    - remove grammar with passed-in scope name
