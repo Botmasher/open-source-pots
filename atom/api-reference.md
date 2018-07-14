@@ -763,3 +763,37 @@ git.getShortHead('vendor/path/to/a/submodule')
     - read all grammars, or a specific grammar (sync or async)
     - add grammar, or load grammar and add it (sync or async)
     - remove grammar with passed-in scope name
+
+## Gutter
+- representation of a TextEditor gutter
+- gutters get created through TextEditor method `addGutter`
+  - recall that TextEditor objects accessed through callback
+  - register that callback on `atom.workspace` method `observeTextEditors`
+  - the callback method fires on current editor instances and whenever any future created editor
+- methods:
+  - destroy the gutter instance this method is called on
+  - subscribe with callback for events
+    - when gutter visibility changed
+    - when gutter destroyed
+  - visibility
+    - show/hide the gutter
+    - check if the gutter is visible
+    - add DisplayMarker decoration to the gutter
+      - decoration for the passed-in marker
+      - tracks the DisplayMarker when moved/invalidated/destroyed
+      - `decorationParams` support all params in TextEditor `decorateMarker`
+      - set `.type` to `line-number` for numbered gutters, otherwise to `gutter`
+      - returns a Decoration
+
+## HistoryManager
+- keep track of projects opened in the past
+- available globally through `atom.history`
+- powers the "Reopen Project" menu
+- methods:
+  - read list of previously opened projects
+  - clear projects from the history
+  - register callback for when list of projects changed
+    - returns a Disposable like other subscription methods
+
+## KeymapManager
+-
