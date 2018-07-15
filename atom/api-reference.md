@@ -796,4 +796,35 @@ git.getShortHead('vendor/path/to/a/submodule')
     - returns a Disposable like other subscription methods
 
 ## KeymapManager
--
+- associates keystrokes with commands
+  - context sensitive
+  - globally accessible through `atom.keymaps`
+- keybindings are just JS objects
+  - CSS selectors for contexts are outer keys
+  - keystroke pattern -> command mappings are defined for each selector
+- keystroke matching
+  - context keystroke sequence matches keybinding
+  - custom DOM event with command type dispatches on event target
+  - keymap starts looking at target for keyboard event
+    - are there keybindings with CSS selectors matching the target?
+    - selects the most specific match
+    - selects most recent match when matches are equally specific
+    - unfound matches then search up to parent selector recursively until top
+- found keybindings
+  - command dispatched on target of keyboard event
+    - this happens even when matched element is higher in DOM
+  - `.preventDefault()` called if binding match found
+  - `.abortKeyBinding()` can be called on command event object
+    - let other bindings match instead
+    - example: bind snippet expansion to tab but abort if no snippet found
+- multistroke keybindings
+  - pending state when keystrokes partially match multikeystroke binding
+  - pending state terminates
+    - on following keystroke
+    - _or_ after milliseconds defined by `partialMatchTimeout`
+  - if terminated without matches
+    - "longest ambiguous bindings" causing pending state disabled temporarily
+    - previous keystrokes replay
+    - if unfound on replay this happens again with next longest bindings, ...
+- methods:
+  - 
