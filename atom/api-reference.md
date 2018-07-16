@@ -827,4 +827,31 @@ git.getShortHead('vendor/path/to/a/submodule')
     - previous keystrokes replay
     - if unfound on replay this happens again with next longest bindings, ...
 - methods:
-  - 
+  - build a keydown DOM event
+    - meant to be used for testing
+    - pass in a key and options like target element or modifier keys
+  - construction/destruction
+    - constructor with options to assign to keymap
+    - clear registered keybindings and keystroke queue
+    - destroy (unwatch paths)
+  - subscribe for events with callback
+    - when binding matched or partially matched
+    - when binding failed to match
+    - when failed to read file (failed to load keymap file)
+  - build or add bindings
+    - build keybindings
+      - group by CSS selector
+      - pass in a `source` and `bindings` mapping keystrokes to commands
+    - add a set of keybindings, passing in same arguments
+  - access bindings
+    - get current keybindings
+    - find keybindings matching keystrokes, command, target
+  - manage keymap files
+    - load keymaps from a path
+    - watch (reload) path on changes
+  - manage keyboard events
+    - handle (dispatch) custom `'keydown'` type keyboard event
+    - turn keydown event into keystroke string
+    - add custom keystroke resolver for raw events
+      - used to work around Chrome or change how Atom resolves key combinations
+    - get partial match timeout (milliseconds before partial pending states terminate)
