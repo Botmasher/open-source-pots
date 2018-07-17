@@ -855,3 +855,24 @@ git.getShortHead('vendor/path/to/a/submodule')
     - add custom keystroke resolver for raw events
       - used to work around Chrome or change how Atom resolves key combinations
     - get partial match timeout (milliseconds before partial pending states terminate)
+
+## MenuManager
+- application menu item registry
+- globally available through `atom.menu`
+- consider the [CSON format](https://atom.io/docs/api/v1.28.2/MenuManager) for menus
+  - include within package's menu `.cson` under `menu` key
+- methods:
+  - add items to menu, passing in a label and optionally submenu items, command
+  - update to refresh the menu
+
+## Package
+- load and activate package
+  - main module
+  - resources including stylesheets, keymaps, grammar, menus
+- methods:
+  - subscribe for events
+    - when deactivated (once all packages activated)
+  - module compatibility
+    - check if compatible (all native module dependencies compiled against current Atom)
+    - rebuild native module dependencies
+    - read the build failure output (sterr contents)
