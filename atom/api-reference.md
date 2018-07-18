@@ -876,3 +876,40 @@ git.getShortHead('vendor/path/to/a/submodule')
     - check if compatible (all native module dependencies compiled against current Atom)
     - rebuild native module dependencies
     - read the build failure output (sterr contents)
+
+## PackageManager
+- coordinate packages lifecycle
+  - load, activate, parse metadata
+  - load, activate, parse resources
+    - keymaps
+    - menus
+    - stylesheets
+- globally available through `atom.packages`
+- activate a package to register resources and call `activate()` on main module
+- deactivate a package to unregister resources and call `deactivate()` on main module
+- enable or disable a package
+  - through `core.disabledPackages` config settings
+  - or calling `enablePackage()` or `disablePackage()`
+- methods:
+  - subscribe with callbacks for events
+    - all packages loaded or activated
+    - one package loaded/unloaded or activated/deactivated
+  - package system data
+    - get the apm command path (`core.apmPath` if exists)
+    - get the directory path where Atom looks for packages
+  - package data
+    - resolve named package to path on disk
+    - check if named package is bundled with Atom
+  - enable and disable package by name, check if disabled
+  - access active packages
+    - get one named package or all packages
+    - check if a package is active
+    - check if all packages have activated
+  - access loaded packages
+    - get one loaded package by name or all loaded packages
+    - check if a named package is loaded
+    - check if all packages have loaded
+  - access available packages
+    - get paths to all the available packages
+    - get names of all the available packages
+    - get metadata for all the available packages
