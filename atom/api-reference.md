@@ -913,3 +913,35 @@ git.getShortHead('vendor/path/to/a/submodule')
     - get paths to all the available packages
     - get names of all the available packages
     - get metadata for all the available packages
+
+## Pane
+- content container at center of Workspace
+  - can hold multiple items
+  - only one item active at a time (one is active)
+  - interface displays view for the active item
+  - tabs display for all items (by default)
+- pending items
+  - pane can have a pending item
+  - added pending items replace current pending
+  - tab text for pending items displays in italics
+- methods
+  - subscribe with callback for events
+    - flex scale changed values or observed (this and future values)
+    - pane activated / destroyed (called before) / will destroy (called before)
+    - active changed or observe
+    - item added, moved or removed, plus will remove (for calling before removed)
+    - observe current and future items, or active item
+    - active item changed
+    - next/last/done choosing chosen most recently used item
+    - before item destroyed
+  - item methods
+    - activate specific items or read active item
+    - various methods for moving, adding, destroying, saving items (including active)
+  - lifecycle methods
+    - check if pane active or if destroyed
+    - activate, destroy pane
+  - split methods
+    - split pane up/down or left/right
+
+## Panel
+- 
