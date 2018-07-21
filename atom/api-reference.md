@@ -944,4 +944,23 @@ git.getShortHead('vendor/path/to/a/submodule')
     - split pane up/down or left/right
 
 ## Panel
-- 
+- container for panels at editor edges
+- not meant to be accessed directly
+  - add through the Workspace `addTopPanel` method
+  - or one of the other directional friend methods (right/left/bottom)
+- examples of packages that use panels
+  - the `status-bar`
+  - `find-replace`
+- methods:
+  - construction and destruction
+    - construction not done directly; called through Workspace (mentioned above)
+    - destroy panel and remove from UI
+  - subscribe with callbacks for events
+    - when pane visibility changes
+      - see hide/show methods below
+    - when pane is destroyed
+  - panel detail methods
+    - get the panel item
+    - get the panel priority number
+    - check if the panel is visible
+    - hide/show the panel
