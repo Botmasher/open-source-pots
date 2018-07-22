@@ -964,3 +964,29 @@ git.getShortHead('vendor/path/to/a/submodule')
     - get the panel priority number
     - check if the panel is visible
     - hide/show the panel
+
+## PathWatcher
+- subscription manager for base filesystem
+  - filesystem events "beneath a root directory"
+  - constructed through a call to `watchPath`
+- not meant for watching active project
+  - use the Project method `onDidChangeFiles`
+- multiple PathWatchers
+  - back by one native watcher for saving OS resources
+- stop watching events and release resources with `dispose`
+- add to CompositeDisposable to manage with other Disposables
+  - good for grouping with event subscriptions
+- `watchPath` params include:
+  - root of the filesystem to watch
+  - options for controlling watcher behavior
+  - event callback when filesystem events batch observed
+    - event has an action (CRUD), absolute path, old former absolute path
+- methods
+  - `getStartPromise` for a promise resolving when native watcher is ready to send events
+    - delay between watcher instantiation and OS resource activation
+    - so wait for this promise before changing filesystem
+    - but watchers obtained with `watchPath` already started
+  - `onDidError` when watcher reports errors
+  - `dispose` to unsubscribe from filesystem events
+    - native resources released async
+    - watcher immediately stops emitting events
