@@ -990,3 +990,27 @@ git.getShortHead('vendor/path/to/a/submodule')
   - `dispose` to unsubscribe from filesystem events
     - native resources released async
     - watcher immediately stops emitting events
+
+## Project
+- representation of open Atom project
+- globally available through `atom.project`
+- methods:
+  - subscribe for events
+    - when project path changed
+    - when added a text buffer (also observe for current and future buffers)
+    - when filesystem changes under open project path
+  - git repo methods
+    - fetch the array of repos for the open project
+    - fetch the repo for a directory
+  - manage paths
+    - get/set array of paths to project directory
+    - add/remove path to array of root paths for the project
+    - get filesystem PathWatcher (promise) when watcher is ready for events
+      - use in testing to ensure filesystem watcher is ready
+      - after verifying ready watcher, can change filesystem to trigger events
+    - get array of project directories
+    - relativize path to get path to project directory and relative path from that directory
+    - check if project contains path
+      - path can be real or symbolic
+      - only checks relative path locations, not if path exists
+      - sees if that path location is inside root directory
