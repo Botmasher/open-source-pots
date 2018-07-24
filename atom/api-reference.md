@@ -1014,3 +1014,20 @@ git.getShortHead('vendor/path/to/a/submodule')
       - path can be real or symbolic
       - only checks relative path locations, not if path exists
       - sees if that path location is inside root directory
+
+## ScopeDescriptor
+- represents path from syntax tree root to a token
+  - array of strings for that path
+  - contains name of every one of the scopes down along that path
+  - not meant to be created directly
+    - use TextEditor's `getRootScopeDescriptor` for the language
+    - use TextEditor's `scopeDescriptorForBufferPosition` within the buffer
+    - use Cursor's `getScopeDescriptor` for scope at cursor position
+  - can be substituted in method args with array of scope names
+- use to obtain language config settings through Config object `get` method
+- methods:
+  - construction
+    - create a ScopeDescriptor, passing an Object with a `.scopes` property
+    - the scopes property will contain the array of scopes
+  - reading
+    - get the scopes array for this ScopeDescriptor
