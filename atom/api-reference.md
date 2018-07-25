@@ -1031,3 +1031,41 @@ git.getShortHead('vendor/path/to/a/submodule')
     - the scopes property will contain the array of scopes
   - reading
     - get the scopes array for this ScopeDescriptor
+
+## Selection
+- representation of selected text in TextEditor
+- methods:
+  - subscribe with callback for events
+    - when the selection range changed
+    - when selection was destroyed
+  - manage range
+    - get/set the selection screen range
+    - get/set the selection buffer range
+    - get the first and last rows for the buffer selection
+  - selection info
+    - check if selection is empty
+    - check if selection is reversed (selected up instead of down)
+    - check if selection is a single line
+    - read text in selection
+    - check if selection intersects the passed-in buffer range
+    - check if selection intersects another selection
+  - modify range
+    - clear selection (move DisplayMarker to head)
+    - select to a specific screen/buffer position
+    - select to all kinds of positions, from right/left to word/line to beginning of next paragraph, ...
+    - expand selection to cover entire word around current cursor position
+    - expand selection to cover entire line around cursor
+  - modify text
+    - insert passed-in text to replace selected text
+    - backspace over text (remove selection or character before selection if empty)
+    - many methods to delete text to various positions, such as to end of line
+    - join line(s) with following line, separating by space
+    - indent/outdent rows in selection or autoindent based on grammar
+    - toggle line comments to wrap selection in line comments
+    - cut and copy including methods for cutting to end of screen or buffer line
+    - fold the selection
+  - manage multiple
+    - add below to move selection down a row
+    - add above to move selection up a row
+    - adds other selection to this selection then destroys other selection
+  - compare: a method comparing buffer ranges with another selection
