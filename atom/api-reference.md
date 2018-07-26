@@ -1069,3 +1069,26 @@ git.getShortHead('vendor/path/to/a/submodule')
     - add above to move selection up a row
     - adds other selection to this selection then destroys other selection
   - compare: a method comparing buffer ranges with another selection
+
+## StyleManager
+- class for checking and observing active stylesheets
+  - globally accessible as singleton through `atom.styles`
+  - does not add style elements to DOM
+  - `<atom-styles>` elements subscribe to StyleManager
+  - subscribed `<atom-styles>` clone then attach style elements
+  - `<atom-styles>` do that in different contexts
+- methods:
+  - subscribe with callback for events
+    - when style element added (or observe for current and future elements)
+    - when style element removed
+    - when style element updated
+    - added or updated style elements have nonstandard properties
+      - path where style element loaded
+      - context for target context of the style element
+  - read methods
+    - get all of the loaded style elements
+  - path methods
+    - get path within `~/.atom` to the user style sheet
+
+## Task
+- 
