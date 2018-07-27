@@ -1091,4 +1091,33 @@ git.getShortHead('vendor/path/to/a/submodule')
     - get path within `~/.atom` to the user style sheet
 
 ## Task
-- 
+- object providing ways to run a Node script
+  - runs Node script in a separate process
+- used for fuzzy-finder
+- used for [scan-handler](https://github.com/atom/atom/blob/master/src/scan-handler.coffee)
+- example use
+  - require `{Task}` from `atom` in package code
+  - store return from `Task.once`, which runs a task file, passing parameters
+  - use the returned task to access events from the task and run callbacks
+  - in that task file, have a task method emitting the event like this
+```
+module.exports = (parameter1, parameter2) ->
+  # Indicates that this task will be async.
+  # Call the `callback` to finish the task
+  callback = @async()
+  emit('some-event-from-the-task', {someString: 'yep this is it'})
+  callback()
+```
+- methods:
+  - `.once` takes a path to the task file and any args to pass
+    - script at the path should be JS or CoffeeScript
+  - constructor method creates task for task path
+    - prefer using `.once` instead
+  - start task, passing in args and a callback for when task completes
+    - raises error if task terminated or cannot message child process
+  - send a message to the task
+  - `on` event calls a passed-in callback when a child-process event is emitted
+  - terminate the task to force it to stop running
+    - ends emitting events for the task
+  - cancel the task and emit a cancel event
+    - returns Boolean for whether task terminated
