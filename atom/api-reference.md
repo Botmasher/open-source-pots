@@ -1121,3 +1121,50 @@ module.exports = (parameter1, parameter2) ->
     - ends emitting events for the task
   - cancel the task and emit a cancel event
     - returns Boolean for whether task terminated
+
+## TextBuffer
+- container representing mutable text
+  - supports undo and redo
+  - capable of "annotat[ing] logical regions"
+- observe buffer changes
+  - methods can observe when changed, stopped changing, changes since checkpoint
+  - changes are reported as arrays of change objects
+  - change objects include properties like:
+    - the old and new range
+    - the old text and the new text
+  - `oldRange` is nuanced
+    - reports replaced text range vs original buffer
+    - does not include impact of other reported changes
+    - easiest way to apply all transaction changes: do it in reverse
+    - applying changes forward: include impact of preceding changes
+      - use preceding changes by traversing extent of old range from `newRange.start` for each change
+- methods:
+  - construction
+    - load a buffer "backed by" source path
+      - with params for encoding and destroying on delete
+      - less performant sync version of method as well
+    - deserialize to restore earlier text buffer state passed to a TextBuffer's `serialize()`
+    - constructor method to create a new buffer with some initial text
+  - subscribe with callback for events
+    - a variety of events like will change, changed, conflicted with file
+    - when stopped changing
+      - also separate method returning the time in ms before stop changing observers called
+    - when marker is created or updated
+    - when check for `isModified` returns true
+    - when path or path encoding changed
+    - when saved or will save, when deleted, when did or will reload
+    - when destroyed
+    - when will throw a watch error
+  - get or set file details
+    - check if file is modified, is in conflict (with buffer mem)
+    - get or set the file path (also as `getUri`)
+    - get or set encoding
+  - read buffer text
+    - check if buffer is empty
+    - read the buffer text, or just buffer text in given range
+    - get lines including all text but without newline
+    - get last line of text without newline
+    - get the line text or the line length at a specific row
+    - check if row is blank (only contains whitespace)
+    - get the previous or next non-blank row given a starting row
+    - check if the buffer contains astral (supplementary) Unicode chars
