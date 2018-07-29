@@ -1167,4 +1167,33 @@ module.exports = (parameter1, parameter2) ->
     - get the line text or the line length at a specific row
     - check if row is blank (only contains whitespace)
     - get the previous or next non-blank row given a starting row
-    - check if the buffer contains astral (supplementary) Unicode chars
+    - check if the buffer contains astral (supplementary) Unicode charg
+  - mutate buffer text
+    - set buffer text
+      - a variant allows setting by diffing the passed-in text
+      - another variant limits to setting text in a range
+    - insert text at a specific buffer insertion position
+    - append text to the end of the buffer
+    - delete text in the range
+    - delete text line at a row index
+    - delete all lines in a range of rows
+  - read and mark markers
+    - add a marker layer for the buffer
+    - get marker layer at passed-in id or just the default marker layer
+    - create a marker with the passed-in range or at the passed-in position
+    - get all markers on default marker layer
+    - get marker with passed-in id
+    - find markers matching passed-in params
+    - get the current marker count in the default marker layer
+  - history stack
+    - undo/redo
+    - transaction batch undo/redo operation
+      - also method to abort a transaction
+    - clear the undo stack
+    - create buffer state checkpoint for reverting or grouping changes
+    - revert to checkpoint, read/group changes since a checkpoint
+    - group last two changes for undo/redo
+  - find and replace
+  - buffer range details
+  - basic buffer-file operations
+  - load buffer from path
