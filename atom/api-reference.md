@@ -1194,6 +1194,26 @@ module.exports = (parameter1, parameter2) ->
     - revert to checkpoint, read/group changes since a checkpoint
     - group last two changes for undo/redo
   - find and replace
+    - scan or reverse scan buffer for regex and run passed-in iterator on matches
+      - also variants for scanning or backwards scanning in passed-in range
+    - replace text in buffer matching regex with passed-in replacement text
   - buffer range details
+     - read row-column range from [0, 0] to end position in buffer
+     - read line count, last row, first/last position, text length, character count length
+     - get the range for the passed-in row
+     - get the character index for passed-in position or position for char index
+     - clip range or a given position so positions are valid
+      - trimming any out of bounds positions
+      - for range this means verifying that start/end positions are valid
+      - like converting [0,11] to [0,9] if 2 are out of bounds
   - basic buffer-file operations
+    - save buffer to file
+    - save as passed-in file path
+    - reload file contents to buffer
   - load buffer from path
+    - load from source file path
+    - variant to load sync (less performant)
+    - params for encoding and whether to destroy buffer when file deleted
+
+## ThemeManager
+- 
