@@ -1216,4 +1216,21 @@ module.exports = (parameter1, parameter2) ->
     - params for encoding and whether to destroy buffer when file deleted
 
 ## ThemeManager
-- 
+- object for handling available themes
+  - load and activate themes
+  - globally available through `atom.themes`
+- package for (atom-theme-manager)[https://atom.io/packages/atom-theme-manager]
+- loaded, active, enabled themes
+- methods:
+  - subscribe with callback for events
+    - active themes changed
+      - callback after changes to stylesheets
+      - stylesheet changes updated across list of active themes
+  - access loaded themes
+    - get array of names for loaded themes
+    - get array of all loaded themes
+  - access active themes
+    - get array of names for active themes
+    - get array of all active themes
+  - manage enabled themes
+    - get array of names in activation order from Atom config
