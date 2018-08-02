@@ -1,0 +1,38 @@
+# Repo notes: atom/atom
+
+## Overview
+- README checks the basic boxes but lacks any path into the code base
+  - test shields
+  - mentions and links to Electron
+  - product description, including links to community and code of conduct
+  - links to documentation: Flight Manual and API Reference (see my notes)
+  - installation prerequisites and OS steps
+  - links to building instructions
+  - license
+- how to know the code?
+  - existing docs don't directly answer that question
+- goals of this doc:
+  - break down and understand the codebase from a wide view
+  - trace a beginning path through the code to gain that understanding
+
+## Basic Branching
+- `apm` for Atom Package Manager
+  - just an install folder for APM: https://github.com/atom/apm
+  - most use cases covered by APM command line tool
+  - API info: https://atom.io/docs/api/v1.29.0/PackageManager
+  - Flight Manual: https://flight-manual.atom.io/atom-server-side-apis/sections/atom-package-server-api/
+  - an [example of how Atom uses apm](https://github.com/atom/settings-view/blob/master/lib/package-manager.coffee)
+- `benchmark` for a benchmark runner and large file / long line tests
+- `docs` for building documentation
+  - focused on platform-specific instructions for building Atom from source
+  - this was moved to the Flight Manual
+  - `./focus` contains a doc [sharing current plans](https://github.com/atom/atom/tree/master/docs/focus)
+- `dot-atom` contains the files and directories that install to `.atom`
+  - including the custom stylesheet and keymap files
+  - including the custom packages directory
+- `exports` requires and exports objects
+  - requires and exports a bunch of src objects that all seem to deal with file and buffer load/events
+    - including Task and TextEditor when not a child node process (meaning when process type is `'renderer'`)
+  - also contains a handful of Electron API shims using [grim.deprecate](https://github.com/atom/grim/blob/master/src/grim.coffee)
+- `keymaps`
+  - 
