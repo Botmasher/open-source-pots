@@ -35,4 +35,25 @@
     - including Task and TextEditor when not a child node process (meaning when process type is `'renderer'`)
   - also contains a handful of Electron API shims using [grim.deprecate](https://github.com/atom/grim/blob/master/src/grim.coffee)
 - `keymaps`
-  - 
+  - cson keybinding maps for various platforms
+  - `base.cson` has selectors for `atom-text-editor` and many `body` default to native
+  - movement, selection and many other bindings for `darwin`, `linux`, `win32`
+- `menus`
+  - three files containing array of menu items for different platforms
+  - objects contain a `label` and `submenu` arrays of objects with `label` and `command`
+- `resources`
+  - png app icons
+  - shell script, js and apm shell and command scripts for `win` installation
+  - long bundle info plist for `mac`
+  - debian and redhat package for `linux`
+- `script`
+- `spec`
+- `src`
+- `static`
+  - `.less` files for editor, cursors, docks, syntax and much more
+  - stylesheet fallback variables
+  - basic html template `index.html`
+  - window load and setup script in `index.js`
+  - and the octocat spinner!
+- `vendor`
+  - Jasmine tests for JS and JQuery
