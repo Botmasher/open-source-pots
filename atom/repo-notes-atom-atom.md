@@ -47,6 +47,23 @@
   - long bundle info plist for `mac`
   - debian and redhat package for `linux`
 - `script`
+  - a variety of scripts for building Atom
+  - linter scripts
+  - version and platform sensitive installation, cleaning, transpiling
+  - `vsts` subfolder
+    - contains its own README
+    - scripts for automating Atom releases
+    - `yml` files for configuring releases
+    - tasks for handling release branch on different platforms
+    - uses Visual Studio Team Services
+      - [multi-phase jobs](https://github.com/Microsoft/vsts-agent/blob/master/docs/preview/yamlgettingstarted-jobs.md)
+      - generate Atom installation packages on all three platforms
+      - publish new release on successful build
+    - Atom Nightly packages published to GitHub and atom.io
+    - version release numbers calculated by `generate-version.js`
+      - nightly release number incremented after comparing base version against `package.json`
+    - phase templates build Atom simultaneously across platforms
+    - successful build release artifacts uploaded to S3 bucket
 - `spec`
 - `src`
 - `static`
