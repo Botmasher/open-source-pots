@@ -65,6 +65,13 @@
     - phase templates build Atom simultaneously across platforms
     - successful build release artifacts uploaded to S3 bucket
 - `spec`
+  - quite a large directory with many CoffeeScript and JS `-spec` files
+  - Jasmine `describe` tests
+    - run for Atom environment, paths, clipboard, installation, grammar registry, style manager and much more
+    - the project settings `config` spec is a long, representative example: https://github.com/atom/atom/blob/master/spec/config-spec.js
+  - `./helpers` directory contains a random line builder and a very long lexicon
+  - `./fixtures` contains samples with extreme formatting, example packages, sample themes
+  - `./main-process` contains the application test and command line test
 - `src`
 - `static`
   - `.less` files for editor, cursors, docks, syntax and much more
