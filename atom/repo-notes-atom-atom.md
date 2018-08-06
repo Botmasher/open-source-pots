@@ -73,6 +73,27 @@
   - `./fixtures` contains samples with extreme formatting, example packages, sample themes
   - `./main-process` contains the application test and command line test
 - `src`
+  - `./main-process` subdirectory contains application start, menu, win updater and more
+    - the short `main.js` is where the start path is built
+    - `parse-command-line.js` breaks down cli args and returns object with all the process info
+    - `start.js` is called from `main`
+      - runs the command line parser and stores the resulting `args`
+      - sets up `app.on` events for opening files, launching and ready
+      - requires `./main-process/atom-application` and runs `.open` with `args`
+      - defines a `getConfig` function to read the config file
+  - the rest of the directory is many `.js` and `.coffee` files
+    - class exports for many of the objects documented in the API
+      - for example, [Package](https://atom.io/docs/api/v1.29.0/Package) relates to `package.js`
+      - that example defines `onDidDeactivate (callback) { ... }` mentioned in the API docs
+      - others include everything from `gutter` to `pane` to `cursor` to global `config-file`
+    - `grammar-registry` is an example with many requires, complex class methods, much to think through
+    - some API doc classes come from other sources imported into these `src` files
+      - like `Emitter` from `event-kit`
+        - for example, the `package.js` mentioned above requires and instantiates `Emitter`, then `onDidDeactivate` returns `emitter.on()` event with your callback
+      - or like `Disposable` and `CompositeDisposable` from `event-kit`
+    - some scripts provide other functionality
+      - like how `crash-reporter-start` requires and starts CrashReporter from `electron`
+      - or how `babel` creates a babel version and compiles source using babel
 - `static`
   - `.less` files for editor, cursors, docks, syntax and much more
   - stylesheet fallback variables
