@@ -102,3 +102,23 @@
   - and the octocat spinner!
 - `vendor`
   - Jasmine tests for JS and JQuery
+  - on second glance, these are not tests but the testing framework
+  - see tests under `spec`
+- root files
+  - `.gitattributes` for defining line endings on `spec/fixtures` files
+  - support/appinfo files for appveyer, coffeelinter, Python versioning, style linter, Docker
+  - package and package locks for node
+  - Travis config yaml file
+  - `LICENSE` copyrights software to GitHub, permissively allowing as-is use
+  - user submission templates
+    - `ISSUE_TEMPLATE` defines checklist and format to use when submitting an issue
+    - `PULL_REQUEST_TEMPLATE` defines requirements and needed info when submitting a PR
+  - `CHANGELOG` links to [Atom releases](https://atom.io/releases)
+  - `README` and `SUPPORT` provide documentation for getting into Atom
+    - the readme focuses on installation
+    - the support doc focuses on links into the documentation and community
+  - `CODE_OF_CONDUCT` adapts the OSS [Contributor Covenant](https://www.contributor-covenant.org/)
+  - `CONTRIBUTING` offers a detailed set of guidelines for contributing to Atom
+
+## CONTRIBUTING.md in greater detail
+- since the focus of my repo is on contributing, I'll outline this in detail
