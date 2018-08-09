@@ -122,3 +122,43 @@
 
 ## CONTRIBUTING.md in greater detail
 - since the focus of my repo is on contributing, I'll outline this in detail
+- Atom as part of the [Atom Organization](https://github.com/atom)
+- contributor covenant as mentioned above
+- issues are a [deluge](https://blog.atom.io/2016/04/19/managing-the-deluge-of-atom-issues.html) and are not for questions
+- discussions happen at [discuss](https://discuss.atom.io/), which has a FAQ[FAQ](https://discuss.atom.io/c/faq)
+- faster discussion happens in the [team chat](https://atom-slack.herokuapp.com/)
+  - use the appropriate channel: `#atom`, `#electron`, `#packages`, `ui`
+- background knowledge
+  - Atom has over 200 repos, so know which implements which functionality
+  - this helps so you know where to report bugs
+  - modularity by intention
+    - non-editor UI is almost always a separate package
+    - even tree-view, find-and-replace, tabs and status-bar are packages
+    - key difference: whether a package is bundled into default distribution
+  - visit `Settings` and view `Packages` to see Core packages
+    - Atom Core: `atom/atom`
+      - text editor
+      - associated functionality like indentation, wrapping, rendering, file system, installation and updating
+      - this repo is good for giving feedback on API or proposing "overarching" features
+    - stuff around the UI
+      - like `tree-view`, `fuzzy-finder` (quick file opener), `find-and-replace`, `tabs`, `markdown-preview`, `settings-view`, ...
+    - stuff around behavior and styling
+      - like autocomplete, git, default UI and syntax themes
+    - Atom Package Manager: `apm`
+    - Feedback repo for website and `apm`'s package API: `atom.io`
+  - note that issues arise from [community pacakges and themes](https://discuss.atom.io/t/i-have-a-question-about-a-specific-atom-community-package-where-is-the-best-place-to-ask-it/25581)
+  - package naming conventions
+    - syntax highlighting grammars: `language-[language-name]`
+      - these can add more than grammars but shouldn't get too bulky
+    - UI themes: `[theme-name]-ui`
+      - these style stuff outside editor pane
+    - syntax themes: `[theme-name]-syntax`
+      - these style stuff inside editor pane
+      - (me: wow, that's an easy distinction I wish the Flight Manual made)
+    - coordinate themes that do both, like `one-dark-ui` and `one-dark-syntax`
+    - atocomplete providers: `autocomplete-[autocompleted]`
+      - an example might be `autocomplete-css`
+- design decisions
+  - commitment to maintain a [decisions repo](https://github.com/atom/design-decisions)
+  - this will include big decisions about how Atom is maintained and what can be supported
+  - if decisions are not documented there, check the "discuss" link above
