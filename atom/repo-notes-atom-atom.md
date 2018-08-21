@@ -158,7 +158,62 @@
     - coordinate themes that do both, like `one-dark-ui` and `one-dark-syntax`
     - atocomplete providers: `autocomplete-[autocompleted]`
       - an example might be `autocomplete-css`
-- design decisions
-  - commitment to maintain a [decisions repo](https://github.com/atom/design-decisions)
-  - this will include big decisions about how Atom is maintained and what can be supported
-  - if decisions are not documented there, check the "discuss" link above
+  - design decisions
+    - commitment to maintain a [decisions repo](https://github.com/atom/design-decisions)
+    - this will include big decisions about how Atom is maintained and what can be supported
+    - if decisions are not documented there, check the "discuss" link above
+- ways to contribute
+  - report a bug
+    - point of having you follow these steps
+      - maintainers and community can understand your report
+      - maintainers and community can reproduce the behavior
+      - maintainers and community can find related reports
+    - general things to keep in mind as you report
+      - [ ] be as detailed as you can
+      - [ ] if there's a similar closed issue, include a link
+      - [ ] stick to the [issue template](https://github.com/atom/atom/blob/master/ISSUE_TEMPLATE.md)
+    - follow these steps _before_ submitting a report:
+      - [ ] check if you can reproduce the problem in the latest Atom release
+      - [ ] check if the problem shows up in safe mode
+      - [ ] check if you can solve by changing package config
+      - [ ] reread the [debugging guide](https://flight-manual.atom.io/hacking-atom/sections/debugging/) to see if you can fix it yourself
+      - [ ] check the [FAQ](https://discuss.atom.io/c/faq)
+      - [ ] figure out which repo this issue belongs in
+      - [ ] search already [reported issues](https://github.com/search?q=+is%3Aissue+user%3Aatom) to see if you can just add a comment to an existing issue
+    - follow these steps _when_ submitting a report:
+      - [ ] understand that bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/)
+      - [ ] determine the correct Atom repo (mentioned above)
+      - [ ] create an issue
+      - [ ] fill out the template (linked above)
+      - [ ] explain the problem with:
+        - [ ] clear, descriptive title
+        - [ ] exact steps to reproduce the issue (not _what_ you did but _how_: with a mouse or a shortcut? which one?)
+        - [ ] specific examples for each step (links to files/projects, Markdown code block snippets)
+        - [ ] observed behavior after these steps are taken
+        - [ ] expected behavior and why it's expected
+        - [ ] screenshots or [animated GIFs](https://www.cockos.com/licecap/) with Keybinding Resolver in view
+        - [ ] crash reports with stack trace from the OS if issue crashes Atom
+          - Mac `Console.app` under "User Diagnostic Reports"
+          - include in a code block, attached file or link to gist
+        - [ ] a [CPU profile caputure](https://flight-manual.atom.io/hacking-atom/sections/debugging/#diagnose-runtime-performance) for memory or performance issues
+        - [ ] confirmation you ran in safe mode and used a different theme (or commented out styles) if Chrome dev tools show without being triggered
+        - [ ] your prior actions if the problem wasn't triggered by specific actions
+      - [ ] answer these questions to give more context:
+        - [ ] Can the problem be reproduced in safe mode?
+          - [ ] If so, can you reproduce it in an older Atom version?
+        - [ ] Did the problem start recently?
+        - [ ] Can you reproduce the problem reliably?
+        - [ ] Does the problem happen for all files/projects or only some?
+          - [ ] check if it's only for specific file types
+          - [ ] check if it's only large files or files with long lines
+          - [ ] check if it's only remote or local files
+      - [ ] include config and environment info
+        - [ ] your Atom version (`atom -v` or `Application: About` in the Command Palette)
+        - [ ] your OS name and version
+        - [ ] your VM if applicable (software and OS name/version for host and guest)
+        - [ ] your Atom packages (`apm list --installed`)
+        - [ ] your customized local config files (`config.cson`, `keymap.cson`, `snippets.cson`, `styles.less`)
+          - ideally in a code block or a gist link
+        - [ ] your monitor setup if using multiple monitors (have you tried only one?)
+        - [ ] your keyboard layout (US, ...)
+  - suggest enhancements
