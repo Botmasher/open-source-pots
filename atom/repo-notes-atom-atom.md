@@ -217,3 +217,40 @@
         - [ ] your monitor setup if using multiple monitors (have you tried only one?)
         - [ ] your keyboard layout (US, ...)
   - suggest enhancements
+    - submit an "enhancement suggestion" for:
+      - features for new functionality
+      - minor improvements
+    - follow these guidelines so
+      - maintainers and community can understand your suggestion
+      - maintainers and community can find related suggestions
+    - general advice when considering creating one
+      - check the pre-submitting steps below
+      - include as many details as you can
+      - refer to and use the [issue template](https://github.com/atom/atom/blob/master/ISSUE_TEMPLATE.md)
+    - before submitting
+      - [ ] review the [debugging guide](https://flight-manual.atom.io/hacking-atom/sections/debugging/) to make sure the enhancement doesn't already exist
+      - [ ] make sure you're on the latest Atom version
+      - [ ] check if you can get the behavior through core packages or config
+      - [ ] check if you can get the behavior through registered Atom packages
+      - [ ] figure out the relevant Atom repo
+      - [ ] search [existing suggestions](https://github.com/search?q=+is%3Aissue+user%3Aatom) before opening a new one
+    - while submitting
+      - [ ] understand that enhancement suggestions are tracked through GitHub issues
+      - [ ] create an issue on the relevant repo you determined above
+      - [ ] fill out the issue with:
+        - [ ] a clear title for identifying your suggestion
+        - [ ] a detailed, step-by-step description
+        - [ ] specific, demonstrable examples with Markdown code block snippets
+        - [ ] a description of the current behavior vs what you expect instead
+        - [ ] screenshots and animated GIFs to demonstrate steps and related parts of Atom
+        - [ ] an explanation of the enhancement's usefulness to Atom users
+          - [ ] including why this couldn't be a community package
+        - [ ] a list of other text editors or apps with this enhancement
+        - [ ] the version of Atom you're on (`atom -v` or Command Pallete `Application: About`)
+        - [ ] the name and version of your OS
+  - your first contribution
+    -
+  - pull requests
+    -
+- Styleguides
+  - 
