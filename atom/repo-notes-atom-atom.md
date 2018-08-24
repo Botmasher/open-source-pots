@@ -249,8 +249,28 @@
         - [ ] the version of Atom you're on (`atom -v` or Command Pallete `Application: About`)
         - [ ] the name and version of your OS
   - your first contribution
-    -
+    - understand where to begin when contributing to Atom
+      - search [beginner issues](https://github.com/search?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3Abeginner+label%3Ahelp-wanted+user%3Aatom+sort%3Acomments-desc)
+      - search [help wanted issues](https://github.com/search?q=is%3Aopen+is%3Aissue+label%3Ahelp-wanted+user%3Aatom+sort%3Acomments-desc+-label%3Abeginner)
+      - "help wanted" issues are more involved
+      - issue lists are sorted by comment count (to operationalize the "impact a given change will have")
+    - read through the Flight Manual for using Atom or developing packages
+    - local development
+      - core and packages support local development
+      - the relevant Flight Manual sections are [Hacking on Atom Core](https://flight-manual.atom.io/hacking-atom/sections/hacking-on-atom-core/) and [Contributing to Official Atom Packages](https://flight-manual.atom.io/hacking-atom/sections/contributing-to-official-atom-packages/)
   - pull requests
-    -
+    - refer to the [template](https://github.com/atom/atom/blob/master/PULL_REQUEST_TEMPLATE.md)
+    - make sure the PR includes:
+      - clear title but without the PR issue number
+      - animated GIFs and screenshots
+      - syntax and styling following the [JS](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#javascript-styleguide) and [CS](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#coffeescript-styleguide) guides
+      - Jasmine specs in the `./spec` dir that have been run with `atom --test spec`
+        - these tests should be "thoughtfully worded"
+        - these tests should be "well structured"
+      - follow the [documentation styleguide](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#documentation-styleguide) for any added code
+      - files that end in a newline
+      - no platform dependent code
+      - ordered requires: built in Node modules, built in Atom and Electron modules, local modules (with relative paths)
+      - ordered class properties: class properties (`@` in CoffeeScript, `static` in JS), then instance methods/properties
 - Styleguides
-  - 
+  -
