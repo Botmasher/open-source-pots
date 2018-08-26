@@ -273,4 +273,40 @@
       - ordered requires: built in Node modules, built in Atom and Electron modules, local modules (with relative paths)
       - ordered class properties: class properties (`@` in CoffeeScript, `static` in JS), then instance methods/properties
 - Styleguides
-  -
+  - git commit messages
+    - verbs in the present tense, imperative mood
+    - first line length <= 72 characters
+    - after first line reference specific issues and PRs
+    - documentation changes: include `[ci skip]` in the title
+    - begin with the [correct emoji](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#git-commit-messages)
+  - JS
+    - stick to [Standard Style](https://standardjs.com/)
+    - use object spread instead of `Object.assign()`
+    - use inline exports instead of post-definition/instantiation exports
+  - CS
+    - default parameters without spaces around equals sign
+    - spaces around operators otherwise
+    - spaces after commas that aren't followed by newline
+    - use parens when they make code clearer
+    - use alphabetic instead of symbolic keywords: `is` over `==`
+    - do not use spaces before closing curly brace or after opening curly brace
+    - leave one whitespace line between method definitions
+    - caps acronyms unless they are the first word: `getURI` but `uri`
+    - copy arrays with `slice()`
+    - use explicit `return`s in functions ending in `for`/`while` loops
+      - do this when avoiding returning a collection
+    - use `this` instead of standalone `@`: `return this` not `return @`
+  - specs
+    - use Jasmine specs in `./spec`
+      - ensure they're "thoughtfully-worded, well-structured" tests
+      - use `describe` statements for nouns or situations
+      - use `it` statements for states or operation changes to state
+    - consider [this simple example](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#example)
+  - documentation
+    - use the [AtomDoc parser](https://github.com/atom/atomdoc)
+    - use Markdown
+    - reference classes and methods with this notation:
+      - classes with `{ClassName}`
+      - instance methods with `{ClassName::methodName}`
+      - class methods with `{ClassName.methodName}`
+- Additional notes
