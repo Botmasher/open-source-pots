@@ -309,4 +309,28 @@
       - classes with `{ClassName}`
       - instance methods with `{ClassName::methodName}`
       - class methods with `{ClassName.methodName}`
-- Additional notes
+- issue and PR labels
+  - for issue types and issue states
+    - enhancements: feature requests
+    - bugs: reported (when likely) or confirmed bugs
+      - needs-reproduction are likely bugs but need tested
+    - questions and feedback from users
+    - more-information-needed, needs-reproduction for more about reproduce steps
+    - duplicate, blocked, invalid, wontfix, wrong-repo for issues with issues
+    - help-wanted, beginner for community calls for contributors
+    - package-ideas for new packages instead of extensions or core
+  - for topic categories
+    - os: windows, linux, mac
+    - documentation, performance, security, ui
+    - errors: uncaught-exception, crash
+    - ui, api, git, network (remote files), encoding
+  - atom/atom topic categories
+    - editor text rendering (independent of language)
+    - errors: from pathwatcher, from save, from open, build errrors
+    - os: installer, auto-updater
+    - deprecation help for packages removing deprecated API usage
+  - PR labels
+    - work in progress
+    - needs review or under review
+    - requires changes
+    - needs testing
