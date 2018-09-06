@@ -334,3 +334,40 @@
     - needs review or under review
     - requires changes
     - needs testing
+
+## src directory in greater detail
+- flow:
+  - `package.json` has a key `"main"` pointing to `src/main-process/main.js`
+  - `package.json` has a `"standard"` key for `"snapshotResult"`
+  - `src.main-process/main.js` checks for any `snapshotResult`
+  - `main.js` builds a path to and calls `start.js`
+  - `start.js` opens `atom-application.js`:
+    - imports the electron app
+    - imports a path
+    - defines a `start` function that:
+      - adds exception and rejection handling listeners
+      - parses the command line args
+      - adds app open listeners for path and url
+      - sets app path to user or test data
+      - adds app ready listener to remove open listeners then open Atom app
+        - path built from resource path + `src/main-process/atom-application.js`
+    - (outside `start` are also win32 and user config file functions)
+  - `atom-application` loads and juggles the app
+    - imports `atom-window`, `application-menu`, `config-file`, other Atom stuff
+    - imports `event-kit` disposables
+    - imports electron pieces like `BrowserWindow`, `clipboard`, `screen`
+    - beyond that the Atom app's class is defined including the open method (run from `start`)
+    - see closer look at `atom-application.js` below
+  - `atom-window` is included in the Atom application
+    - see closer look at `application-menu.js` below
+  - `application-menu` is included in the Atom application
+    - see closer look at `atom-window.js` below
+
+### atom-application.js
+-
+
+## application-menu.js
+-
+
+## atom-window.js
+-
