@@ -381,6 +381,22 @@ TODO learn more about:
   - then defines an `exit` method
     - this runs `app.exit`
   - next comes the constructor method
+    - takes one `options` argument
+    - empty `super` call
+    - directly assign class variables and bind methods
+    - assigned properties range from boolean `this.quitting` to `this.resourcePath`
+    - many properties pulled from `options` like `options.socketPath` or `options.version`
+    - run `initializeAtomHome`
+    - join a config file path and assign a `this.configFile`
+    - create and assign `this.config` object with a callback to save `this.configFile`
+    - set `this.config` schema
+    - set a new file recovery service, storage folder, auto update manager
+    - create a `CompositeDisposable` and assign to `this.disposable`
+    - run `this.handleEvents` ("Registers basic application commands" see below)
+
+  - the `handleEvents` method "[r]egisters basic application commands"
+    - this is run at the end of `constructor`
+    - TODO fill out info about this long method registering app commands
 
 ## application-menu.js
 -
