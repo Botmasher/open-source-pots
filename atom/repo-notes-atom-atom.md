@@ -339,7 +339,7 @@
 - flow:
   - `package.json` has a key `"main"` pointing to `src/main-process/main.js`
   - `package.json` has a `"standard"` key for `"snapshotResult"`
-  - `src.main-process/main.js` checks for any `snapshotResult`
+  - `src/main-process/main.js` checks for any `snapshotResult`
   - `main.js` builds a path to and calls `start.js`
   - `start.js` opens `atom-application.js`:
     - imports the electron app
@@ -363,8 +363,24 @@
   - `application-menu` is included in the Atom application
     - see closer look at `atom-window.js` below
 
+TODO learn more about:
+- socket files
+- Electron including `app`
+
 ### atom-application.js
--
+- requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
+- requires multiple `electron` exports including `app`
+- crucially exports a defined `AtomApplication` class inheriting from `EventEmitter`
+  - comment notes it's a singleton entry point to the app
+  - comment notes it holds global app state
+  - starts by defining a static method `open`
+    - if there's not an open socket file, create a socket path
+    - instantiate and initialize `AtomApplication`
+    - set up `net.connect` client to end connection and run `app.quit`
+    - have client reinstantiate and reinitialize on `'error'`
+  - then defines an `exit` method
+    - this runs `app.exit`
+  - next comes the constructor method
 
 ## application-menu.js
 -
