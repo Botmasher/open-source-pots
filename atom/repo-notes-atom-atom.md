@@ -366,6 +366,9 @@
 TODO learn more about:
 - socket files
 - Electron including `app`
+  - `app.focus` run in `openWithOptions`
+  - `app.quit` for example in `removeWindow`
+- how disposables dispose
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -393,7 +396,49 @@ TODO learn more about:
     - set a new file recovery service, storage folder, auto update manager
     - create a `CompositeDisposable` and assign to `this.disposable`
     - run `this.handleEvents` ("Registers basic application commands" see below)
-
+  - then defines an async `initialize` method
+    - originally in constructor but moved out for testing "without booting up the world"
+    - assign `global.atomApplication = this`
+    - deprecated code for Mac OS to change `useCustomTitleBar` to `titleBar: custom`
+    - instantiate and assign an application menu and protocol handler
+    - start listening for new process arguments (see method below)
+    - set up dock menu (see method below)
+    - await and return result of `this.launch(options)`
+  - then an async `destroy` method
+    - close windows in promises and await all window close promises
+    - run `this.disposable.dispose()`
+  - then the `launch` method called at the end of `initialize` (construction)
+    - promise watching for config file changes, add that to disposable, then add restart change listeners
+    - create array of options for opening windows and determine if previous windows should reopen
+    - run `this.openWithOptions` on each option in the array of options for windows to open
+  - define `openWithOptions` (run from `this.launch`)
+    - destructure paths, tests, mode, startup, window options from passed-in `options`
+    - run `app.focus()` on the Electron app instance
+    - branching checks for options
+      - if it's a test, call `this.runTests` with relevant options
+      - or a benchmark, call `this.runBenchmarks` with relevant options
+      - or if there are `pathsToOpen`, run `this.openPaths` with options
+      - or if there are `urlsToOpen`, run `this.openUrl` for each one
+      - otherwise call and return `this.openPath` with relevant options
+  - the `removeWindow` public method runs `this.windowStack.removeWindow`
+    - quits the app if all windows are removed
+  - the `addWindow` public method adds a window to the window stack
+    - loaded listener for auto update manager to notify available updates
+    - add listeners to window for focus, blur, closed (remove focus, blur)
+  - `getAllWindows` returns the members of the window stack
+  - `getLastFocusedWindow` runs window method returning the last focused window
+    - takes optional boolean predicate, used for example for checking `window.isSpec`
+    - the `WindowStack` class defines the called method, and by default sets null predicates to `win => true`
+  - the method to listen for new launches of the Atom application
+    - check for a socket path and delete the socket file
+    - create a server with `net.createServer`
+      - with a data listener to concatenate data chunks
+      - with an end listener to `this.openWithOptions` on the concatenated, JSON parsed data
+    - have the created server listen on the socket path
+    - send errors to the console on server error
+  - `deleteSocketFile` runs a filesystem unlink sync on the socket path, with non-ENOENT error handling
+    - remember the socket path has been stored in `this.socketPath`
+    - only run if it's not Windows and there is a socket path
   - the `handleEvents` method "[r]egisters basic application commands"
     - this is run at the end of `constructor`
     - TODO fill out info about this long method registering app commands
