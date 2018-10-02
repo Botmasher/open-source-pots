@@ -369,6 +369,7 @@ TODO learn more about:
   - `app.focus` run in `openWithOptions`
   - `app.quit` for example in `removeWindow`
 - how disposables dispose
+- `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -441,7 +442,50 @@ TODO learn more about:
     - only run if it's not Windows and there is a socket path
   - the `handleEvents` method "[r]egisters basic application commands"
     - this is run at the end of `constructor`
-    - TODO fill out info about this long method registering app commands
+    - define local `getLoadSettings` to check if using dev or safe mode
+    - add a half dozen `this.on` listeners for running app new/open/quit tasks
+    - add a half dozen `this.on` listeners for shell opening external links to docs, issues, ...
+    - add update check and install listeners
+    - add `this.on` listeners for app window sizing (many more for `darwin` than other OS)
+    - add `this.openPathOnEvent` listeners for opening config, license, keymap and other Atom files
+    - add config file listeners
+      - `onDidChange` listener to set user config settings
+      - `onDidError` listener for failed to read user settings
+    - `this.disposable.add` for quite a few `ipcHelpers.on` event Disposables
+      - starting with a long one for waiting to run `app.quit` until all windows unload and close
+      - an `app` one for `will-quit` that kills all processes and deletes socket file
+      - an `app` one for `open-file` that prevents default and opens a path passed to callback
+      - an `app` one for `open-url` that prevents default and opens the passed-in url with dev and safe modes
+      - an `app` one for `activate` that emits `application:new-window` if there are no visible windows
+      - an `ipcMain` one for restarting the app
+      - an `ipcMain` one for resolving `event.sender` URL proxy and sending `did-resolve-proxy` if `event.sender` is not destroyed
+      - an `ipcMain` one for `did-change-history-manager`
+        - checks if each window's `webContents` match `event.sender`
+        - otherwise has the `webContents` send `did-change-history-manager`
+      - an `ipcMain` one for opening a new render process (path in Atom window)
+      - and many more `ipcMain` one for other events including:
+        - updating the window
+        - running package specs
+        - running benchmarks
+        - emitting a command
+        - prompting for paths on `application:open` commands (including open file or folder)
+        - prompting for path on picking folder
+      - a number of `ipcHelpers.respondTo` events including:
+        - running a browser window method with spread passed-in args
+        - setting window size
+        - setting window position
+        - setting user settings (config file update)
+        - centering/focusing/showing/hiding window
+        - getting temporary window state
+        - setting the `this.fileRecoveryService` did save or will save file path
+      - even more `ipcHelpers.on` including ones that:
+        - write to clipboard, to stdout, to stderr
+        - add a recent document filename
+        - execute code using `event.sender.devToolsWebContent.executeJavaScript`
+        - get the `autoUpdateManager` state or its error
+        - save the current window options when paths changed
+    - and finally one more disposable to disable zoom on display change
+  -
 
 ## application-menu.js
 -
