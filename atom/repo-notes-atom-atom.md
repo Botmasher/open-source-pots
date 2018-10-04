@@ -485,6 +485,14 @@ TODO learn more about:
         - get the `autoUpdateManager` state or its error
         - save the current window options when paths changed
     - and finally one more disposable to disable zoom on display change
+  - `setupDocMenu` to build a Mac OS menu with a `'New Window'` label that emits `application:new-window`
+  - `initializeAtomHome` to make sure the `.atom` config home path is synced
+  - `sendCommand` to emit an Atom command with passed-in args to `focusedWindow` or first responder
+  - `sendCommandToWindow` to emit command with args to `atomWindow`
+  - `sendCommandToFirstResponder` to send actions to `Menu.sendActionToFirstResponder`
+    - sent actions: cut, copy, paste, undo, redo, select-all
+  - `openPathOnEvent` to create a `this.on` listener that opens path in focused window (or new if no focused window)
+  - `windowForPaths` to find all windows that contain passed-in open paths
   -
 
 ## application-menu.js
