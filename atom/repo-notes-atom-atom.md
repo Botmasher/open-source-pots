@@ -370,6 +370,8 @@ TODO learn more about:
   - `app.quit` for example in `removeWindow`
 - how disposables dispose
 - `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
+- ipcMain events, using sender to find browser window
+  - difference between browser window and Atom window
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -493,7 +495,16 @@ TODO learn more about:
     - sent actions: cut, copy, paste, undo, redo, select-all
   - `openPathOnEvent` to create a `this.on` listener that opens path in focused window (or new if no focused window)
   - `windowForPaths` to find all windows that contain passed-in open paths
-  -
+  - `atomWindowForEvent` to find browser window matching sender of passed-in ipcMain event
+  - `atomWindowForBrowserWindow` to find window with passed-in browser window
+  - `focusedWindow` to return the focused Atom window
+  - `getWindowOffsetForCurrentPlatform` to return the Win or Mac OS window offset
+  - `getDimensionsForNewWindow` to calculate non-maximized window dimensions
+    - use methods for window focus, platform offset as well as window dimensions
+  - `openPath` to run `this.openPaths` with a path and property options
+    - note the destructured object arg with a default assignment
+  - `openPaths` to open each passed-in path with the window and mode options
+    - ...
 
 ## application-menu.js
 -
