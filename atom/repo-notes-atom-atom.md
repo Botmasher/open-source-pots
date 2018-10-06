@@ -504,7 +504,19 @@ TODO learn more about:
   - `openPath` to run `this.openPaths` with a path and property options
     - note the destructured object arg with a default assignment
   - `openPaths` to open each passed-in path with the window and mode options
-    - ...
+    - another destructured object arg with a default assignment
+      - as above these are destructured window, mode, path properties
+      - the comment explains each of the properties
+    - parse paths and add to an array of locations to open with extra
+    - determine if adding to open window otherwise set up an Atom window for path
+    - set a browser window listener to kill open window once closed
+  - `killAllProcesses` to get window wait sessions, kill each window process and delete wait session
+  - `windowDidClosePathWithWaitSession` to remove a path from window sessions
+    - get window wait sessions, delete passed-in path from remaining session paths
+    - kill process if this completely empties session paths
+  - `killProcess` to run `this._killProcess` with a passed-in `pid`
+    - error handling to log if process kill failed and error is not `'ESRCH'`
+  - 
 
 ## application-menu.js
 -
