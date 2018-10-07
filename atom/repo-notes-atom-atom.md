@@ -516,7 +516,16 @@ TODO learn more about:
     - kill process if this completely empties session paths
   - `killProcess` to run `this._killProcess` with a passed-in `pid`
     - error handling to log if process kill failed and error is not `'ESRCH'`
-  - 
+  - async `saveCurrentWindowOptions` to save state for each app window
+    - take a boolean `allowEmpty`
+    - do not run if `this.quitting`
+    - store all windows' directory paths in a `states` array, reverse the array
+    - call and wait for `this.storageFolder.store` to store the app states in `application.json`
+    - emit `application:did-save-state`
+  - async `loadPreviosWindowOptions` to return an array of state objects with paths and modes
+    - get those from `this.storageFolder.load` to load states from `application.json`
+  - `openUrl` to parse URL for package name and run `openPackageUrlMain` with settings
+    - if no package found run `openPackageUriHandler`
 
 ## application-menu.js
 -
