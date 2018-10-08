@@ -372,6 +372,8 @@ TODO learn more about:
 - `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
 - ipcMain events, using sender to find browser window
   - difference between browser window and Atom window
+- leading semicolon in `atom-application` method `runTests`?
+  - me: only familiar with two reasons why this is done in JS and don't understand how either applies
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -526,6 +528,21 @@ TODO learn more about:
     - get those from `this.storageFolder.load` to load states from `application.json`
   - `openUrl` to parse URL for package name and run `openPackageUrlMain` with settings
     - if no package found run `openPackageUriHandler`
+  - `openPackageUriHandler` to get or open window then open the passed-in `url`
+    - either get an appropriate focused window and message it with `url`
+    - or open and add new Atom window (with resolved initialization script) and message with `url`
+  - `findPackageWithName` to find package metadata for package having passed-in `name`
+  - `openPackageUrlMain` to resolve package path, initialization script and add a new window with path and options
+  - `getPackageManager` to return `this.packages`
+    - initialize a new `PackageManager` and assign to `this.packages` with config path, resource path, `devMode`
+  - `runTests` load tests from `pathsToOpen` and run in new window
+    - reset resource path to `this.resourcePath` if they don't match and there's no filesystem sync for it
+    - set a timeout for exiting tests at time limit
+    - resolve window initialization script (more hands-on with dir paths than window open methods above)
+    - build array of test paths from resolved paths to open and exit process if this ends up empty
+    - set options for modes and test runner paths
+    - open and add a new window with all of the above options
+  - `runBenchmarks`
 
 ## application-menu.js
 -
