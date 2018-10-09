@@ -542,7 +542,20 @@ TODO learn more about:
     - build array of test paths from resolved paths to open and exit process if this ends up empty
     - set options for modes and test runner paths
     - open and add a new window with all of the above options
-  - `runBenchmarks`
+  - `runBenchmarks` to run a test in a window
+    - headless, resource path, paths to open, environment and where executed from as with `runTests`
+    - unlike running tests takes no logfile or timeout but takes one test
+    - same window initialization logic as in `runTests` but resolving `initialize-benchmark-window`
+    - open and resolve benchmark paths and exit if there aren't any
+    - open and add a new window with options (but unlike test no test runner paths)
+  - `resolveTestRunnerPath` to find package root and resolve runner path with base and extensions
+    - use `find-parent-dir` to sync package root path
+    - sync and return path for test runner from package metadata
+    - write out error and exit process if there's no package metadata test runner
+    - if no root dir is assignable from test path `package.json` then run method to resolve legacy path
+  - `resolveLegacyTestRunnerPath` to try to resolve the Jasmine spec runner from dev path
+    - if this errs then use Jasmine spec path relative to `__dirname`
+  - `parsePathToOpen` to break raw path into line and column starts, normalized path and return that info in object
 
 ## application-menu.js
 -
