@@ -556,6 +556,19 @@ TODO learn more about:
   - `resolveLegacyTestRunnerPath` to try to resolve the Jasmine spec runner from dev path
     - if this errs then use Jasmine spec path relative to `__dirname`
   - `parsePathToOpen` to break raw path into line and column starts, normalized path and return that info in object
+  - `promptForPathToOpen` to open a dialog that calls `promptForPath` with callback for modes and paths to open
+  - `promptForPath` to take fs type, callback and path
+    - check type to store properties `'openFile'` or `'openDirectory'`
+    - set parented or unparented dialog window based on platform
+    - run `dialog.showOpenDialog` with parent window, options, callback
+  - `promptForRestart` to run `dialog.showMessageBox` with restart prompt
+    - pass focused browser window
+    - pass object with properties for warning type, restart title, message and buttons
+    - pass callback for restarting if response is `0`
+  - `restart` to relaunch with same args and quit app
+    - store modes, log file, socket path, user data dir flags as `args`
+    - run `app.relaunch` with those args
+    - run `app.quit`
 
 ## application-menu.js
 -
