@@ -569,6 +569,17 @@ TODO learn more about:
     - store modes, log file, socket path, user data dir flags as `args`
     - run `app.relaunch` with those args
     - run `app.quit`
+  - `disableZoomOnDisplayChange` to keep window from "zooming the webframe"
+    - create a callback that runs `window.disableZoom` on all windows
+    - add `screen.on` listeners for `display-added` and `display-removed` that call the callback
+    - return a `Disposable` with `screen.removeListener` for the two events with that callback
+- a `WindowStack` class at the very bottom
+  - constructor takes windows array and binds `this` to methods
+  - `addWindow` to take a `window`, remove it from windows array and `unshift` it back in
+  - `touch` just runs `addWindow` on passed-in window
+  - `removeWindow` to get index of passed-in window and splice windows array if it's in the array
+  - `getLastFocusedWindow` to find windows with passed-in `predicate` (or all windows if no predicate)
+  - `all` to return the windows array
 
 ## application-menu.js
 -
