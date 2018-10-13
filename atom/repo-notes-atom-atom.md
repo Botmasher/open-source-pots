@@ -582,7 +582,34 @@ TODO learn more about:
   - `all` to return the windows array
 
 ## application-menu.js
--
+- instantiated within `AtomApplication` constructor
+  - see `atom-application.js` notes above
+- includes `app` and `Menu` from `electron`
+- includes `MenuHelpers` from `src/menu-helpers`
+- comment explains it's global menu management for adding, removing, maintaining menu items
+- the body of the file exports the `ApplicationMenu` class
+  - constructor focuses on assignment and one autoupdate listener
+    - take a version and `autoUpdateManager` and assigns both
+    - create a `WeakMap` and assigns to `this.windowTemplates`
+    - set the active template to default
+    - listener for auto update state change to show update menu item
+  - `update` to update the window menu and its keybindings
+    - take browser window, menu template to display, keystroke commands object
+    - run `this.translateTemplate` to set keystrokes for the menu template items
+    - run `this.substituteVersion` to update template version
+    - set the window template to passed-in template
+    - if the window is the last focused window, return `setActiveTemplate` with this template
+  - `setActiveTemplate` to build and set the app menu from passed-in template
+    - check if the active template is not the passed-in template
+      - if not, set it to the active template and build and assign `this.menu`
+      - use `Menu.buildFromTemplate` and `Menu.setApplicationMenu` to do menu work
+    - either way return showing autoupdater items
+  - `addWindow` to set passed-in window listeners and `enableWindowSpecificItems`
+    - set window to last focused if none was already focused
+    - build a focus handler for setting to last focused and template setup
+    - add a window focus listener callback
+    - add a close listener to delete the window and remove focus listener
+    - run `this.enableWindowSpecificItems`
 
 ## atom-window.js
 -
