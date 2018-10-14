@@ -610,6 +610,19 @@ TODO learn more about:
     - add a window focus listener callback
     - add a close listener to delete the window and remove focus listener
     - run `this.enableWindowSpecificItems`
+  - `flattenMenu` to get an unnested array of all menu items
+    - iterate through items in passed-in `menu` object
+    - add each item to array
+    - recursively flatten and add any submenu object items to the end of the array
+  - `flattenMenuTemplate` to take template items and flatten them into an array
+    - works like `flattenMenu` except without assigning menu items to local const
+  - `enableWindowSpecificItems` to enable all items that have metadata in flattened `this.menu`
+  - `substituteVersion` to flatten template, find the item with version label, then update item label value
+  - `showUpdateMenuItem` to set visibility for various update items on the menu
+    - first flatten menu items
+    - then get ones with labels for check, checking, downloading, restart/install
+    - return if none found
+    - turn off visibility of each, then switch case using passed-in `state` to display one
 
 ## atom-window.js
 -

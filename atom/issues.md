@@ -2,13 +2,23 @@
 
 Issues noticed while reading and taking notes on the documentation. This includes both the [API docs](https://atom.io/docs/api/v1.28.0/) and the [Flight Manual](https://flight-manual.atom.io/).
 
+## Source
+- [ ] Atom `ApplicationMenu` method comment for `enableWindowSpecificItems` has unclear syntax
+  - where: atom/atom application-menu script
+  - uri: https://github.com/atom/atom/blob/master/src/main-process/application-menu.js
+  - the first line of the comment (currently 92) reads "Public: Used to make all window related menu items are active."
+
+- [ ] Atom `ApplicationMenu` method comment for `showUpdateMenuItem` has unclear syntax
+  - where: atom/atom application-menu script
+  - uri: https://github.com/atom/atom/blob/master/src/main-process/application-menu.js
+  - the comment line (currently 108) reads "Sets the proper visible state the update menu items"
+
 ## API Docs
 
 - [ ] documentation for getting `gutterWithName` indicates no parameter for a "given name"
   - where: TextEditor > Gutters
   - uri: https://atom.io/docs/api/v1.28.0/TextEditor#instance-gutterWithName
   - description: (check the code base & test before submitting as issue) the documentation explains that the method "get[s] the gutter with the given name" but lacks info on a parameter for passing that name
-
 
 ## Flight Manual
 
@@ -43,7 +53,7 @@ Issues noticed while reading and taking notes on the documentation. This include
   - uri: https://flight-manual.atom.io/shadow-dom/sections/removing-shadow-dom-styles/
   - description: most multiword headings in this section are not title-cased, including some full sentences, which conflicts with the [language guidelines](https://github.com/atom/flight-manual.atom.io/blob/master/CONTRIBUTING.md#language) in CONTRIBUTING.md.
 
-  - [ ] heading text lacks prescribed title-case
-    - where: Appendix D (including both sections)
-    - uri: https://flight-manual.atom.io/atom-server-side-apis/
-    - description: most multiword headings in this section are not title-cased, including some full sentences, which conflicts with the [language guidelines](https://github.com/atom/flight-manual.atom.io/blob/master/CONTRIBUTING.md#language) in CONTRIBUTING.md.
+- [ ] heading text lacks prescribed title-case
+  - where: Appendix D (including both sections)
+  - uri: https://flight-manual.atom.io/atom-server-side-apis/
+  - description: most multiword headings in this section are not title-cased, including some full sentences, which conflicts with the [language guidelines](https://github.com/atom/flight-manual.atom.io/blob/master/CONTRIBUTING.md#language) in CONTRIBUTING.md.
