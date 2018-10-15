@@ -374,6 +374,13 @@ TODO learn more about:
   - difference between browser window and Atom window
 - leading semicolon in `atom-application` method `runTests`?
   - me: only familiar with two reasons why this is done in JS and don't understand how either applies
+- `ApplicationMenu` class defines method `translateTemplate` that iterates through template and sets keybindings and click executions
+  - after assigning a template item's accelerator and click properties it checks and flags this:
+```JavaScript
+if (!/^application:/.test(item.command)) {
+  item.metadata.windowSpecific = true
+}
+```
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -623,6 +630,25 @@ TODO learn more about:
     - then get ones with labels for check, checking, downloading, restart/install
     - return if none found
     - turn off visibility of each, then switch case using passed-in `state` to display one
+  - `getDefaultTemplate` to return an Atom menu template
+    - takes no arguments
+    - only statement is a returned array with one object
+    - array has two properties: an Atom label and an array of submenu objects
+    - each submenu entry has a `label`, `accelerator` keybinding and `click` callback
+      - entries to check updates, reload, close window, toggle dev tools, quit
+      - callbacks run basic window or app methods
+      - check for update just has `metadata` to enable autoupdate
+  - `focusedWindow` to find the focused window
+    - use global AtomApplication instance to get all windows and find one with `window.isFocused()`
+  - `translateTemplate` to iterate through template and assign accelerator keystroke commands
+    - take a template and keystrokes-commands object
+    - iterate through each template item and assign accelerator and click
+      - set `item.accelerator` to `this.acceleratorForCommand`
+      - set `item.click` to run the result of global Atom app instance `sendCommand` with the item command
+    - iterate through any submenus and recursively call to assign submenu accelerators and clicks
+    - return the template now with keybindings and commands
+  - `acceleratorForCommand` to build the Electron-readable keystroke string
+    - return the result of `MenuHelpers.acceleratorForKeystroke` with the keystroke for this command
 
 ## atom-window.js
 -
