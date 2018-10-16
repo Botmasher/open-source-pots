@@ -365,9 +365,10 @@
 
 TODO learn more about:
 - socket files
-- Electron including `app`
+- Electron `app`
   - `app.focus` run in `openWithOptions`
   - `app.quit` for example in `removeWindow`
+- Electron IPC including `ipcMain` and `ipcHelpers`
 - how disposables dispose
 - `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
 - ipcMain events, using sender to find browser window
@@ -651,4 +652,36 @@ if (!/^application:/.test(item.command)) {
     - return the result of `MenuHelpers.acceleratorForKeystroke` with the keystroke for this command
 
 ## atom-window.js
--
+- this window class gets included in main application source described above
+- include browser window, app dialog and main IPC events from Electron
+- include filesystem, url, path and event emitter modules
+- before creating the class assign a few variables
+  - resolved path to icon
+  - updatable shell load boolean and `nextId` int
+- the rest scripts the main `AtomWindow` class built atop `EventEmitter`
+  - constructor assigns properties for settings, app and file recovery
+    - increment and assign `nextId` to `this.id`
+    - store file recovery service
+    - store settings spec, headless, modes, resource path
+    - use settings to determine path to open and locations to open
+    - assign promises for loaded and closed async work
+  - constructor then builds an Atom window options object
+    - title `Atom`, tabbing id `'atom'`
+    - background throttling and blink features settings
+  - constructor then instantiates a browser window and binds it locally
+    - set and pass in title bar options
+  - constructor then assigns load settings and does work to store load paths
+    - use event to get load settings JSON and run `handleEvents` method below
+    - load settings for resource path, Atom home, modes, version, clear window state
+    - build and sort an array of initial paths from locations to open
+    - use shell load boolean from top of script to send only to first non-spec window
+  - constructor then attaches some browser window listeners
+    - window loaded event to disable zoom, emit window loaded and resolve loaded promise
+    - window locations opened event just to emit that event
+    - enter or exit full screen event to send full screen to browser
+  - constructor finally sets up window and opens location if available
+    - have browser window load resource path index as URL
+    - attach `showSaveDialog` method below to browser window
+    - determine if there are any locations to open
+    - (locations to open pulled out of passed-in settings near start of constructor)
+    - if this isn't a spec window and there are paths, run `openLocations` method below
