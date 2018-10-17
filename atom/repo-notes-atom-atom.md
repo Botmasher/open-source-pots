@@ -685,3 +685,15 @@ if (!/^application:/.test(item.command)) {
     - determine if there are any locations to open
     - (locations to open pulled out of passed-in settings near start of constructor)
     - if this isn't a spec window and there are paths, run `openLocations` method below
+  - `hasProjectPath` to check if there's at least one represented directory path
+  - `setupContextMenu` to include the `context-menu` and instantiate one on browser window event
+  - `containsPaths` to check `containsPath` on every path in an array
+  - `containsPath` to check if some represented directory paths match the passed-in path
+  - `handleEvents` to attach a bunch of browser window `on` listeners
+    - `close` listener to async save and close window
+    - `closed` listener to notify file recovery service of close, remove window from app and resolve closed promise
+    - `unresponsive` listener to create force close or wait dialog for non-spec window
+    - web contents `crashed` to async exit if headless or fs crash and close/reload dialog otherwise
+    - web contents `will-navigate` to prevent default if event URL doesn't match content URL
+    - run `setupContextMenu`
+    - `focus` spec window on `blur` event to make sure it stays in focus
