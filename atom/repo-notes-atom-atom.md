@@ -697,3 +697,30 @@ if (!/^application:/.test(item.command)) {
     - web contents `will-navigate` to prevent default if event URL doesn't match content URL
     - run `setupContextMenu`
     - `focus` spec window on `blur` event to make sure it stays in focus
+  - `prepareToUnload` to async create and return a promise with unload prep work
+    - create `lastPrepareToUnloadPromise`
+      - assign a callback that removes `ipcMain` listener and resolves if event sender is browser window
+      - add `ipcMain` listener with that callback
+      - send prepare to unload event
+    - return that promise
+  - `openPath` to run `this.openLocations` with passed-in path, line and column
+  - `openLocations` to wait for load then send open locations event with locations to open
+  - `didChangeUserSettings` to send user settings changed message with passed-in settings
+  - `didFailToReadUserSettings` to send failure to read message with passed-in message
+  - `replaceEnvironment` to send environment to browser window web contents
+  - `sendMessage` to send message to browser window web contents
+  - `sendCommand` to run spec commands or send commands to browser window
+    - spec window commands not sent to app first responder can reload, toggle dev tools, close
+    - non-spec commands are sent to browser window if window is web view focused or app cannot send to first responder
+      - see `sendCommandToBrowserWindow` below
+  - `sendURIMessage` to send browser window contents message with passed-in uri
+  - `sendCommandToBrowserWindow` to send browser window contents a passed-in command and args
+    - assign an action `context-command` if that's the first arg otherwise `command`
+    - pass the browser window web contents `send` the action, command and spread args
+  - `getDimensions` to build an object with browser window dimensions
+    - store the x and y positions
+    - store the width and height
+    - return an object with the x and y positions, width and height
+  - `shouldAddCustomTitleBar` to set non-spec Mac app config title bar to `custom`
+  - `shouldAddCustomInsetTitleBar` to do the same as above but set it to `custom-inset`
+  - `shouldHideTitleBar` to to the same as above but set it to `hidden`
