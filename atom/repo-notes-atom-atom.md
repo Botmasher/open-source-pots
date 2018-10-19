@@ -382,6 +382,8 @@ if (!/^application:/.test(item.command)) {
   item.metadata.windowSpecific = true
 }
 ```
+- spec window comes up much
+  - see `atom-window`: window that `handlesAtomCommands` is not spec and not web view focused
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -724,3 +726,29 @@ if (!/^application:/.test(item.command)) {
   - `shouldAddCustomTitleBar` to set non-spec Mac app config title bar to `custom`
   - `shouldAddCustomInsetTitleBar` to do the same as above but set it to `custom-inset`
   - `shouldHideTitleBar` to to the same as above but set it to `hidden`
+  - `close` to run browser window close method
+  - `focus` to run browser window focus method
+  - `minimize` to run browser window minimize method
+  - `maximize` to run browser window maximize method
+  - `unmaximize` to run browser window unmaximize method
+  - `restore` to run browser window restore method
+  - `setFullScreen` to run browser window fullscreen method using passed-in `fullScreen`
+  - `setAutoHideMenuBar` to run browser window auto hide menu bar
+  - similar pass-through methods for checking if browser window focused, maximized, minimized, spec, web view focusedWindow
+  - `handlesAtomCommands` to check if this isn't a spec window and isn't web view focused
+  - `reload` to unload then reload
+    - assign a new loaded promise
+    - run `prepareToUnload` and chain work to reload browser window
+    - return loaded promise
+  - `showSaveDialog` to create save file dialog options object and run dialog
+    - options are just save text and default path
+    - run async `dialog.showSaveDialog` if callback function passed otherwise sync return it
+  - `toggleDevTools` to run browser window toggle dev tools method
+  - `openDevTools` to run browser window open dev tools method
+  - `closeDevTools` to do the same but with close method
+  - `setDocumentEdited` is another browser window pass-through method but with document argument
+  - `setRepresentedFilename` is another one and takes a filename argument
+  - `setRepresentedDirectoryPaths` to sort passed-in paths, set load settings paths and save atom app window options
+  - `didClosePathWithWaitSession` to pass window and path to Atom app to run method
+  - `copy` to run browser window copy method
+  - `disableZoom` to set browser window web contents visual zoom limits to 1, 1
