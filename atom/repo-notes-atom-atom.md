@@ -752,3 +752,21 @@ if (!/^application:/.test(item.command)) {
   - `didClosePathWithWaitSession` to pass window and path to Atom app to run method
   - `copy` to run browser window copy method
   - `disableZoom` to set browser window web contents visual zoom limits to 1, 1
+
+## atom-protocol-handler.js
+- created when Atom app instantiated (see `atom-application`)
+- handle loading URLs with custom protocol handler `atom://`
+- imports Electron `protocol` plus filesystem and path stuff
+- exports `AtomProtocolHandler` class with the behavior described below
+- constructor builds and stores load paths and registers the protocol
+  - take args for resource path and safe mode flag
+  - load paths include dev packages and resource path packages outside of safe mode
+  - load paths include core packages and resource path node modules
+  - run `this.registerAtomProtocol`
+- `registerAtomProtocol` to create the custom handler
+  - spend the entire body of the function calling `protocol.registerFileProtocol`
+  - pass the first argument `'atom'`
+  - define the callback argument taking back a `(request, callback)`, then:
+    - normalize the `request.url`
+    - build a filepath from the normalized URL and Atom home path or load path
+    - run the `callback` passing in that filepath
