@@ -363,7 +363,7 @@
   - `application-menu` is included in the Atom application
     - see closer look at `atom-window.js` below
 
-TODO learn more about:
+## TODO learn more about:
 - socket files
 - Electron `app`
   - `app.focus` run in `openWithOptions`
@@ -384,6 +384,7 @@ if (!/^application:/.test(item.command)) {
 ```
 - spec window comes up much
   - see `atom-window`: window that `handlesAtomCommands` is not spec and not web view focused
+- Atom protocol handler in main process imports Electron `protocol` and runs `protocol.registerFileProtocol` with callback
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -770,3 +771,13 @@ if (!/^application:/.test(item.command)) {
     - normalize the `request.url`
     - build a filepath from the normalized URL and Atom home path or load path
     - run the `callback` passing in that filepath
+
+## parse-command-line.js
+- imported and used in `start.js`
+- requires dedent, yargs and the `app` export from Electron
+- exports a `parseCommandLine` function taking a `processArgs` argument
+  - set up args options
+  - set the `options.usage` to a helpful message about paths and environment variables
+  - set and describe options booleans, strings and aliases for arguments
+  - go through the `options.argv` to assign variables based on args
+  - return an object with twenty assigned arg variables incl paths, modes, timeout, ...
