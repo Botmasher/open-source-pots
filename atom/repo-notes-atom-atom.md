@@ -781,3 +781,34 @@ if (!/^application:/.test(item.command)) {
   - set and describe options booleans, strings and aliases for arguments
   - go through the `options.argv` to assign variables based on args
   - return an object with twenty assigned arg variables incl paths, modes, timeout, ...
+
+## squirrel-update.js
+- run Win setup and update for the app
+- import filesystem, path, spawner (script in this same directory), win and folder and name stuff
+- define spawn `setx.exe` from `./System32` if running from root otherwise just relative
+  - pass through args and callback when it's finished
+- define spawn `update.exe`
+  - pass through args and callback when it's done
+- `addCommandsToPath` to add Atom and APM paths to Atom `bin/` folder
+  - do this for `atom.cmd`, `atom`, `apm.cmd`, `apm` to add "`.cmd` shims"
+  - write to each of the bin files then run passed-in callback
+- `addBinToPath` to run `setx.exe` method with bin path segments and passed-in callback
+- `installCommands` to get Win PowerShell path, split path, add `bin/` if needed and run callback
+- `removeCommandsFromPath` to get path without `bin/` and run `setx.exe` method if new path
+- `createShortcuts` to run command line statement to create desktop and start menu shortcuts
+- `updateShortcuts` to make shortcut path from home, add to desktop if not previously deleted
+- `removeShortcuts` to run command line statement to remove desktop and start menu shortcuts
+- assign export the defined `update.exe` spawn as `exports.spawn`
+- `exports.existsSync` to check if the `update.exe` was installed with Atom (if exists sync)
+- `exports.restartAtom` to set a `will-quit` listener and quit the app
+  - check if global Atom app exists and last focused window
+    - if so, destructure project path and assign it as args
+  - add an `app.once` listener to run `Spawner.spawn` with the bin `atom.cmd` path and args
+  - run `app.quit`
+- `updateContextMenus` to run Win Shell file and folder update methods, then passed-in callback
+- `exports.handleStartupEvents` to handle special `squirrel` commands with switch-case
+  - if squirrel install arg, create shortcuts, `addCommandsToPath`, run Win Shell file handler register, update menus and quit
+  - if updated arg, do all the same except update shortcuts, Win Shell update
+  - if uninstall arg, `removeCommandsFromPath`, four Win Shell deregister methods, app quit
+  - if obsolete, just run app quit
+  - in all cases except default, return `true`
