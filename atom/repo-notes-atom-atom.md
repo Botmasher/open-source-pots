@@ -812,3 +812,25 @@ if (!/^application:/.test(item.command)) {
   - if uninstall arg, `removeCommandsFromPath`, four Win Shell deregister methods, app quit
   - if obsolete, just run app quit
   - in all cases except default, return `true`
+
+## spawner.js
+- import `child_process`
+- export a `spawn` function
+  - take a command plus args and a callback
+    - comments say the command is the underlying OS command to execute
+    - comments say the callback is invoked with error (with a `{code, stdout}`) and stdout
+  - attempt to use `ChildProcess.spawn` to run the command and output errors to `stdout`
+    - assign it to `SpawnedProcess`
+  - attach data listener to `SpawnedProcess` to concatenate data onto `stdout`
+  - attach error listener to it to remember process error
+  - attach close listener to it to deal with errors and run callback
+    - the event gets a `code` and a `signal`
+    - assign a command failed error if there's not one but the code is not `0`
+    - if there's an error but no error code or error stdout, assign them
+    - run the callback with the error and stdout
+  - end stdin ("necessary if using Powershell 2 on Windows 7")
+
+## Windows scripts in main-process
+- `win-powershell` script deals with .Net Powershell spawning, args, path,
+- `win-shell` script deals with registration
+- see `spawner` and `squirrel-update` for supporting scripts
