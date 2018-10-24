@@ -834,3 +834,44 @@ if (!/^application:/.test(item.command)) {
 - `win-powershell` script deals with .Net Powershell spawning, args, path,
 - `win-shell` script deals with registration
 - see `spawner` and `squirrel-update` for supporting scripts
+
+## file-recovery-service.js
+- still in `src/main-process`
+- imports Electron dialog object, crypto, path, filesystem and recursive `mkdirp`
+- exports a file recovery service and a recovery file
+- `FileRecoveryService` class
+  - constructor takes and assigns a recovery directory
+  - constructor instantiates maps for windows by recovery file, files by path
+  - constructor instantates a weak map for files by window
+    - recall that `WeakMap` uses weak (GC-susceptible) Object-only keys
+  - async `willSavePath` to get or create a recovery file for this path, then add window and file to maps
+    - take a window and a path
+    - get the file at this path from files by path map, or create a new `RecoveryFile`
+    - add the recovery file to the files by window map at passed-in window key
+    - add the window to windows by file map at the recovery file key
+    - add the path, recovery file pair to recovery files by path map
+  - async `didSavePath` to get the recovery file for this window, path and delete from maps
+  - async `didCrashWindow` to create and resolve array of recovery promises for window
+    - take a window
+    - iterate through recovery files for this window, adding promises to array
+    - in each promise show dialog on error, otherwise delete recovery file data from maps
+    - use `Promise.all` to resolve all of the promises
+  - `didCloseWindow` to delete passed-in window for recovery files and in windows by files
+- `RecoveryFile` class
+  - static `fileNameForPath` method to parse and create a filename for the passed-in path
+  - constructor takes path, file mode, recovery path and binds them to the instance
+    - also add an instance ref counter
+  - async `store` to run `copyFile` with instance variables above
+  - async `recover` to run `copyFile`with instance variables and then `remove`
+  - async `remove` to return promise running filesystem unlink on the recovery path
+  - async `retain` to run `store` if `isReleased` and increment the instance ref counter
+  - async `release` to decrement ref counter and run `remove` if `isReleased`
+  - `isReleased` to check if instance ref counter is `0`
+  - async `tryStatFile` to run filesystem stat on passed-in path
+  - async `copyFile` to return promise with filesystem work to write source file to destination file
+    - take source, destination and mode args
+    - inside the promise run `mkdirp` passing destination path and callback
+    - in the callback open a filesystem readstream
+    - once opened create a writestream
+    - on writestream open pipe readstream to writestream
+    - once writestream closed resolve the promise
