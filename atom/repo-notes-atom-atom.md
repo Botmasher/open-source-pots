@@ -875,3 +875,36 @@ if (!/^application:/.test(item.command)) {
     - once opened create a writestream
     - on writestream open pipe readstream to writestream
     - once writestream closed resolve the promise
+
+## auto-update-manager.js
+- used in `atom-application` and in `application-menu` (which is also included in Atom app)
+- imports event emitter, path
+- declares some global strings for a variety of states including idle, error, checking, downloading
+- sets a void `autoUpdater`
+- exports an `AutoUpdateManager` class inheriting from `EventEmitter`
+  - constructor takes in a version, test mode, config
+  - constructor binds a bunch of variables including passed-in, idle state, icon path
+  - `initialize` to set API update feed URL and attach `autoUpdater` events
+    - set the `autoUpdater` to either `auto-updater-win32.js` export or get it from Electron
+    - run `setFeedURL` on the built feed path with version number appended to URL path
+    - on error event, `setState` to error and `emitWindowEvent` for error
+    - on checking for update event, set state and emit window event for checking
+    - on update not available event, set state and emit window event
+    - on update available event, set state and emit window event and emit event
+    - on update downloaded event, change version and set state and emit update available event
+    - config on change event, run `scheduleUpdateCheck` if `newValue` otherwise `cancelScheduledUpdateCheck`
+    - if config `core.automaticallyUpdate` then run `scheduleUpdateCheck`
+    - set state to unsupported for linux or conditionally win32
+  - `emitUpdateAvailableEvent` to run `emitWindowEvent` if there's a release version
+  - `emitWinodwEvent` to send message with passed-in event and payload to each Atom window
+  - `setState` to assign state, error message variables and `emit` state changed event passing state
+  - `getState` to return `this.state`
+  - `getErrorMessage` to return `this.errorMessage`
+  - `scheduleUpdateCheck` to set a periodic update check
+  - `cancelScheduledUpdateCheck` to void out any `checkForUpdatesIntervalID`
+  - `check` to add once events for update not available and error, then `checkForUpdates`
+    - do not check in test mode
+  - `install` to run `quitAndInstall` if not in test mode
+  - `onUpdateNotAvailable` to remove error listener and show update unavailable dialog
+  - `onUpdateError` to remove update not available listener and show update error dialog
+  - `getWindows` to run global Atom app `getAllWindows`
