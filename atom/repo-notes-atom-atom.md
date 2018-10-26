@@ -344,6 +344,7 @@
   - `start.js` opens `atom-application.js`:
     - imports the electron app
     - imports a path
+    - later in one method there's a same-dir import: Win `squirrel-update`, which in turn imports from `spawner`
     - defines a `start` function that:
       - adds exception and rejection handling listeners
       - parses the command line args
@@ -358,10 +359,9 @@
     - imports electron pieces like `BrowserWindow`, `clipboard`, `screen`
     - beyond that the Atom app's class is defined including the open method (run from `start`)
     - see closer look at `atom-application.js` below
-  - `atom-window` is included in the Atom application
-    - see closer look at `application-menu.js` below
-  - `application-menu` is included in the Atom application
-    - see closer look at `atom-window.js` below
+  - classes from other same-dir scripts are included in the Atom application
+    - `atom-window`, `application-menu` `atom-update-manager`, `atom-protocol-handler`, `file-recovery-service`
+    - see closer looks at specific `main-process` files below
 
 ## TODO learn more about:
 - socket files
@@ -385,6 +385,8 @@ if (!/^application:/.test(item.command)) {
 - spec window comes up much
   - see `atom-window`: window that `handlesAtomCommands` is not spec and not web view focused
 - Atom protocol handler in main process imports Electron `protocol` and runs `protocol.registerFileProtocol` with callback
+- where exactly in `atom-application` do we get into the code that's in main `src/`?
+
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -908,3 +910,19 @@ if (!/^application:/.test(item.command)) {
   - `onUpdateNotAvailable` to remove error listener and show update unavailable dialog
   - `onUpdateError` to remove update not available listener and show update error dialog
   - `getWindows` to run global Atom app `getAllWindows`
+
+## context-menu.js
+- see main Atom Application including `setupContextMenu` method
+- imports Electron Menu
+- exports a `ContextMenu` class
+  - constructor takes a template and Atom Window
+  - constructor binds Atom Window locally
+  - constructor runs `createClickHandlers` with the template
+  - constructor builds menu from template and runs Electron `menu.popup`
+  - `createClickHandlers` to add Atom Window and send command to window for each template item
+    - comments note this method keeps closures from being "dragged across processes" and allows proper GC
+    - take passed-in template
+    - iterate through template items
+    - attach instance Atom Window to item command detail Atom Window
+    - add a click event handler that sends item command and window to Atom app
+    - recursively run `createClickHandlers` if submenu in item
