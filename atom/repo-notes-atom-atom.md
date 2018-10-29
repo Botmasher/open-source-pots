@@ -364,7 +364,32 @@
     - see closer looks at specific `main-process` files below
 
 ## TODO learn more about:
-- socket files
+- socket files in `atom-application.js`
+  - work in the Atom app
+    - socket path is added to `options` object passed to static `open`
+    - create path name including first 12 chars of a hashed instance digest
+      - outside of win32 this starts with `os.tmpdir()`
+    - empty socket path sometimes takes a while to throw error (commented "FIXME")
+    - `constructor` binds the socket path
+    - socket path then used for app server listening, deleting, and restarting
+  - looking up "socket file" (starting [on Wikipedia](https://en.wikipedia.org/wiki/Unix_file_types#Socket))
+    - sockets are used to communicate between processes
+    - use `sendmsg` or `recvmsg` for data or [I/O descriptors](https://en.wikipedia.org/wiki/File_descriptor) (0, 1 or 2)
+    - two-way data flow, unlike one-way "named pipes"
+    - mode string marks socket files with `s` at beginning
+  - browsing around with terminal
+    - open Atom app
+    - look through files in root `.atom`
+    - actually `echo $TMPDIR` to see OS temp (MacOs `(/private)/var/folders/ ... `)
+    - navigate to dir and find `atom-{hash12}.sock`: `cd $TMPDIR`
+      - Atom crashes and APM install dir also live here
+    - the file looks empty to me
+    - the file does not exist after closing Atom
+    - the file exists again, with same hash, on Atom start
+    - opening with `less` I get a message that it `is not a regular file (use -f to see it)`
+      - but even after adding that option: `Operation not supported on socket`
+    - opening with other text editors the file is empty
+    - `ls -l` shows the socket file size `0` and the "socket" at beginning of permission string: `srwxr-xr-x`
 - Electron `app`
   - `app.focus` run in `openWithOptions`
   - `app.quit` for example in `removeWindow`
