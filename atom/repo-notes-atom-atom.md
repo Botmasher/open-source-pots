@@ -391,8 +391,26 @@
     - opening with other text editors the file is empty
     - `ls -l` shows the socket file size `0` and the "socket" at beginning of permission string: `srwxr-xr-x`
 - Electron `app`
-  - `app.focus` run in `openWithOptions`
-  - `app.quit` for example in `removeWindow`
+  - questions & curiosities: how do these work? what's going on here?
+    - `app.focus` gets run in `openWithOptions`
+    - `app.quit` gets run for example in `removeWindow`
+  - [Electron](https://github.com/electron/electron)
+    - what I've heard: Electron is for writing JS apps you can run from your machine just like JS does in a browser
+    - from the repo: it's a desktop  JS+HTML+CSS app building platform based on Node and Chromium
+      - this would be a whole separate set of notes, so keep this brief for now
+    - Electron is written in C++ with quite a bit of JS, some Objective-C++, a dash of Python, ...
+    - `/default_app/` starts in `main.js` but even that imports `app` from `electron`
+    - from the `package.json` it looks like `/script/` specifically `/script/start.js` is an entry point
+      - that just gets us toward utils, processes, path, args, patch stuff
+    - ah, is `app` the one in `/lib/browser/api/app.js`?
+      - this file imports an `app` from `bindings`
+      - this one imports just `electron` and Electron menu and `deprecate`
+      - this one exports `app`
+      - assign app menu methods and command line arg methods to `app` object
+      - add app metrics method and `isPackaged` check (for if there's not already an executable)
+      - add dock (Mac) or launcher (Linux) properties
+      - add domain credentials whitelisting and web contents event routing
+    - TODO: spend more time (than just this <1h) looking through the scripts
 - Electron IPC including `ipcMain` and `ipcHelpers`
 - how disposables dispose
 - `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
