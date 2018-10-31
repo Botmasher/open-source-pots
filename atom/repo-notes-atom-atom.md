@@ -412,7 +412,40 @@
       - add domain credentials whitelisting and web contents event routing
     - TODO: spend more time (than just this <1h) looking through the scripts
 - Electron IPC including `ipcMain` and `ipcHelpers`
-- how disposables dispose
+  - IPC files (besides `spec` testing) live in `lib/browser/`
+    - see `lib/browser/api` for a short script that exports an event emitter
+    - [ipcMain API documentation](https://github.com/electron/electron/blob/master/docs/api/ipc-main.md) is under `/docs`
+  - documentation above describes exported module as `EventEmitter` instance
+  - use for async and sync messaging between main and render processes
+    - mainly from render process (web page) to the module, onto the app
+    - also send messages back to render process (keep reading below)
+  - send messages to render process with `webContents.send`
+    - event name `channel`
+    - reply to sync messages with `event.returnValue`
+    - send async messages back with `event.sender.send`
+    - read [this example](https://github.com/electron/electron/blob/master/docs/api/ipc-main.md#sending-messages) of ping-ponging messages between the processes
+  - `ipcMain` has `on`, `once`, `removeListener` and `removeAllListeners` methods
+    - all take a `channel` event string
+    - all but `removeAllListeners` take a listener function to run/remove
+  - `ipcMain` callbacks pass an `event` arg to the callback
+    - `event.returnValue` will be returned in a sync message
+    - `event.sender` has sender's `webContents` and can `.send` to async reply
+  - `ipc-helpers` script lives in Atom (_not_ Electron) right there within `src/`
+    - wrap and export an `on` method taking an emitter, event, callback
+      - attach an `emmiter.on` listener
+      - and return a `removeListener` Disposable
+    - export a `call` method
+      - import `ipcRenderer` from Electron (what is this? - below)
+      - set renderer max listeners to `20`
+      - return promise to create rendered `on` listener removing listeners and sending event, args
+    - export a `respondTo` to import and assign `ipcMain` instance and return an `on` listener
+      - take a `channel` (event) and a `callback` (method to run)
+      - and really return an exported `on` method call
+      - call `on` with `ipcMain`, event, and an async function call with event, response event, args spread
+      - async func assigns browser window web contents event sender to `browserWindow`
+      - async func waits for response from calling `callback` on browser window and args spread
+      - async func runs async message `event.sender.send` with response event and the result of calling that callback
+- how disposables dispose (`const Disposable = require('event-kit').Disposable` as in `src/ipc-helpers`)
 - `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
 - ipcMain events, using sender to find browser window
   - difference between browser window and Atom window
