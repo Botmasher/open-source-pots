@@ -445,6 +445,22 @@
       - async func assigns browser window web contents event sender to `browserWindow`
       - async func waits for response from calling `callback` on browser window and args spread
       - async func runs async message `event.sender.send` with response event and the result of calling that callback
+    - `ipc-renderer` in `/lib/renderer/api`
+      - documentation in `/docs/api/`
+        - another `EventEmitter` instance
+        - methods for sync and async messaging (also replying) from web page to main process
+        - roughly, how the browser window page can communicate with the app
+      - get and assign global `v8_util` hidden value `ipc` as `ipcRenderer`
+      - assign a process `ipc` Atom Binding to `binding`
+      - create a boolean `internal` and set `false`
+      - wrap methods with `ipcRenderer`
+        - `send` to run and return `binding.send` with `ipc-message` event and passed-in args
+        - `sendSync` to return zeroth result of running `binding.sendSync` with `ipc-message-sync` event and passed-in args
+        - `sendToHost` to return call to `binding.send` with `ipc-host-message` event and passed-in args
+        - `sendTo` to return call to `binding.sendTo` with passed-in `webContentsId`, event and args
+          - pass `internal` and `false` in the first two params
+        - `sendToAll` to return call to `sendTo` as above but passing `true` in second param
+      - export `ipcRenderer`
 - how disposables dispose (`const Disposable = require('event-kit').Disposable` as in `src/ipc-helpers`)
 - `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
 - ipcMain events, using sender to find browser window
