@@ -462,6 +462,7 @@
         - `sendToAll` to return call to `sendTo` as above but passing `true` in second param
       - export `ipcRenderer`
 - how disposables dispose (`const Disposable = require('event-kit').Disposable` as in `src/ipc-helpers`)
+  - this gets into `event-kit` (see more below)
 - `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
 - ipcMain events, using sender to find browser window
   - difference between browser window and Atom window
@@ -478,7 +479,6 @@ if (!/^application:/.test(item.command)) {
   - see `atom-window`: window that `handlesAtomCommands` is not spec and not web view focused
 - Atom protocol handler in main process imports Electron `protocol` and runs `protocol.registerFileProtocol` with callback
 - where exactly in `atom-application` do we get into the code that's in main `src/`?
-
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -1018,3 +1018,51 @@ if (!/^application:/.test(item.command)) {
     - attach instance Atom Window to item command detail Atom Window
     - add a click event handler that sends item command and window to Atom app
     - recursively run `createClickHandlers` if submenu in item
+
+## Supporting projects
+
+### Electron
+- TODO: add info from above questions here
+
+### atom/event-kit
+- "event subscription APIs"
+- see Atom imports in for example `src/main-process/atom-application` and `src/ipc-helpers`
+- peel off two main parts: `Emitter` for implementing events, `Disposable` for consuming
+  - in short: _subscribing_ vs _unsubscribing_
+  - emitter `on` listeners return disposables; call `dispose` to use
+  - `CompositeDisposable` puts disposables together (unsubscribe from multiple)
+  - `Disposable` allows creating disposables passing your own function for work
+- `lib/event-kit` exports emitter, disposable and composite disposable classes
+- `lib/composite-disposable`
+  - constructor assigns `disposed` to `false` and creates disposables set
+  - `dispose` to switch on `disposed` and run `dispose` on each disposable in set
+  - `add` to `assertDisposable` on and add disposable to disposables set
+  - `remove` to delete from disposables set
+  - `delete` alias for `remove`
+  - `clear` to clear out disposables set (not disposed by next `dispose` call)
+  - `assertDisposable` to check if disposable has a `dispose` method
+- `lib/disposable`
+  - disposable resource returned by emitter `on`
+  - static `isDisposable` to check if passed-in object has a `dispose` function
+  - constructor to set `disposed` to `false` and bind passed-in `disposalAction` function
+  - `dispose` to switch on `disposed` and run `disposalAction` function
+- `lib/emitter`
+  - import disposable and composite disposable
+  - static `onEventHandlerException` to add exception handler to handlers array and return disposable for removing handler
+  - static `simpleDispatch` to return the result of running passed-in handler with passed-in value
+  - static `exceptionHandlingDispatch` to run handler with value and catch and run exception handler
+  - constructor assigns switched-off `dispose` and runs `clear`
+  - `clear` to run `dispose` on existing subscriptions, instantiate new `subscriptions` composite disposable, and emtpy object storing `handlersByEventName`
+  - `dispose` to run `dispose` on `subscriptions` and switch on `dispose` boolean
+  - `on` to add handler to handlers by event name and return disposable
+    - takes an event name, handler and an unshift (for positioning in array)
+    - disposable work removes this disposable from `subscriptions` and returns running `off` with this event name and handler
+  - `once` to run `on` passing a callback that disposes disposable and runs handler
+    - takes an event name, handler and an unshift
+  - `preempt` to return running `on` with passed-in event, handler and unshift to `true`
+  - `off` to remove handler from handlers array at this event name
+  - `emit` to dispatch handlers (in `handlersByEventName`) using passed-in value for passed-in event
+  - `emitAsync` to wrap dispatches in promise
+  - `getEventNames` to return all keys in `handlersByEventName`
+  - `listenerCountForEventName` to get length of handlers array for passed-in name
+  - `getTotalListenerCount` to sum all handlers in `handlersByEventName`
