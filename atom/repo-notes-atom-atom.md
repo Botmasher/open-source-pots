@@ -364,104 +364,13 @@
     - see closer looks at specific `main-process` files below
 
 ## TODO learn more about:
-- socket files in `atom-application.js`
-  - work in the Atom app
-    - socket path is added to `options` object passed to static `open`
-    - create path name including first 12 chars of a hashed instance digest
-      - outside of win32 this starts with `os.tmpdir()`
-    - empty socket path sometimes takes a while to throw error (commented "FIXME")
-    - `constructor` binds the socket path
-    - socket path then used for app server listening, deleting, and restarting
-  - looking up "socket file" (starting [on Wikipedia](https://en.wikipedia.org/wiki/Unix_file_types#Socket))
-    - sockets are used to communicate between processes
-    - use `sendmsg` or `recvmsg` for data or [I/O descriptors](https://en.wikipedia.org/wiki/File_descriptor) (0, 1 or 2)
-    - two-way data flow, unlike one-way "named pipes"
-    - mode string marks socket files with `s` at beginning
-  - browsing around with terminal
-    - open Atom app
-    - look through files in root `.atom`
-    - actually `echo $TMPDIR` to see OS temp (MacOs `(/private)/var/folders/ ... `)
-    - navigate to dir and find `atom-{hash12}.sock`: `cd $TMPDIR`
-      - Atom crashes and APM install dir also live here
-    - the file looks empty to me
-    - the file does not exist after closing Atom
-    - the file exists again, with same hash, on Atom start
-    - opening with `less` I get a message that it `is not a regular file (use -f to see it)`
-      - but even after adding that option: `Operation not supported on socket`
-    - opening with other text editors the file is empty
-    - `ls -l` shows the socket file size `0` and the "socket" at beginning of permission string: `srwxr-xr-x`
-- Electron `app`
-  - questions & curiosities: how do these work? what's going on here?
-    - `app.focus` gets run in `openWithOptions`
-    - `app.quit` gets run for example in `removeWindow`
-  - [Electron](https://github.com/electron/electron)
-    - what I've heard: Electron is for writing JS apps you can run from your machine just like JS does in a browser
-    - from the repo: it's a desktop  JS+HTML+CSS app building platform based on Node and Chromium
-      - this would be a whole separate set of notes, so keep this brief for now
-    - Electron is written in C++ with quite a bit of JS, some Objective-C++, a dash of Python, ...
-    - `/default_app/` starts in `main.js` but even that imports `app` from `electron`
-    - from the `package.json` it looks like `/script/` specifically `/script/start.js` is an entry point
-      - that just gets us toward utils, processes, path, args, patch stuff
-    - ah, is `app` the one in `/lib/browser/api/app.js`?
-      - this file imports an `app` from `bindings`
-      - this one imports just `electron` and Electron menu and `deprecate`
-      - this one exports `app`
-      - assign app menu methods and command line arg methods to `app` object
-      - add app metrics method and `isPackaged` check (for if there's not already an executable)
-      - add dock (Mac) or launcher (Linux) properties
-      - add domain credentials whitelisting and web contents event routing
-    - TODO: spend more time (than just this <1h) looking through the scripts
-- Electron IPC including `ipcMain` and `ipcHelpers`
-  - IPC files (besides `spec` testing) live in `lib/browser/`
-    - see `lib/browser/api` for a short script that exports an event emitter
-    - [ipcMain API documentation](https://github.com/electron/electron/blob/master/docs/api/ipc-main.md) is under `/docs`
-  - documentation above describes exported module as `EventEmitter` instance
-  - use for async and sync messaging between main and render processes
-    - mainly from render process (web page) to the module, onto the app
-    - also send messages back to render process (keep reading below)
-  - send messages to render process with `webContents.send`
-    - event name `channel`
-    - reply to sync messages with `event.returnValue`
-    - send async messages back with `event.sender.send`
-    - read [this example](https://github.com/electron/electron/blob/master/docs/api/ipc-main.md#sending-messages) of ping-ponging messages between the processes
-  - `ipcMain` has `on`, `once`, `removeListener` and `removeAllListeners` methods
-    - all take a `channel` event string
-    - all but `removeAllListeners` take a listener function to run/remove
-  - `ipcMain` callbacks pass an `event` arg to the callback
-    - `event.returnValue` will be returned in a sync message
-    - `event.sender` has sender's `webContents` and can `.send` to async reply
-  - `ipc-helpers` script lives in Atom (_not_ Electron) right there within `src/`
-    - wrap and export an `on` method taking an emitter, event, callback
-      - attach an `emmiter.on` listener
-      - and return a `removeListener` Disposable
-    - export a `call` method
-      - import `ipcRenderer` from Electron (what is this? - below)
-      - set renderer max listeners to `20`
-      - return promise to create rendered `on` listener removing listeners and sending event, args
-    - export a `respondTo` to import and assign `ipcMain` instance and return an `on` listener
-      - take a `channel` (event) and a `callback` (method to run)
-      - and really return an exported `on` method call
-      - call `on` with `ipcMain`, event, and an async function call with event, response event, args spread
-      - async func assigns browser window web contents event sender to `browserWindow`
-      - async func waits for response from calling `callback` on browser window and args spread
-      - async func runs async message `event.sender.send` with response event and the result of calling that callback
-    - `ipc-renderer` in `/lib/renderer/api`
-      - documentation in `/docs/api/`
-        - another `EventEmitter` instance
-        - methods for sync and async messaging (also replying) from web page to main process
-        - roughly, how the browser window page can communicate with the app
-      - get and assign global `v8_util` hidden value `ipc` as `ipcRenderer`
-      - assign a process `ipc` Atom Binding to `binding`
-      - create a boolean `internal` and set `false`
-      - wrap methods with `ipcRenderer`
-        - `send` to run and return `binding.send` with `ipc-message` event and passed-in args
-        - `sendSync` to return zeroth result of running `binding.sendSync` with `ipc-message-sync` event and passed-in args
-        - `sendToHost` to return call to `binding.send` with `ipc-host-message` event and passed-in args
-        - `sendTo` to return call to `binding.sendTo` with passed-in `webContentsId`, event and args
-          - pass `internal` and `false` in the first two params
-        - `sendToAll` to return call to `sendTo` as above but passing `true` in second param
-      - export `ipcRenderer`
-- how disposables dispose (`const Disposable = require('event-kit').Disposable` as in `src/ipc-helpers`)
+- [X] socket files in `atom-application.js`
+  - see beneath the file-by-file summaries for supporting stuff
+- [X] Electron `app` questions & curiosities: how do these work? what's going on here?
+  - `app.focus` gets run in `openWithOptions`
+  - `app.quit` gets run for example in `removeWindow`
+- [X] Electron IPC including `ipcMain` and `ipcHelpers`
+- [X] how disposables dispose (`const Disposable = require('event-kit').Disposable` as in `src/ipc-helpers`)
   - this gets into `event-kit` (see more below)
 - `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
 - ipcMain events, using sender to find browser window
@@ -1019,10 +928,109 @@ if (!/^application:/.test(item.command)) {
     - add a click event handler that sends item command and window to Atom app
     - recursively run `createClickHandlers` if submenu in item
 
-## Supporting projects
+
+## Supporting Projects & Concepts
+
+### Socket Files
+- work in the Atom app
+  - socket path is added to `options` object passed to static `open`
+  - create path name including first 12 chars of a hashed instance digest
+    - outside of win32 this starts with `os.tmpdir()`
+  - empty socket path sometimes takes a while to throw error (commented "FIXME")
+  - `constructor` binds the socket path
+  - socket path then used for app server listening, deleting, and restarting
+- looking up "socket file" (starting [on Wikipedia](https://en.wikipedia.org/wiki/Unix_file_types#Socket))
+  - sockets are used to communicate between processes
+  - use `sendmsg` or `recvmsg` for data or [I/O descriptors](https://en.wikipedia.org/wiki/File_descriptor) (0, 1 or 2)
+  - two-way data flow, unlike one-way "named pipes"
+  - mode string marks socket files with `s` at beginning
+- browsing around with terminal
+  - open Atom app
+  - look through files in root `.atom`
+  - actually `echo $TMPDIR` to see OS temp (MacOs `(/private)/var/folders/ ... `)
+  - navigate to dir and find `atom-{hash12}.sock`: `cd $TMPDIR`
+    - Atom crashes and APM install dir also live here
+  - the file looks empty to me
+  - the file does not exist after closing Atom
+  - the file exists again, with same hash, on Atom start
+  - opening with `less` I get a message that it `is not a regular file (use -f to see it)`
+    - but even after adding that option: `Operation not supported on socket`
+  - opening with other text editors the file is empty
+  - `ls -l` shows the socket file size `0` and the "socket" at beginning of permission string: `srwxr-xr-x`
 
 ### Electron
-- TODO: add info from above questions here
+- see questions above
+- here broken down roughly by how imported in `atom/atom`
+
+#### Electron Main
+- [Electron](https://github.com/electron/electron)
+  - what I've heard: Electron is for writing JS apps you can run from your machine just like JS does in a browser
+  - from the repo: it's a desktop  JS+HTML+CSS app building platform based on Node and Chromium
+    - this would be a whole separate set of notes, so keep this brief for now
+  - Electron is written in C++ with quite a bit of JS, some Objective-C++, a dash of Python, ...
+  - `/default_app/` starts in `main.js` but even that imports `app` from `electron`
+  - from the `package.json` it looks like `/script/` specifically `/script/start.js` is an entry point
+    - that just gets us toward utils, processes, path, args, patch stuff
+  - ah, is `app` the one in `/lib/browser/api/app.js`?
+    - this file imports an `app` from `bindings`
+    - this one imports just `electron` and Electron menu and `deprecate`
+    - this one exports `app`
+    - assign app menu methods and command line arg methods to `app` object
+    - add app metrics method and `isPackaged` check (for if there's not already an executable)
+    - add dock (Mac) or launcher (Linux) properties
+    - add domain credentials whitelisting and web contents event routing
+  - TODO: spend more time (than just this <1h) looking through the scripts
+
+#### Electron IPC (imported separately multiple times in Atom)
+- IPC files (besides `spec` testing) live in `lib/browser/`
+  - see `lib/browser/api` for a short script that exports an event emitter
+  - [ipcMain API documentation](https://github.com/electron/electron/blob/master/docs/api/ipc-main.md) is under `/docs`
+- documentation above describes exported module as `EventEmitter` instance
+- use for async and sync messaging between main and render processes
+  - mainly from render process (web page) to the module, onto the app
+  - also send messages back to render process (keep reading below)
+- send messages to render process with `webContents.send`
+  - event name `channel`
+  - reply to sync messages with `event.returnValue`
+  - send async messages back with `event.sender.send`
+  - read [this example](https://github.com/electron/electron/blob/master/docs/api/ipc-main.md#sending-messages) of ping-ponging messages between the processes
+- `ipcMain` has `on`, `once`, `removeListener` and `removeAllListeners` methods
+  - all take a `channel` event string
+  - all but `removeAllListeners` take a listener function to run/remove
+- `ipcMain` callbacks pass an `event` arg to the callback
+  - `event.returnValue` will be returned in a sync message
+  - `event.sender` has sender's `webContents` and can `.send` to async reply
+- `ipc-helpers` script lives in Atom (_not_ Electron) right there within `src/`
+  - wrap and export an `on` method taking an emitter, event, callback
+    - attach an `emmiter.on` listener
+    - and return a `removeListener` Disposable
+  - export a `call` method
+    - import `ipcRenderer` from Electron (what is this? - below)
+    - set renderer max listeners to `20`
+    - return promise to create rendered `on` listener removing listeners and sending event, args
+  - export a `respondTo` to import and assign `ipcMain` instance and return an `on` listener
+    - take a `channel` (event) and a `callback` (method to run)
+    - and really return an exported `on` method call
+    - call `on` with `ipcMain`, event, and an async function call with event, response event, args spread
+    - async func assigns browser window web contents event sender to `browserWindow`
+    - async func waits for response from calling `callback` on browser window and args spread
+    - async func runs async message `event.sender.send` with response event and the result of calling that callback
+  - `ipc-renderer` in `/lib/renderer/api`
+    - documentation in `/docs/api/`
+      - another `EventEmitter` instance
+      - methods for sync and async messaging (also replying) from web page to main process
+      - roughly, how the browser window page can communicate with the app
+    - get and assign global `v8_util` hidden value `ipc` as `ipcRenderer`
+    - assign a process `ipc` Atom Binding to `binding`
+    - create a boolean `internal` and set `false`
+    - wrap methods with `ipcRenderer`
+      - `send` to run and return `binding.send` with `ipc-message` event and passed-in args
+      - `sendSync` to return zeroth result of running `binding.sendSync` with `ipc-message-sync` event and passed-in args
+      - `sendToHost` to return call to `binding.send` with `ipc-host-message` event and passed-in args
+      - `sendTo` to return call to `binding.sendTo` with passed-in `webContentsId`, event and args
+        - pass `internal` and `false` in the first two params
+      - `sendToAll` to return call to `sendTo` as above but passing `true` in second param
+    - export `ipcRenderer`
 
 ### atom/event-kit
 - "event subscription APIs"
