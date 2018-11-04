@@ -370,14 +370,14 @@
   - `app.focus` gets run in `openWithOptions`
   - `app.quit` gets run for example in `removeWindow`
 - [X] Electron IPC including `ipcMain` and `ipcHelpers`
+  - [ ] ipcMain events, using sender to find browser window
+  - [ ] `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
+    - difference between browser window and Atom window
 - [X] how disposables dispose (`const Disposable = require('event-kit').Disposable` as in `src/ipc-helpers`)
   - this gets into `event-kit` (see more below)
-- `ipcHelpers.on` to add disposable listeners (`ipcMain` and `app` listeners)
-- ipcMain events, using sender to find browser window
-  - difference between browser window and Atom window
-- leading semicolon in `atom-application` method `runTests`?
+- [ ] leading semicolon in `atom-application` method `runTests`?
   - me: only familiar with two reasons why this is done in JS and don't understand how either applies
-- `ApplicationMenu` class defines method `translateTemplate` that iterates through template and sets keybindings and click executions
+- [ ] `ApplicationMenu` class defines method `translateTemplate` that iterates through template and sets keybindings and click executions
   - after assigning a template item's accelerator and click properties it checks and flags this:
 ```JavaScript
 if (!/^application:/.test(item.command)) {
@@ -386,7 +386,21 @@ if (!/^application:/.test(item.command)) {
 ```
 - spec window comes up much
   - see `atom-window`: window that `handlesAtomCommands` is not spec and not web view focused
-- Atom protocol handler in main process imports Electron `protocol` and runs `protocol.registerFileProtocol` with callback
+  - `.isSpec` is passed into Atom window constructor through `settings` object
+  - `window.isSpec` is checked in `atom-application`
+  - `this.isSpec` is checked throughout `atom-window`
+  - this setting is set `true` when `new AtomWindow` created in `runTests`
+  - when Electron app is ready `start.js` runs `AtomApplication.open` passing `args`
+  - those `args` come from `parseCommandLine` (from `parse-command-line`) on `process.argv`
+  - I still don't see where the `isSpec` is passed since instantiations that pass `settings` to Window pass things like boolean benchmark but not an `isSpec`
+- Atom protocol handler in `main-process/` imports Electron `protocol` and runs `protocol.registerFileProtocol`
+  - first line is destructured assignment of `protocol` from `'electron'`
+  - the `registerFileProtocol` call passes `'atom'` and callback
+  - this Electron method is defined and set in `atom/browser/api/`
+    - in `atom_api_protocol.cc` the method is mapped to `RegisterProtocol`
+    - the `RegisterProtocol` method is defined in `atom_api_protocol.h`
+      - take a `scheme` string pointer, a pointer to a `handler` and some args
+      - basically do some browser thread work registering the protocol then running the callback
 - where exactly in `atom-application` do we get into the code that's in main `src/`?
 
 ### atom-application.js
