@@ -375,8 +375,39 @@
     - difference between browser window and Atom window
 - [X] how disposables dispose (`const Disposable = require('event-kit').Disposable` as in `src/ipc-helpers`)
   - this gets into `event-kit` (see more below)
-- [ ] leading semicolon in `atom-application` method `runTests`?
-  - me: only familiar with two reasons why this is done in JS and don't understand how either applies
+- [X] leading semicolon in `atom-application` method `runTests`?
+  - see example code lines below
+```JavaScript
+if (resourcePath !== this.resourcePath && !fs.existsSync(resourcePath)) {
+  ;({resourcePath} = this)
+}
+```
+  - the syntax occurs in both `runTests` and `runBenchmarks` in `src/main-process/atom-application`
+  - is this to end a previous statement? if so, which?
+  - seen as a way to chain code safely (like for minifying) in [this question-answer](https://stackoverflow.com/questions/1873983/what-does-the-leading-semicolon-in-javascript-libraries-do)
+  - the assignment is in parens
+  - the semicolon could be for safely concatenating parens, but why are the parens there?
+    - testing in node v11 with small script below
+    - syntax error unexpected token `=` without the parens
+    - so the parens clear up the parsing of an assignment statement following `{`
+    - the addition or omission of `;` does not give different behavior or errors
+  - the semicolon was included in the "decaffeinated" JS Atom app at [this commit](https://github.com/atom/atom/commit/043f183b1a3202e323d2c7f517cdcc4636be77ba#diff-63931220a4d57b726ca3d2edc445f371)
+  - nothing similar in the previous `atom-application.coffee`
+    - the if statement has minimal syntax: `if resourcePath isnt @resourcePath and not fs.existsSync(resourePath)`
+    - it's a simple assignment `resourcePath = @resourcePath`
+  - conjectured explanations
+    - it may be a safeguard to ensure parens are properly concatenated
+    - it may have been added on seeing the initial sequence `({` in an assignment statement
+    - there may be or have been a relevant project or team style standard
+      - (no such info retrieved on first search of repo or docs)
+```JavaScript
+this.resourcePath = 'asdf'
+let resourcePath = '123'
+let someScript
+if (resourcePath !== this.resourcePath) {
+  {resourcePath} = this   // surround with parens to prevent unexpected token error
+}
+```
 - [ ] `ApplicationMenu` class defines method `translateTemplate` that iterates through template and sets keybindings and click executions
   - after assigning a template item's accelerator and click properties it checks and flags this:
 ```JavaScript
@@ -384,7 +415,7 @@ if (!/^application:/.test(item.command)) {
   item.metadata.windowSpecific = true
 }
 ```
-- spec window comes up much
+- [X] spec window comes up much
   - see `atom-window`: window that `handlesAtomCommands` is not spec and not web view focused
   - `.isSpec` is passed into Atom window constructor through `settings` object
   - `window.isSpec` is checked in `atom-application`
@@ -393,7 +424,7 @@ if (!/^application:/.test(item.command)) {
   - when Electron app is ready `start.js` runs `AtomApplication.open` passing `args`
   - those `args` come from `parseCommandLine` (from `parse-command-line`) on `process.argv`
   - I still don't see where the `isSpec` is passed since instantiations that pass `settings` to Window pass things like boolean benchmark but not an `isSpec`
-- Atom protocol handler in `main-process/` imports Electron `protocol` and runs `protocol.registerFileProtocol`
+- [X] Atom protocol handler in `main-process/` imports Electron `protocol` and runs `protocol.registerFileProtocol`
   - first line is destructured assignment of `protocol` from `'electron'`
   - the `registerFileProtocol` call passes `'atom'` and callback
   - this Electron method is defined and set in `atom/browser/api/`
@@ -401,7 +432,7 @@ if (!/^application:/.test(item.command)) {
     - the `RegisterProtocol` method is defined in `atom_api_protocol.h`
       - take a `scheme` string pointer, a pointer to a `handler` and some args
       - basically do some browser thread work registering the protocol then running the callback
-- where exactly in `atom-application` do we get into the code that's in main `src/`?
+- [ ] where exactly in `atom-application` do we get into the code that's in main `src/`?
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
