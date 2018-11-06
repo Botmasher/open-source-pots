@@ -408,8 +408,26 @@ if (resourcePath !== this.resourcePath) {
   {resourcePath} = this   // surround with parens to prevent unexpected token error
 }
 ```
-- [ ] `ApplicationMenu` class defines method `translateTemplate` that iterates through template and sets keybindings and click executions
-  - after assigning a template item's accelerator and click properties it checks and flags this:
+- [X] `ApplicationMenu` class defines method `translateTemplate` that iterates through template and sets keybindings and click executions
+  - after assigning a template item's accelerator and click properties it runs the conditional below
+  - the comments say it's for relating a keystroke to a menu template
+  - reviewing the context:
+    - the method iterates through each item in the passed-in template
+    - if there's a command for an item, it assigns a keystroke accelerator for the command
+    - then a `click` function is assigned to the item to send the command
+    - at that point you get to this conditional for setting if the item is `windowSpecific`
+  - at a glance it looks like a falsey test for a regex immediately followed by a method call
+  - bringing up Node to run some example code...
+    - `/app/` and `/^app/` seem to test the same on strings I'm passing them
+    - me: coding the examples quickly reminded me that `.test` is a regex method
+      - look for regex match in a string arg
+      - the conditional starts to look obvious at this point, but let's keep digging
+    - with some reading, reminder that `/^app/` matches a string that starts with `'app'`
+    - test that `/app/` matches `'zapp'` but `/^app/` does not
+    - test that `/^application:/` matches `'application:'` but not `'app'`, `'zapp'`, `'e'`, ...
+  - after that reading and double checking, here's an explanation of the code:
+    - check if the template item's command starts with `'application:'`
+    - if it does not, set its metadata property `windowSpecific` to `true`
 ```JavaScript
 if (!/^application:/.test(item.command)) {
   item.metadata.windowSpecific = true
