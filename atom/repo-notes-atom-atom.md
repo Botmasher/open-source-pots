@@ -450,7 +450,37 @@ if (!/^application:/.test(item.command)) {
     - the `RegisterProtocol` method is defined in `atom_api_protocol.h`
       - take a `scheme` string pointer, a pointer to a `handler` and some args
       - basically do some browser thread work registering the protocol then running the callback
-- [ ] where exactly in `atom-application` do we get into the code that's in main `src/`?
+- [X] where exactly in `atom-application` do we get into the code that's in main `src/`?
+  - follow the startup step by step to find it's through config, storage and IPC
+  - root `package.json` points to the main Atom entrypoint at `src/main-process/main`
+  - in `main.js` we parse paths and call `src/main-process/start` with paths and start time
+  - in `start.js` we run the `start` function with those args
+    - parse command line args for paths
+    - get config and core color profile
+    - add file open and launch listeners to Electron app
+    - when app is ready import `src/main-process/atom-application` and call its `open` with args
+  - in `atom-application.js` run that static `open` method
+    - deal with the socket file stuff and `initialize` Atom app class
+  - now the `atom-application.js` method `initialize`
+    - instantiate an `ApplicationMenu` imported from `application-menu`
+    - instantiate an `AtomProtocolHandler` imported from `atom-protocol-handler`
+    - listen for args, set up the dock menu
+    - wait for `this.launch`
+    - run the `initialize` method of `this.autoUpdateManager` (instantiated in constructor)
+      - `auto-update-manager` has `initialize` mostly adding listeners to auto updater
+  - `atom-application` method `this.launch`
+    - config for title bar and color profile
+    - this takes us into src dir (config) below
+    - window options and opening windows with `this.openWithOptions`
+  - `atom-application` method `this.openWithOptions`
+    - lots of options for the window like paths, modes, clear, environment, ...
+    - standardly gets down to `openPath` or `openPaths` in an existing window
+    - `openPaths` does create an `AtomWindow`
+  - `atom-window` has that long constructor
+    - gets user config settings and adds events
+    - ends up sending commands to open locations
+- [ ] at this point `config` files in `src/` are worth a read since they deal with packages
+  - revisit the use of `src/config` and `src/config-file` are the `Config` and `ConfigFile` in `atom-application`
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
