@@ -480,7 +480,27 @@ if (!/^application:/.test(item.command)) {
     - gets user config settings and adds events
     - ends up sending commands to open locations
 - [ ] at this point `config` files in `src/` are worth a read since they deal with packages
-  - revisit the use of `src/config` and `src/config-file` are the `Config` and `ConfigFile` in `atom-application`
+  - revisit the use of `src/config` and `src/config-file` as the `Config` and `ConfigFile` in `atom-application`
+  - `atom-application` use of config:
+    - imports `config`, `config-file` and at end of imports `config-schema`
+    - in constructor, `configFilePath` is built for the `config.json` for `this.configFile`
+    - constructor instantiates `Config` as `this.config` and runs `this.config.setSchema`
+      - the `ConfigSchema` is used this once to pass in clone of it to `{type, properties}` object as second arg
+    - throughout app calls to config methods include:
+      - `this.config.get` and `.unset` for example to read and switch off `'core.useCustomTitleBar'`
+      - `this.config.set` for example to set property `core.titleBar` to `'custom'` after switching off the setting
+      - `this.config.onDidChange` for example to add a prompt for restart callback to `core.titleBar` changes
+      - `this.config.resetUserSettings` with passed-in settings on config file changes
+    - `this.configFile` is retrieved through passing `ConfigFile.at` the above `configFilePath` to the JSON/CSON
+      - a run of `this.configFile.update` is put into the instantiated `Config` object `saveCallback`
+      - `launch` uses a `this.configFile.watch()` promise
+      - `handleEvents` adds `onDidError` and `onDidChange` listeners
+  - so the summary of the path once we're in `atom-application`
+    - get JSON/CSON config path
+    - run `ConfigFile.at` with the JSON path
+    - instantiate `Config` and run instance's `setSchema`
+      - pass `setSchema` a clone of `ConfigSchema`
+  - below take a closer look within those specific config files
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
