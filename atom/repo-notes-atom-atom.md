@@ -1187,3 +1187,22 @@ if (!/^application:/.test(item.command)) {
   - `getEventNames` to return all keys in `handlersByEventName`
   - `listenerCountForEventName` to get length of handlers array for passed-in name
   - `getTotalListenerCount` to sum all handlers in `handlersByEventName`
+
+## src/config
+- imports `event-kit` Emitter, keypath methods from `key-path-helper`, scope and scoped properties
+- defines `Config` class globally available through `atom.config`
+- starts with hundreds of lines commenting how to use config
+  - including types and how values are displayed and used
+  - preview/display are in Settings View
+- static methods for schema enforcers
+- `constructor` runs `this.clear` and then passes params to `this.initialize`
+  - takes a single `params` object that it passes through to `initialize`
+- `initialize` to bind passed-in `saveCallback`, `mainSource` and `projectHomeSchema`
+  - these values are destructured off of passed-in params
+- `clear` to start new emitter instance and reset config properties
+  - store `this.emitter` instance of event kit `Emitter`
+  - reset `this.schema` to have empty properties object
+  - set bound settings variables to empty or falsy
+  - setup `this.requestSave` as debounced call to `this.save`
+
+## src/config-file
