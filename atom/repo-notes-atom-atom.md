@@ -1204,5 +1204,19 @@ if (!/^application:/.test(item.command)) {
   - reset `this.schema` to have empty properties object
   - set bound settings variables to empty or falsy
   - setup `this.requestSave` as debounced call to `this.save`
+- config subscription for adding callback on changes to keypath
+  - unspecified keypaths fire callbacks on changes to any key
+  - `observe` to take in args and peel off keypath, callback and options
+    - run `observeScopedKeyPath` if there's a scope property in options
+    - otherwise run `observeKeyPath`
+  - `onDidChange` to take in args and peel off keypath, callback and options
+    - run `onDidChangeScopedKeyPath` if there's a scope property in options
+    - otherwise run `onDidChangeKeyPath`
+- manage settings - get and set config settings for a key or keys
+  - `get` to take args and run `getRawScopedValue` or `getRawValue` depending on options scope
+  - `getAll` to take keypath and options and return values and scope selectors in keypath
+    - build array of objects with legacy scope descriptors, keypath, options
+    - then append the raw value for the keypath with scope `*`
+    - note this is all values for a single keypath
 
 ## src/config-file
