@@ -1218,5 +1218,21 @@ if (!/^application:/.test(item.command)) {
     - build array of objects with legacy scope descriptors, keypath, options
     - then append the raw value for the keypath with scope `*`
     - note this is all values for a single keypath
+  - `set` value stored in config file at keypath
+    - note the comments for setting themes and different scopes
+    - set raw or raw scoped value depending on options scope selector
+  - `unset` to restore default value stored in config file keypath
+    - remove source and scope properties, undefine keypath value, save
+    - iterate through scope selectors and `unset` each one if multiple
+  - `getSources` to get array of all added settings source strings
+  - `getSchema` to get data about a keypath in object with type and other info
+    - comment gives example of `schema.properties` including things like default or min values
+  - `getUserConfigPath` to read `this.mainSource`
+  - `transact` to take a callback, call `beginTransaction`, return invoked callback, `endTransaction`
+  - `getLegacyScopeDescriptorForNewScopeDescriptor` to return `null` for scope descriptor
+- internal core methods
+  - `transactAsync` to pause change and observe events while a callback promise executes
+  - `beginTransaction` to increment `this.transactDepth`
+  - `endTransaction` to decrement `this.transactDepth` and run `emitChangeEvent`
 
 ## src/config-file
