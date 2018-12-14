@@ -1234,5 +1234,21 @@ if (!/^application:/.test(item.command)) {
   - `transactAsync` to pause change and observe events while a callback promise executes
   - `beginTransaction` to increment `this.transactDepth`
   - `endTransaction` to decrement `this.transactDepth` and run `emitChangeEvent`
+  - `pushAtKeyPath` to add one value to the array at the keypath
+    - use `get` to fetch and `set` to store the array, as with unshift and remove below
+  - `unshiftAtKeyPath` to ushift passed-in values onto the front of the array at the keypath
+  - `removeAtKeyPath` to delete a passed-in value from the array at the keypath
+    - `get` to fetch array, underscore to mutate it, then `set` to store it for the keypath
+  - `setSchema` to set up root schema, combine passed-in schema and set defaults from schema
+  - `save` to create an `allSettings` object from settings and pass it to the `saveCallback`
+    - only save if there's a bound `saveCallback`
+- private methods for managing global settings
+  - `resetUserSettings` to pass through to `_resetSettings`
+  - `_resetSettings` to create a new settings object and `set` values for all keys in the new settings
+  - `_clearUnscopedSettingsForSource` to empty out bound `settings` or `projectSettings` object
+  - `resetProjectSettings` to `_resetSettings` to passed-in new settings and source to passed-in file
+    - if no passed-in file path, instead remove properties for old project file and empty out `projectSettings`
+  - `clearProjectSettings` to run `resetProjectSettings` passing empty object
+  -
 
 ## src/config-file
