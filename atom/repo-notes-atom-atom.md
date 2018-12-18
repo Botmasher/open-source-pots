@@ -1249,6 +1249,24 @@ if (!/^application:/.test(item.command)) {
   - `resetProjectSettings` to `_resetSettings` to passed-in new settings and source to passed-in file
     - if no passed-in file path, instead remove properties for old project file and empty out `projectSettings`
   - `clearProjectSettings` to run `resetProjectSettings` passing empty object
-  -
+  - `getRawValue` to read `deepClone` of value from keypath in `projectSettings` (or `settings` if not)
+  - `setRawValue` to set keypath value if not default (otherwise delete/nullify) and emit change
+  - `observeKeyPath` to run passed-in callback on keypath value and return keypath value change listener calling callback
+  - `onDidChangeKeyPath` to store old keypath value and return emitter updating value and running callback passing change event
+  - `isSubKeyPath` to check if split keypath tokens array is equal to subkeypath tokens
+    - take passed-in args for `keyPath` and `subKeyPath`
+  - `setRawDefault` to run `setValueAtKeyPath` with passed-in keypath and value and emit change event
+  - `setDefaults` to run `transact` which calls `setDefaults` on passed-in keypath keys with passed-in defaults values
+    - if passed-in defaults not a plain object, conform to schema and run `setRawDefault`
+  - `deepClone` to clone colors, map `deepClone` arrays, underscore map object kvs, or return plain objects
+  - `deepDefaults` to iterate through argument objects and add their keys recursively to build a target object
+  - `setScopedDefaultsFromSchema` to go through passed-in schema scopes and set keypath to scope defaults
+    - call recursively to set child values from schema properties
+  - `extractDefaultsFromSchema` to return schema default if one exists otherwise go through and extract schema properties
+  - `makeValueConformToSchema` to get down to keypath values and run `executeSchemaEnforcers`
+  - `resetSettingsForSchemaChange` to run `transact` making settings and scoped settings values conform to schema
+    - run `makeValueConformToSchema` on bound `settings` and on each scope selector from `scopedSettingsStore.propertiesForSource`
+    - comment notes this resets config values to conform when a new schema is added
+- private scoped settings
 
 ## src/config-file
