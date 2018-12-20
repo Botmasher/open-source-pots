@@ -1268,5 +1268,22 @@ if (!/^application:/.test(item.command)) {
     - run `makeValueConformToSchema` on bound `settings` and on each scope selector from `scopedSettingsStore.propertiesForSource`
     - comment notes this resets config values to conform when a new schema is added
 - private scoped settings
+  - `priorityForSource` to return codes if passed-in source matches `mainSource`, `projectSource` or neither
+  - `emitChangeEvent` to run emitter emit `'did-change'`
+    - only run if the bound `transactDepth` is zero or less
+  - `resetScopedSettings` to add passed-in scoped settings properties to bound scoped settings store
+    - get settings iterating through each scope selector in passed-in settings
+    - make settings conform to schema using method above
+    - return call to `emitChangeEvent`
+  - `setRawScopedValue` to `setValueAtKeyPath` with passed-in keypath and set one property in scoped settings store
+    - return call to `emitChange Event`
+  - `getRawScopedValue` to get the scoped settings store property value for passed-in keypath
+    - use passed-in scope descriptor and options
+    - return property value using legacy scope descriptor chain if legacy otherwise regular
+  - `observeScopedKeyPath` to run passed-in callback on keypath and scope then add change listener
+    - return `onDidChangeKeyPath` passing new event value to the same callback
+  - `onDidChangeScopedKeyPath` to return on change running callback with old and new value
+    - store old value calling `get` on keypath and scope before return
+    - `get` new value within return listener function and compare old to new
 
 ## src/config-file
