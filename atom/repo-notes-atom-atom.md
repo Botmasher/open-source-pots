@@ -1285,5 +1285,21 @@ if (!/^application:/.test(item.command)) {
   - `onDidChangeScopedKeyPath` to return on change running callback with old and new value
     - store old value calling `get` on keypath and scope before return
     - `get` new value within return listener function and compare old to new
+- base schema enforcers
+  - comment that these change type of raw input or err warning not to set value
+  - comment that these are run from most to least specific, like from `integer` to `*`
+  - run `Config.addSchemaEnforcers` described at the start of notes for this file
+    - pass it an object with keys for the various types from `any` to `string` to `*`
+    - values for those keys are validate and coerce functions to run
+    - for example, `'number'` parses as and returns a float unless it's not a finite number
+    - for example, `'boolean'` parses the string `'true'` and returns boolean value
+    - for example, `'object'` builds a new object from passed-in plain object `value` using passed-in `schema.properties`
+    - for example, `'string'` validates that it's of type string and cuts it if it's beyond max length
+- assorted utility methods outside config class
+  - `isPlainObject` to check if a value is an object but not an array, func, string, color
+    - used for example in the function at the `'object'` property of schema enforcers just above
+  - `sortObject` to build a new object sorted by keys
+  - `withoutEmptyObjects` to build a new object recursively without empty object values
+- finally, export `Config`
 
 ## src/config-file
