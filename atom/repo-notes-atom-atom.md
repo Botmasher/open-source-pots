@@ -335,34 +335,6 @@
     - requires changes
     - needs testing
 
-## src directory in greater detail
-- flow:
-  - `package.json` has a key `"main"` pointing to `src/main-process/main.js`
-  - `package.json` has a `"standard"` key for `"snapshotResult"`
-  - `src/main-process/main.js` checks for any `snapshotResult`
-  - `main.js` builds a path to and calls `start.js`
-  - `start.js` opens `atom-application.js`:
-    - imports the electron app
-    - imports a path
-    - later in one method there's a same-dir import: Win `squirrel-update`, which in turn imports from `spawner`
-    - defines a `start` function that:
-      - adds exception and rejection handling listeners
-      - parses the command line args
-      - adds app open listeners for path and url
-      - sets app path to user or test data
-      - adds app ready listener to remove open listeners then open Atom app
-        - path built from resource path + `src/main-process/atom-application.js`
-    - (outside `start` are also win32 and user config file functions)
-  - `atom-application` loads and juggles the app
-    - imports `atom-window`, `application-menu`, `config-file`, other Atom stuff
-    - imports `event-kit` disposables
-    - imports electron pieces like `BrowserWindow`, `clipboard`, `screen`
-    - beyond that the Atom app's class is defined including the open method (run from `start`)
-    - see closer look at `atom-application.js` below
-  - classes from other same-dir scripts are included in the Atom application
-    - `atom-window`, `application-menu` `atom-update-manager`, `atom-protocol-handler`, `file-recovery-service`
-    - see closer looks at specific `main-process` files below
-
 ## TODO learn more about:
 - [X] socket files in `atom-application.js`
   - see beneath the file-by-file summaries for supporting stuff
@@ -501,6 +473,34 @@ if (!/^application:/.test(item.command)) {
     - instantiate `Config` and run instance's `setSchema`
       - pass `setSchema` a clone of `ConfigSchema`
   - below take a closer look within those specific config files
+
+## src directory in greater detail
+- (flow through app code below)
+- `package.json` has a key `"main"` pointing to `src/main-process/main.js`
+- `package.json` has a `"standard"` key for `"snapshotResult"`
+- `src/main-process/main.js` checks for any `snapshotResult`
+- `main.js` builds a path to and calls `start.js`
+- `start.js` opens `atom-application.js`:
+  - imports the electron app
+  - imports a path
+  - later in one method there's a same-dir import: Win `squirrel-update`, which in turn imports from `spawner`
+  - defines a `start` function that:
+    - adds exception and rejection handling listeners
+    - parses the command line args
+    - adds app open listeners for path and url
+    - sets app path to user or test data
+    - adds app ready listener to remove open listeners then open Atom app
+      - path built from resource path + `src/main-process/atom-application.js`
+  - (outside `start` are also win32 and user config file functions)
+- `atom-application` loads and juggles the app
+  - imports `atom-window`, `application-menu`, `config-file`, other Atom stuff
+  - imports `event-kit` disposables
+  - imports electron pieces like `BrowserWindow`, `clipboard`, `screen`
+  - beyond that the Atom app's class is defined including the open method (run from `start`)
+  - see closer look at `atom-application.js` below
+- classes from other same-dir scripts are included in the Atom application
+  - `atom-window`, `application-menu` `atom-update-manager`, `atom-protocol-handler`, `file-recovery-service`
+  - see closer looks at specific `main-process` files below
 
 ### atom-application.js
 - requires `AtomWindow`, `ApplicationMenu`, `event-kit` Disposables, `EventEmitter`, ...
@@ -1041,7 +1041,6 @@ if (!/^application:/.test(item.command)) {
     - add a click event handler that sends item command and window to Atom app
     - recursively run `createClickHandlers` if submenu in item
 
-
 ## Supporting Projects & Concepts
 
 ### Socket Files
@@ -1303,3 +1302,29 @@ if (!/^application:/.test(item.command)) {
 - finally, export `Config`
 
 ## src/config-file
+- remember this is included when starting `atom-application`
+  - imports `ConfigFile`
+  - app binds a local `configFile` from `ConfigFile.at` the config JSON/CSON filepath
+  - then listeners for `this.configFile` change or error
+- import fs and path utilities, event emitter, ...
+- create a set of three `EVENT_TYPES`
+- then the bulk of it is to export a `ConfigFile` class
+  - static `at` to take a path and return a ConfigFile
+    - private mapping of paths:ConfigFiles
+    - return existing entry or create new one, store it in map and return it
+  - `constructor` to bind local variables and write to CSON file
+    -  path, emitter, value and callbacks array come into play in other methods
+    - take in the `path` as arg
+    - the write is done in an `async.queue` for enforcing sequential writing ([see syntax](https://github.com/atom/atom/blob/master/src/config-file.js#L40))
+    - finally bind `requestLoad` and `requestSave` methods debouncing reloading and writing
+  - `get` to return the bound `value`
+  - `update` to return promise modifying the `value` using `requestSave`
+    - also push the resolve to the `reloadCallbacks` array
+  - async `watch` to sync fs, reload, return watcher watching path for events
+    - assign `watcher` to result of call to `await watchPath()`
+    - in `watchPath` cb, `this.requestLoad` if any events have `action` property
+    - emit errors if any happen during `watchPath`
+    - ? passed-in arg `callback` not used in body of method
+  - `onChange` to take cb and run it on `did-change` event
+  - `onDidError` to take cb and run it on `did-error` event
+  - `reload` to return promise reading CSON, updating `value`, running and clearing `reloadCallbacks`
